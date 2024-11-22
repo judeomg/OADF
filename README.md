@@ -10,10 +10,9 @@ This repository contains datasets and scripts for analyzing the OpenAI Developer
 
 ## File Structure and Descriptions
 
-### Dataset Folder (`Figures/`)
+### Figures Folder (`Figures/`)
 
-- **`mission (1).xlsx`**: Contains a dataset of 2,364 manually labeled forum posts with basic information (title, link, etc.).
-- **`new1.xlsx`**: Contains a dataset of 29,057 forum posts crawled as of June 2024.
+This folder contains all the figures used in the associated research paper, including charts, diagrams, and visualizations.
 
 ### GitHub Dataset Folder (`Github_Dataset/`)
 
