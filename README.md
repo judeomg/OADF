@@ -25,15 +25,14 @@ This folder contains data collected from the OpenAI Developer Forum:
 - **`posts.csv`**: Complete dataset of forum posts, including metadata (e.g., titles, links, times).
 - **`users.xlsx`**: User profile data, including user activities and registration details.
 
----
-
-## Quick Start
-
-The **Scripts** folder contains the following components:  
+### Scripts Folder (`Scripts/`) 
 
 1. **Crawling Scripts**: Python scripts for extracting posts (`chatgpt.py`, `other.py`) and user information (`code.py`, `desc+data.py`).  
 2. **Data Organization**: Includes text files (`page.txt`, `url_to_title.py`) for organizing and parsing data.  
 3. **RQ Analysis and Visualization**: Original chart data and analysis scripts for RQ1 and RQ2 are stored in corresponding subfolders, with Excel files (`data.xlsx`) supporting the analysis.  
+---
+
+## Quick Start
 
 
 1. **Prepare the Environment**
@@ -55,12 +54,7 @@ The **Scripts** folder contains the following components:
 
 3. **Analyze Data**
 
-   Execute the analysis scripts as needed, for example:
-
-   ```bash
-   python analyze_popularity.py
-   python analyze_difficulty.py
-   ```
+    Perform the analysis based on the datasets provided, such as annotated_dataset.xlsx and sampled_issues.xlsx, instead of running scripts. These files contain preprocessed data for manual or software-assisted analysis of post popularity and difficulty levels.
 
 ---
 
