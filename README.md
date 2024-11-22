@@ -54,8 +54,8 @@ This folder contains data collected from the OpenAI Developer Forum:
 
 3. **Analyze Data**
 
-    Perform the analysis based on the datasets provided, such as annotated_dataset.xlsx and sampled_issues.xlsx. These files contain preprocessed data for manual or software-assisted analysis of post popularity and difficulty levels.
-
+    For popularity and difficulty analysis, refer to the scripts and data located in the RQ1 and RQ2 folders.
+For analyzing the challenge taxonomy, use the datasets annotated_dataset.xlsx and sampled_issues.xlsx. These files provide the necessary data for exploring and refining the categorization of challenges.
 ---
 
 ## Project Goals
