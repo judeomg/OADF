@@ -1,10 +1,4 @@
-Here is the updated `README.md` file with descriptions in English:
-
----
-
-# OADF: OpenAI Developer Forum Analysis
-
-This repository contains datasets and scripts for analyzing the OpenAI Developer Forum, aiming to help researchers explore community interaction patterns and trends.
+This repository contains datasets and scripts for analyzing the OpenAI Developer Forum and GitHub issues data from major vendors (Gemini, Llama, and OpenAI). The goal is to explore community interaction patterns, identify challenges, and analyze trends.
 
 ---
 
@@ -12,22 +6,24 @@ This repository contains datasets and scripts for analyzing the OpenAI Developer
 
 ### Figures Folder (`Figures/`)
 
-This folder contains all the figures used in the associated research paper, including charts, diagrams, and visualizations.
+- This folder contains all the figures used in the associated research paper, including charts, diagrams, and visualizations.
 
 ### GitHub Dataset Folder (`Github_Dataset/`)
 
-- **`github_users.csv`**: Contains a dataset of 722,389 GitHub user profiles crawled as of June 2024.
+This folder contains GitHub issues data collected from three vendors:
+- **`Gemini/`**: GitHub issues data related to the Gemini project.
+- **`Llama/`**: GitHub issues data related to the Llama project.
+- **`OpenAI/OpenAI/`**:
+  - **`github.xlsx`**: Complete GitHub issues data for OpenAI.
+  - **`github_issues.xlsx`**: Filtered GitHub issues dataset.
+  - **`sampled_github_issues.xlsx`**: A sampled subset of the GitHub issues dataset for analysis.
 
 ### OpenAI Dataset Folder (`OpenAI_Dataset/`)
 
-- **`openai_posts.csv`**: Contains data from the OpenAI Developer Forum, including post titles, links, timestamps, and other metadata.
-
-### Scripts Folder (`Scripts/`)
-
-- **`fetch_forum_posts.py`**: Script for crawling basic information about forum posts from the OpenAI Developer Forum.
-- **`fetch_user_profiles.py`**: Script for crawling user profile data and activity information.
-- **`analyze_popularity.py`**: Script for analyzing the popularity of forum posts.
-- **`analyze_difficulty.py`**: Script for assessing the difficulty level of forum posts.
+This folder contains data collected from the OpenAI Developer Forum:
+- **`annotated_dataset.xlsx`**: Annotated forum posts dataset.
+- **`posts.csv`**: Complete dataset of forum posts, including metadata (e.g., titles, links, timestamps).
+- **`users.xlsx`**: User profile data, including user activities and registration details.
 
 ---
 
@@ -43,7 +39,7 @@ This folder contains all the figures used in the associated research paper, incl
 
 2. **Run Crawling Scripts**
 
-   Navigate to the `Scripts/` folder and run the following scripts to collect data:
+   Navigate to the `Scripts/` folder and run the scripts to collect data:
 
    ```bash
    python fetch_forum_posts.py
@@ -63,11 +59,10 @@ This folder contains all the figures used in the associated research paper, incl
 
 ## Project Goals
 
+- **Vendor Comparison**: Analyze GitHub issues across Gemini, Llama, and OpenAI to identify common challenges and trends.
 - **Popularity Analysis**: Explore trends in the popularity of forum posts over time.
 - **Difficulty Analysis**: Assess the difficulty levels of forum post content.
 
 Contributions and feedback are welcome!
 
 ---
-
-This README has been updated to reflect the actual structure and content of the repository.
