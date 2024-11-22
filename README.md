@@ -16,13 +16,13 @@ This folder contains GitHub issues data collected from three vendors:
 - **`OpenAI/OpenAI/`**:
   - **`github.xlsx`**: Complete GitHub issues data for OpenAI.
   - **`github_issues.xlsx`**: Filtered GitHub issues dataset.
-  - **`sampled_github_issues.xlsx`**: A sampled subset of the GitHub issues dataset for analysis.
+  - **`sampled_github_issues.xlsx`**: A sampled subset of the GitHub issues dataset, used for constructing the taxonomy.
 
 ### OpenAI Dataset Folder (`OpenAI_Dataset/`)
 
 This folder contains data collected from the OpenAI Developer Forum:
-- **`annotated_dataset.xlsx`**: Annotated forum posts dataset.
-- **`posts.csv`**: Complete dataset of forum posts, including metadata (e.g., titles, links, timestamps).
+- **`annotated_dataset.xlsx`**: Annotated forum posts dataset, used for constructing the taxonomy.
+- **`posts.csv`**: Complete dataset of forum posts, including metadata (e.g., titles, links, times).
 - **`users.xlsx`**: User profile data, including user activities and registration details.
 
 ---
