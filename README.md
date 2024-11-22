@@ -54,7 +54,7 @@ This folder contains data collected from the OpenAI Developer Forum:
 
 3. **Analyze Data**
 
-    Perform the analysis based on the datasets provided, such as annotated_dataset.xlsx and sampled_issues.xlsx, instead of running scripts. These files contain preprocessed data for manual or software-assisted analysis of post popularity and difficulty levels.
+    Perform the analysis based on the datasets provided, such as annotated_dataset.xlsx and sampled_issues.xlsx. These files contain preprocessed data for manual or software-assisted analysis of post popularity and difficulty levels.
 
 ---
 
