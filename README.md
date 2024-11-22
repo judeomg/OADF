@@ -29,6 +29,13 @@ This folder contains data collected from the OpenAI Developer Forum:
 
 ## Quick Start
 
+The **Scripts** folder contains the following components:  
+
+1. **Crawling Scripts**: Python scripts for extracting posts (`chatgpt.py`, `other.py`) and user information (`code.py`, `desc+data.py`).  
+2. **Data Organization**: Includes text files (`page.txt`, `url_to_title.py`) for organizing and parsing data.  
+3. **RQ Analysis and Visualization**: Original chart data and analysis scripts for RQ1 and RQ2 are stored in corresponding subfolders, with Excel files (`data.xlsx`) supporting the analysis.  
+
+
 1. **Prepare the Environment**
 
    Ensure Python 3.8+ is installed along with the necessary dependencies:
@@ -42,8 +49,8 @@ This folder contains data collected from the OpenAI Developer Forum:
    Navigate to the `Scripts/` folder and run the scripts to collect data:
 
    ```bash
-   python fetch_forum_posts.py
-   python fetch_user_profiles.py
+   python chatgpt.py
+   python other.py
    ```
 
 3. **Analyze Data**
