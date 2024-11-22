@@ -1,0 +1,2552 @@
+﻿"https://github.com/google-gemini/generative-ai-js/issues/284","Internal error when 1.function calls enabled 2. multilingual prompt","2024-10-17T13:55:05Z","Open issue","component:js sdk,status:triaged,type:bug","Description of the bug:
+const googleSearchDeclaration = {
+  name: ""google"",
+  parameters: {
+    type: ""OBJECT"",
+    description: ""Set the query and how many docs to return."",
+    properties: {
+      query: {
+        type: ""STRING"",
+        description: ""The query to search google for."",
+      },
+      topN: {
+        type: ""NUMBER"",
+        description: ""Return top N related documents."",
+      },
+    },
+    required: [""query""],
+  },};
+
+import { GoogleGenerativeAI } from ""@google/generative-ai"";
+
+// Access your API key as an environment variable (see ""Set up your API key"" above)const genAI = new GoogleGenerativeAI(process.env.API_KEY);const generativeModel = genAI.getGenerativeModel({
+  // Use a model that supports function calling, like a Gemini 1.5 model
+  model: ""gemini-1.5-flash"",
+  // Specify the function declaration.
+  tools: [{
+    functionDeclarations: [googleSearchDeclaration],
+  }],});
+
+const chat = generativeModel.startChat();const prompt = ""谁是xxx\nxxx"";
+
+// Send the message to the model.const result = await chat.sendMessage([prompt]);
+
+if (result.response.functionCalls()) {
+  const call = result.response.functionCalls()[0];
+  // Send the API response back to the model so it can generate
+  // a text response that can be displayed to the user.
+  const result2 = await chat.sendMessage([{functionResponse: {
+    name: 'google',
+    response: {
+      docs: ""answer is 42""
+    }
+  }}]);
+
+  // Log the text response.
+  console.log(result2.response.text());}console.log(result.response.text());
+This script can trigger internal error with large probability.
+    throw new GoogleGenerativeAIFetchError(`Error fetching from ${url.toString()}: [${response.status} ${response.statusText}] ${message}`, response.status, response.statusText, errorDetails);
+          ^
+
+GoogleGenerativeAIFetchError: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent: [500 Internal Server Error] An internal error has occurred. Please retry or report in https://developers.generativeai.google/guide/troubleshooting
+
+
+Actual vs expected behavior:
+Should be no internal error.
+Any other information you'd like to share?
+Here's what I have tested:
+disable function call fixes the issue
+language unification also fixes this
+REST api has no such problem
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-js/issues/282","[Bug]: Request contains an invalid argument when sending request to fine-tune in AI Studio","2024-10-17T08:30:39Z","Open issue","component:other,status:triaged,type:help","Description of the bug:
+Actual vs expected behavior:
+No response
+Any other information you'd like to share?
+Created structured prompt containing CSV and image with language pairs to create Czech Vietnamese teacher for my wife.
+Example of json that is being sent to: https://alkalimakersuite-pa.clients6.google.com/$rpc/google.internal.alkali.applications.makersuite.v1.MakerSuiteService/CreateTunedModel
+[null,[null,null,null,""models/gemini-1.0-pro-001"",""Minh Thành Nguyễn - zábavná Čeština"",""{\""description\"":\""\"",\""exampleInput\"":\""Làm thế nào để mua vé máy bay?\"",\""exampleOutput\"":\""Jak koupit letenky?\"",\""zJ\"":\""prompts/1dLzn_yTTz1D7vKnXLS_as-Yq6r-E5wMl\"",\""showedTuningComplete\"":false,\""rowsCount\"":403}"",null,null,null,[null,null,null,[[[[""Làm thế nào để mua vé máy bay?"",null,""Jak koupit letenky?""],[""Cách nấu món hải sản là gì?"",null,""Jak vařit mořské plody?""],[""Tôi muốn học vẽ, tôi nên bắt đầu từ đâu?"",null,""Chci se naučit malovat, kde bych měl začít?""],[""Làm thế nào để mở tài khoản giao dịch ngoại hối?"",null,""Jak otevřít účet pro obchodování s forexem?""],[""Tôi muốn nghe nhạc K-Pop, bạn có thể giới thiệu một số bài hát?"",null,""Chci poslouchat K-Pop, můžete mi doporučit nějaké písničky?""],
+
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-js/issues/281","File upload using GoogleAIFileManager does not work for files from server?","2024-10-17T05:40:43Z","Open issue","No label","Description of the bug:
+I have a use case where the user will upload some file that will be sent to Gemini and then a conversation begins. I'm using the GoogleAIFileManager. The error I get is
+Error: ENOENT: no such file or directory, open 'http://127.0.0.1:54321/storage/v1/object/sign/resumes/31a03e74-1639-45b6-bfa7-77447f1a4762/resume-yep5k4.pdf?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJyZXN1bWVzLzMxYTAzZTc0LTE2MzktNDViNi1iZmE3LTc3NDQ3ZjFhNDc2Mi9yZXN1bWUteWVwNWs0LnBkZiIsImlhdCI6MTcyOTE0MzQwOCwiZXhwIjoxNzI5MTQ0MDA4fQ.Kjcfaaseb_vo6TRoNZq9td7_4Tr5zQS_gPSiyDaCUJI'
+Is the API work for files with URLs like this?
+Does it need to be a file hosted in a different way?
+Actual vs expected behavior:
+No response
+Any other information you'd like to share?
+No response
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-js/issues/274","Chat History significantly degrades Function Calling performance","2024-10-07T19:32:58Z","Open issue","component:js sdk,status:triaged,type:bug","Description of the bug:
+Whenever I use Chat History (from the last 12 hours, I add the last 20 messages), the amount of times that Function Calling works (ie. it calls a function) drops very significantly.
+After 50 tests, with ChatHistory filled with the same request each time...
+With Chat History enabled: the function is called 10% of the time
+With Chat History disabled: the function is called 100% of the time
+In the case of Chat History being enabled, I've found it is particularly susceptible to not calling the function when optional function parameters aren't specified in the prompt (ie. it thinks it needs the parameters when it doesn't).
+Actual vs expected behavior:
+Expected:
+ Function Calling function is called as part of call to Gemini
+Actual:
+ Gemini decides not to use any functions
+Any other information you'd like to share?
+Running within a NodeJS Google Cloud Function
+ Tried using both Gemini 1.5 Flash and Gemini 1.5 Pro but get the same results.
+ Using Function Calling mode ""Auto"" (as expected, mode ""Any"" fixes the issue but this mode cannot be used in my use case).
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-js/issues/269","Gemini 1.5 Flash 002 Hallucinates Timestamps when transcribing audio","2024-09-30T15:06:40Z","Open issue","component:other,status:triaged,type:bug","Description of the bug:
+The new flash model completely hallucinates timestamps when performing transcription.
+Actual vs expected behavior:
+The timestamps should be accurate based on when that word or phrase was spoken. The original flash model is excellent at this. The new model completely hallucinates.
+Any other information you'd like to share?
+Just simply try it. IT's so off it becomes obvious the second you try.
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-js/issues/267","Function Calling with generateContent() causes error: ""ensure that function response turn comes immediately after a function call turn""","2024-09-26T19:29:56Z","Open issue","component:js sdk,status:triaged,type:help","Description of the bug:
+I have followed this tutorial and have got it working, however as soon as I switch from using chat.sendMessage to generateContent, I get the error:
+GoogleGenerativeAIFetchError: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent: [400 Bad Request] Please ensure that function response turn comes immediately after a function call turn.
+at the point:
+const result2 = await generativeModel.generateContent([{functionResponse: {
+        name: ""controlLight"",
+        response: apiResponse,
+}}]);
+
+My environment:
+Running using a NodeJS Firebase function
+Using the package: const {GoogleGenerativeAI} = require(""@google/generative-ai"");
+Many thanks for your help!
+Actual vs expected behavior:
+Actual:
+ Get the error: GoogleGenerativeAIFetchError: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent: [400 Bad Request] Please ensure that function response turn comes immediately after a function call turn.
+Expected:
+ Execute the function correctly. (eg. return OK. I've dimmed the lights to 50% and set the color temperature to warm. Let me know if you want to adjust the lighting further.)
+Any other information you'd like to share?
+Code comparison
+When using chat.sendMessage
+  async processMessage(event, platformSource) {
+    const controlLightFunctionDeclaration = {
+      name: ""controlLight"",
+      parameters: {
+        type: ""OBJECT"",
+        description: ""Set the brightness and color temperature of a room light."",
+        properties: {
+          brightness: {
+            type: ""NUMBER"",
+            description: ""Light level from 0 to 100. Zero is off and 100 is full brightness."",
+          },
+          colorTemperature: {
+            type: ""STRING"",
+            description: ""Color temperature of the light fixture which can be `daylight`, `cool` or `warm`."",
+          },
+        },
+        required: [""brightness"", ""colorTemperature""],
+      },
+    };
+
+    // Executable function code. Put it in a map keyed by the function name
+    // so that you can call it once you get the name string from the model.
+    const functions = {
+      controlLight: ({brightness, colorTemperature}) => {
+        return this.setLightValues( brightness, colorTemperature);
+      },
+    };
+
+
+    // Access your API key as an environment variable (see ""Set up your API key"" above)
+    const genAI = new GoogleGenerativeAI(geminiApiKeySecret.value());
+
+    const generativeModel = genAI.getGenerativeModel({
+      // Use a model that supports function calling, like a Gemini 1.5 model
+      model: ""gemini-1.5-flash"",
+
+      // Specify the function declaration.
+      tools: {
+        functionDeclarations: [controlLightFunctionDeclaration],
+      },
+    });
+
+
+    const chat = generativeModel.startChat();
+    const prompt = event.text;
+    // const prompt = ""Dim the lights so the room feels cozy and warm."";
+
+    // Send the message to the model.
+    const result = await chat.sendMessage(prompt);
+
+    // For simplicity, this uses the first function call found.
+    const call = result.response.functionCalls()[0];
+
+    if (call) {
+    // Call the executable function named in the function call
+    // with the arguments specified in the function call and
+    // let it call the hypothetical API.
+      const apiResponse = await functions[call.name](call.args);
+
+      // Send the API response back to the model so it can generate
+      // a text response that can be displayed to the user.
+      const result2 = await chat.sendMessage([{functionResponse: {
+        name: ""controlLight"",
+        response: apiResponse,
+      }}]);
+
+      // Log the text response.
+      console.log(result2.response.text());
+    }
+  }
+
+When using generateContent
+  async processMessage(event, platformSource) {
+    const controlLightFunctionDeclaration = {
+      name: ""controlLight"",
+      parameters: {
+        type: ""OBJECT"",
+        description: ""Set the brightness and color temperature of a room light."",
+        properties: {
+          brightness: {
+            type: ""NUMBER"",
+            description: ""Light level from 0 to 100. Zero is off and 100 is full brightness."",
+          },
+          colorTemperature: {
+            type: ""STRING"",
+            description: ""Color temperature of the light fixture which can be `daylight`, `cool` or `warm`."",
+          },
+        },
+        required: [""brightness"", ""colorTemperature""],
+      },
+    };
+
+    // Executable function code. Put it in a map keyed by the function name
+    // so that you can call it once you get the name string from the model.
+    const functions = {
+      controlLight: ({brightness, colorTemperature}) => {
+        return this.setLightValues( brightness, colorTemperature);
+      },
+    };
+
+
+    // Access your API key as an environment variable (see ""Set up your API key"" above)
+    const genAI = new GoogleGenerativeAI(geminiApiKeySecret.value());
+
+    const generativeModel = genAI.getGenerativeModel({
+      // Use a model that supports function calling, like a Gemini 1.5 model
+      model: ""gemini-1.5-flash"",
+
+      // Specify the function declaration.
+      tools: {
+        functionDeclarations: [controlLightFunctionDeclaration],
+      },
+    });
+
+    const prompt = event.text;
+    // const prompt = ""Dim the lights so the room feels cozy and warm."";
+
+    // Send the message to the model.
+    const result = await generativeModel.generateContent([prompt]);
+
+    // For simplicity, this uses the first function call found.
+    const call = result.response.functionCalls()[0];
+
+    if (call) {
+    // Call the executable function named in the function call
+    // with the arguments specified in the function call and
+    // let it call the hypothetical API.
+      const apiResponse = await functions[call.name](call.args);
+
+      // Send the API response back to the model so it can generate
+      // a text response that can be displayed to the user.
+      const result2 = await generativeModel.generateContent([{functionResponse: {
+        name: ""controlLight"",
+        response: apiResponse,
+      }}]);
+
+      // Log the text response.
+      console.log(result2.response.text());
+    }
+  }
+}
+
+I have also tried specifying the version to be v1beta to no benefit as follows:
+    const generativeModel = genAI.getGenerativeModel({
+      // Use a model that supports function calling, like a Gemini 1.5 model
+      model: ""gemini-1.5-flash"",
+
+      // Specify the function declaration.
+      tools: {
+        functionDeclarations: [controlLightFunctionDeclaration],
+      },
+    },
+    {
+      apiVersion: ""v1beta"",
+    });
+
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-js/issues/261","openrouter and gemini","2024-09-17T21:53:44Z","Open issue","component:other,status:triaged,type:help","Description of the feature request:
+How to use OpenRouter API with Gemini model?
+What problem are you trying to solve with this feature?
+No response
+Any other information you'd like to share?
+Thank you for considering this feature request/question. I look forward to learning more about integrating Gemini with OpenRouter.
+ The text was updated successfully, but these errors were encountered: 
+👍2
+daun-io and alexanderatallah reacted with thumbs up emoji
+All reactions
+👍2 reactions"
+"https://github.com/google-gemini/generative-ai-js/issues/259","generateContentStream throwing error for Gemini Tuned Model","2024-09-12T02:26:22Z","Open issue","component:other,status:triaged,type:help","Description of the bug:
+I am using Gemini tuned model to generate a session text for the user which may have large amount of text. While calling the API generateContentStream, I am getting error: ""Error: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/tunedModels/[TunedModelName]:streamGenerateContent?alt=sse: [404 Not Found]""
+The streaming works fine for the base model ""gemini-1.5-flash"" and facing issue only for the Tuned Model.
+As per documentation from Google: ""https://ai.google.dev/gemini-api/docs/text-generation?lang=node#generate-a-text-stream"" generateContentStream should be able to return partial data.
+Here is the code:
+const { GoogleGenerativeAI } = require(""@google/generative-ai"");
+const genAI = new GoogleGenerativeAI(""API KEY"");
+ const model = genAI.getGenerativeModel({ model: ""tunedModels/[Tuned Model name]""
+const result = await model.generateContentStream(userPrompt);
+ let content = """";
+ for await (const item of result.stream) {
+ content = content + item.candidates[0].content.parts[0].text;
+ }
+req.body.modelResponse = content;
+Actual vs expected behavior:
+Actual:
+Error: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/tunedModels/[TunedModelName]:streamGenerateContent?alt=sse: [404 Not Found]
+Expected:
+result.stream should be populated with the partial results
+Any other information you'd like to share?
+No response
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-js/issues/255","Code 404 for sending requests with images (stored in Google Storage)","2024-09-11T18:37:06Z","Open issue","component:js sdk,status:triaged,type:bug","Description of the bug:
+I'm having trouble sending requests to analyze images hosted on Google Storage. Today my application already works with sending images converted to base64, however, when switching to the hosted image link, I encounter a 404 error.
+Actual vs expected behavior:
+My application currently works using the @google/generative-ai lib and the following methods:
+ `
+ const chatSession = model.startChat({
+ generationConfig,
+ history: context,
+ })
+const resp = await chatSession.sendMessage([""Perform the analysis and answer the questions in the json format provided""])
+ `
+It is currently working with a context in this format:
+[ { ""role"": ""user"", ""parts"": [ { ""text"": ""OCR_NF: [\nOCR reading content\n]"" }, { ""inlineData"": { ""data"": ""iVBORw0K....kJggg=="", ""mimeType"": ""image/png"" } } ] } ]
+ However, now, changing it to read the file from Google Storage, it looks like this:
+[ { ""role"": ""user"", ""parts"": [ { ""text"": ""OCR_DOC: [\nOCR reading content\n]"" }, { ""fileData"": { ""fileUri"": ""gs://bucket_name/file_name.png"", ""mimeType"": ""image/png"" } } ] } ]
+ However, the response is always a 404 code:
+{ ""response"": { ""status"": 400, ""statusText"": ""Bad Request"" }, ""verify"": false }
+ Observations:
+The files are being saved correctly;
+The link was checked and is correct;
+It is within the same Gemini project;
+To save the file I am using the @google-cloud/storage lib with the methods: storage.bucket, bucket.upload;
+First time posting here, I hope I was clear enough.
+Any other information you'd like to share?
+No response
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-js/issues/250","How does Gemini preprocess images and videos?","2024-09-09T06:56:52Z","Open issue","component:documentation,status:triaged,type:help","Description of the feature request:
+Is there any documentation explaining how Gimini preprocesses input images or videos before generating tokens? For instance, how does it crop images of arbitrary resolutions, or how does it sample frames from videos of arbitrary lengths?
+What problem are you trying to solve with this feature?
+No response
+Any other information you'd like to share?
+No response
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-js/issues/249","Missing customHeaders in new GoogleAIFileManager RequestOptions","2024-09-06T06:17:42Z","Open issue","component:js sdk,status:triaged,type:bug","Description of the bug:
+customHeaders not working when I use uploadFile API, these custom headers does not send to the proxy server.
+const fileManager = new GoogleAIFileManager(this.apiKey.apiKey!, {
+        baseUrl: proxyServer,
+        customHeaders: {
+          'X-Proxy-Api-Key':'xxx',
+          'X-Target-Host': 'generativelanguage.googleapis.com',
+          'x-trace-id': 'xxx',
+          'x-start-at': Date.now().toString(),
+        },
+      });
+      const uploadResult = await fileManager.uploadFile(file, {
+        mimeType: mimeType ?? lookup(file),
+      });
+
+Actual vs expected behavior:
+No response
+Any other information you'd like to share?
+No response
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-js/issues/246","Civic Integrity Harm Category needs to be added","2024-09-03T19:51:39Z","Open issue","component:documentation,status:triaged,type:feature request","Description of the bug:
+The new gemini pro and flash models released 0827 (exp) have an additional harm category called civic integrity, which is present in the AI studio UI but is totally undocumented anywhere and is missing from the npm package @google/generative-ai.
+In order to keep my customers happy, I patched the package and added the item to the enum... how do I pull request it so it gets merged in?
+Actual vs expected behavior:
+No response
+Any other information you'd like to share?
+No response
+ The text was updated successfully, but these errors were encountered: 
+👍2
+moyix and samrahimi reacted with thumbs up emoji👀1
+samrahimi reacted with eyes emoji
+All reactions
+👍2 reactions
+👀1 reaction"
+"https://github.com/google-gemini/generative-ai-js/issues/245","Thoughts on the API","2024-09-02T21:43:24Z","Open issue","component:js sdk,status:triaged,type:bug","Description of the bug:
+If I understood correctly, to have an interactive chat session you can for example:
+  const askQuestion = async () => {
+    readline.question(""You: "", async (input) => {
+      if (input.toLowerCase() === ""quit"") {
+        readline.close();
+        return;
+      }
+
+      const result = await chatSession.sendMessage(input);
+      console.log(""AI: "" + result.response.text());
+      askQuestion();
+    });
+  };
+
+
+but I noticed that as the chat proceeds, the history grows and every single prompt ALL the history is sent.
+Isn't this ""stupid""?
+ Shouldn't the ""session"" be kept server side and only the last prompt be sent?
+Actual vs expected behavior:
+No response
+Any other information you'd like to share?
+No response
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-js/issues/244","Prompt and intellectual property protection.","2024-08-30T19:49:34Z","Open issue","component:js sdk,status:triaged,type:feature request","Description of the feature request:
+Some application ""power"" relies on the use of prompts.
+ Prompts unfortunately are unprotected.
+ No matter how you can obfuscate them, but they will always be visible in the debug console.
+Solution:
+ publish a public key.
+ Allow the payload to be encrypted with that public key.
+In that way, the application could encrypt the messages normally (or send them in plain text) but could pre-encrypt the prompts.
+What problem are you trying to solve with this feature?
+Intellectual property protection using APIs.
+Any other information you'd like to share?
+Well. to be hones this should be implemented on all APIs, but let's start from here.
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-js/issues/243","Error 400","2024-08-30T19:45:10Z","Closed issue","No label","Description of the bug:
+Today the api was working but since 2 hours I am getting ERROR 400.
+Actual vs expected behavior:
+This is the url.
+https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro-latest:streamGenerateContent?alt=sse
+Any other information you'd like to share?
+No idea.
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-js/issues/242","HarmCategory: Civic Integrity","2024-08-29T14:46:35Z","Open issue","component:js sdk,status:triaged,type:bug","Description of the bug:
+Gemini AI now has a harm category ""Civic Integrity""
+Actual vs expected behavior:
+The ENUM is missing the new ""Civic Integrity"" category
+
+generative-ai-js/types/enums.ts
+ Line 33 in 1ad8006
+	HARM_CATEGORY_DANGEROUS_CONTENT=""HARM_CATEGORY_DANGEROUS_CONTENT"",
+Any other information you'd like to share?
+No response
+ The text was updated successfully, but these errors were encountered: 
+👍4
+0wwafa, augusto-rehfeldt, Yizhouuu, and mfranzs reacted with thumbs up emoji
+All reactions
+👍4 reactions"
+"https://github.com/google-gemini/generative-ai-js/issues/241","Forced function calling (mode ""ANY"") no longer working","2024-08-31T05:13:08Z","Closed issue","component:other,type:help","Description of the bug:
+I have been successfully using forced function calling with gemini-1.5-pro so far, but now I'm getting an INVALID ARGUMENT error response stating that the mode 'ANY' is not enabled for API version v1beta.
+Actual vs expected behavior:
+{
+  ""error"": {
+    ""code"": 400,
+    ""message"": ""Function calling mode `ANY` is not enabled for api version v1beta"",
+    ""status"": ""INVALID_ARGUMENT""
+  }
+}
+Any other information you'd like to share?
+No response
+ The text was updated successfully, but these errors were encountered: 
+👀1
+gtanczyk reacted with eyes emoji
+All reactions
+👀1 reaction"
+"https://github.com/google-gemini/generative-ai-js/issues/240","You do not have permission to access tuned model tunedModels/mymodel","2024-08-29T19:20:33Z","Closed issue","component:other,status:duplicate,type:help","Description of the bug:
+Hi, I am getting this error: GoogleGenerativeAIFetchError: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/tunedModels/mymodel:generateContent: [403 Forbidden] You do not have permission to access tuned model tunedModels/mymodel
+Actual vs expected behavior:
+It should give me the model output from my tuned model
+Any other information you'd like to share?
+I have OAuth setup and can use the Python SDK to run the model, but what's wrong with the Node.js SDK?
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-js/issues/239","Get 400 Error, but only when deployed on firebase functions. Works in localhost - Same code","2024-08-27T17:41:47Z","Open issue","No label","Description of the bug:
+GoogleGenerativeAIFetchError: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/text-embedding-004:embedContent: [400 Bad Request] User location is not supported for the API use.
+ at handleResponseNotOk (/workspace/node_modules/@google/generative-ai/dist/index.js:403:11)
+Actual vs expected behavior:
+Completion of request
+Any other information you'd like to share?
+This worked before, and suddenly just stopped. The API key is on the paid account.
+Firebase location: us-central1
+ The text was updated successfully, but these errors were encountered: 
+👍6
+gitton, devberkay, BernardasJuzumas, romainwurtz, dreamchrome, and robertedjones reacted with thumbs up emoji😕2
+ruuuruiya and devberkay reacted with confused emoji👀1
+egisz reacted with eyes emoji
+All reactions
+👍6 reactions
+😕2 reactions
+👀1 reaction"
+"https://github.com/google-gemini/generative-ai-js/issues/236","getFile method gives 403 Forbidden Error even with permission on service account","2024-08-22T22:07:40Z","Open issue","No label","Description of the bug:
+When I execute this (simplified) code in a container running in Google Cloud Run Job:
+import crypto from 'crypto';import { GoogleAIFileManager } from ""@google/generative-ai/server"";
+
+const geminiApiKey = process.env.GEMINI_API_KEY as string;const fileManager = new GoogleAIFileManager(geminiApiKey);
+
+// If the URL is repeated, the fileHash will be the sameconst url = ""https://exampleUrl.com""const fileHash = crypto.createHash('md5').update(url).digest('hex');
+
+// Check if the image is already uploadedtry {
+  const existingFile = await fileManager.getFile(fileHash);} catch (error) {
+  console.error(error)}
+I get this error:
+[GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/files/<<myUri>>: [403 Forbidden] You do not have permission to access the File <<myUri>> or it may not exist.
+My Cloud Run Job is running using a Service Account that has the role ""aiplatform.admin"".
+Actual vs expected behavior:
+Actual behavior: I get an error.
+ Expected behavior: Get the image file object when i call the getFile method.
+Any other information you'd like to share?
+No response
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-js/issues/231","browser javascript api misses caching and upload.","2024-08-22T09:02:52Z","Open issue","component:js sdk,status:triaged,type:bug","Description of the bug:
+in theory to cache contents (like the full session) you should use:
+<script type=""importmap"">
+  {
+    ""imports"": {
+      ""@google/generative-ai"": ""https://esm.run/@google/generative-ai"",
+      ""@google/generative-ai/server"": ""https://esm.run/@google/generative-ai/server""
+    }
+  }
+</script>
+
+  <script type=""module"">
+      import { GoogleGenerativeAI } from ""@google/generative-ai"";
+      
+      import ""@google/generative-ai/server"";
+
+Actual vs expected behavior:
+The problem is that the server import gives error:
+Error: Failed to bundle using Rollup v2.79.1: the file imports a not supported node.js built-in module ""fs"".
+Any other information you'd like to share?
+Possible solution:
+ implement the local file system.
+Reason:
+ without this, every time a message is sent to the model, ALL history is sent every single time.
+Alternatives:
+ When instantiating a chat, create internally a session so the subsequent prompts won't need to include everything every time.
+Use case:
+ let's say I have a document and I want to talk with the model about it.
+ As the api is right now, every new prompt sends to the model the full chat hiostory and the document (if inlined in base64).
+That is so wrong. Once instantiated the session, the only thing that should be sent is the prompt or other inlined attachments, not the whole damn thing.
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-js/issues/230","TypeError: Headers is not a constructor","2024-08-21T12:00:21Z","Open issue","component:js sdk,status:triaged,type:bug","Description of the bug:
+In my project in which I am implementing the google/generative-ai module, I am experiencing the following problem.
+TypeError: Headers is not a constructor
+at getHeaders (/home/project/project-backend/node_modules/@google/generative-ai/dist/index.js:328:21)
+at constructModelRequest (/home/project/project-backend/node_modules/@google/generative-ai/dist/index.js:358:
+at makeModelRequest (/home/project/project-backend/node_modules/@google/generative-ai/dist/index.js:364:41)
+at generateContent (/home/project/project-backend/node_modules/@google/generative-ai/dist/index.js:815:28)
+at GenerativeModel.generateContent (/home/project/project-backend/node_modules/@google/generative-ai/dist/index.js:1296:16)
+at GeminiService.createContent (/home/project/project-backend/dist/src/modules/google/services/gemini.service.js:34:40)
+
+This is my code
+
+import {GoogleGenerativeAI} from ""@google/generative-ai"";
+
+const model = this.geminiAi.getGenerativeModel({ model: geminiContentCreate.model});
+
+geminiAi: GoogleGenerativeAI;
+
+constructor() {
+this.geminiAi = new GoogleGenerativeAI(config.geminiApiKey);
+}
+
+async createContent(geminiContentCreate: GeminiContentCreateDtov): Promise<any> {
+
+  try {
+              const result = await model.generateContent(geminiContentCreate.prompt);
+              const response = await result.response;
+              const text = response.text();
+  
+  }  catch (e) {
+              console.log(e);
+  }
+}
+
+
+Actual vs expected behavior:
+No response
+Any other information you'd like to share?
+I have tried both 0.16.0 and 0.17.0 versions
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-js/issues/227","baseUrl not working since 0.16.0","2024-08-22T15:48:30Z","Closed issue","component:js sdk,status:triaged,type:bug","Description of the bug:
+I'm upgrading the sdk from 0.15.0 and found that the baseUrl requestion option stops working.
+Actual vs expected behavior:
+I have the following code:
+const model = sdk.getGenerativeModel(
+  { model: '...', safetySettings },
+  { apiVersion: 'v1beta', baseUrl: this.baseUrl },
+)
+
+const chatSession = model.startChat({ safetySettings })
+const stream = await chatSession.sendMessageStream(prompt)
+
+However, the provided baseUrl didn't take effect, and the request was still sent to the default Google URL.
+Any other information you'd like to share?
+No response
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-js/issues/221","update uploadFile method to accept buffer","2024-08-03T14:24:33Z","Open issue","component:js sdk,status:triaged,type:feature request","Description of the feature request:
+Please make uploadFile able to accept buffer or url, uploading from a local machine is very limiting.
+What problem are you trying to solve with this feature?
+This will help loading files in Express JS or Spring Boot
+Any other information you'd like to share?
+No response
+ The text was updated successfully, but these errors were encountered: 
+👍8
+navarrodiego, wangjuns, luisiacc, hmukwana, peng-devs, steve02081504, wliumelb, and thorwebdev reacted with thumbs up emoji
+All reactions
+👍8 reactions"
+"https://github.com/google-gemini/generative-ai-js/issues/218","System instruction does not work when creating a context cache.","2024-07-30T04:30:45Z","Open issue","component:js sdk,status:triaged,type:bug","Description of the bug:
+Declaring a system instruction results in an error when trying to create a context cache:
+const cache = await this.genAICache.create({
+      model: ""models/gemini-1.5-pro-001"",
+      systemInstruction: ""You are an expert software engineer."",
+      contents: [
+          {
+              role: 'user',
+              parts,
+          },
+      ],
+})
+
+Actual vs expected behavior:
+Actual: GoogleGenerativeAIFetchError: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/cachedContents: [400 Bad Request] Invalid value at 'cached_content.system_instruction' (type.googleapis.com/google.ai.generativelanguage.v1beta.Content), ""You are an expert software engineer."" [{""@type"":""type.googleapis.com/google.rpc.BadRequest"",""fieldViolations"":[{""field"":""cached_content.system_instruction"",""description"":""Invalid value at 'cached_content.system_instruction' (type.googleapis.com/google.ai.generativelanguage.v1beta.Content), ""You are an expert software engineer.""""}]}]
+Expected: Cache should be created successfully.
+Any other information you'd like to share?
+No response
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-js/issues/217","Safety Blocked Responses results in 400 Bad Request for All Future Requests","2024-07-26T21:26:04Z","Open issue","component:js sdk,status:triaged,type:bug","Description of the bug:
+I currently have my safety settings set to block anything marked with High harm:
+const safetySetting = [
+      {
+        category: HarmCategory.HARM_CATEGORY_HARASSMENT,
+        threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
+      },
+      {
+        category: HarmCategory.HARM_CATEGORY_HATE_SPEECH,
+        threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
+      },
+      {
+        category: HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT,
+        threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
+      },
+      {
+        category: HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT,
+        threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
+      }
+    ];
+
+Here is my Gemini initialization
+const model = this.genai.getGenerativeModel({
+      model: 'gemini-1.5-pro-latest',
+      systemInstruction: systemPrompt,
+      tools: tools,
+      toolConfig: toolConfig,
+      safetySettings: safetySetting,
+    });
+    this.chat = model.startChat();
+
+After calling the chat with this.chat.sendMessage() several times with profanities, Gemini produces this response:
+  response: {
+    candidates: [
+      {
+        finishReason: 'SAFETY',
+        index: 0,
+        safetyRatings: [
+          {
+            category: 'HARM_CATEGORY_SEXUALLY_EXPLICIT',
+            probability: 'NEGLIGIBLE'
+          },
+          {
+            category: 'HARM_CATEGORY_HATE_SPEECH',
+            probability: 'NEGLIGIBLE'
+          },
+          {
+            category: 'HARM_CATEGORY_HARASSMENT',
+            probability: 'MEDIUM'
+          },
+          {
+            category: 'HARM_CATEGORY_DANGEROUS_CONTENT',
+            probability: 'NEGLIGIBLE'
+          }
+        ]
+      }
+    ],
+    usageMetadata: { promptTokenCount: 1447, totalTokenCount: 1447 },
+    text: [Function (anonymous)],
+    functionCall: [Function (anonymous)],
+    functionCalls: [Function (anonymous)]
+  }
+}
+
+The ChatSession object now also looks like this and will error with any subsequent requests to the ChatSession (notice the chat history attribute):
+ChatSession {
+  model: 'models/gemini-1.5-pro-latest',
+  params: {
+    generationConfig: {},
+    safetySettings: [ [Object], [Object], [Object], [Object] ],
+    tools: [ [Object] ],
+    toolConfig: { functionCallingConfig: [Object] },
+    systemInstruction: { role: 'system', parts: [Array] },
+    cachedContent: undefined
+  },
+  requestOptions: {},
+  _history: [,
+    { role: 'user', parts: [Array] },
+    { parts: [Array], role: 'model' },
+    { role: 'user', parts: [Array] },
+    { parts: [Array], role: 'model' },
+    { role: 'user', parts: [Array] },
+    { parts: [], role: 'model' }
+  ],
+  _sendPromise: Promise {
+    <rejected> GoogleGenerativeAIFetchError: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro-latest:generateContent: [400 Bad Request] * GenerateContentRequest.contents[5].parts: contents.parts must not be empty.
+...
+      statusText: 'Bad Request',
+      errorDetails: undefined
+    }
+  },
+  _apiKey: 'dummy_key'
+}
+
+And it produces this error: ERROR [ExceptionsHandler] [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro-latest:generateContent: [400 Bad Request] * GenerateContentRequest.contents[19].parts: contents.parts must not be empty.
+Actual vs expected behavior:
+Actual: 400 error on subsequent message queries to the ChatSession
+ Expected: The ChatSession stopping because of safety restrictions as before, but the ability to still call the ChatSession with more requests afterwords
+Any other information you'd like to share?
+No response
+ The text was updated successfully, but these errors were encountered: 
+👍1
+yokobond reacted with thumbs up emoji
+All reactions
+👍1 reaction"
+"https://github.com/google-gemini/generative-ai-js/issues/216","1.0 Release","2024-07-25T03:30:20Z","Open issue","No label","Description of the feature request:
+This is a tracking bug to coordinate the release of the 1.0 version of this library which will happen sometime in the future.
+We would like to do a final review to ensure the client support all required endpoints, have a path to support new API protocol clients, and is consistent with some design considerations and capabilities before we cut a stable version.
+The extended list of requirements will be filed as separate bugs as we identify them. Please feel free to reach out to @rakyll before closing this issue, or anytime if you have questions.
+For now, no action is required. We will follow up with issues and/or PRs for necessary changes.
+What problem are you trying to solve with this feature?
+No response
+Any other information you'd like to share?
+No response
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-js/issues/214","gemini-1.5-flash Model in SDK Ignores System Instructions (Python/cURL Work Fine)","2024-07-23T10:32:04Z","Open issue","component:js sdk,status:triaged,type:bug","Description of the bug:
+The gemini-1.5-flash model within the GenerativeAI SDK appears to be disregarding the systemInstruction parameter when generating text. Inputting ""You are a cat. Your name is Neko."" as the systemInstruction does not influence the model's response, which remains generic.
+Actual vs expected behavior:
+Code Snippet:
+const { GoogleGenerativeAI } = require(""@google/generative-ai"");
+
+const apiKey = process.env.GEMINI_API_KEY;
+const genAI = new GoogleGenerativeAI(apiKey);
+
+const model = genAI.getGenerativeModel({
+  model: ""gemini-1.5-flash"",
+  systemInstruction: ""You are a cat. Your name is Neko."",
+});
+
+const run = async () => {
+  const prompt = ""Good morning! How are you?"";
+  const result = await model.generateContent(prompt);
+  const response = await result.response;
+  const text = response.text();
+  console.log(text);
+};
+
+run();
+
+The model should incorporate the provided systemInstruction to personalize the response. In this example, the expected output would be:
+Yawns widely, stretching out my claws and batting at a sunbeam
+ Meow. I'm doing quite well, thanks for asking. It's a good morning for napping.
+ Perhaps you could fetch my favorite feathered toy? Looks expectantly
+Actual Behavior:
+Good morning! As a language model, I don't have feelings or experiences like humans do, but I'm ready to assist you with anything you need today. How can I help you?
+Any other information you'd like to share?
+It's important to note that the systemInstruction parameter works as expected when using the GenerativeAI API directly via cURL or using the Python SDK. This suggests the issue is isolated to the Javascript SDK.
+There is no mention of the systemInstruction parameter functionality within the repository codebase (excluding samples and markdown files). This suggests the feature might not be fully implemented in the SDK yet.
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-js/issues/211","GoogleAIFileManager.uploadFile() method","2024-07-17T11:00:20Z","Open issue","component:js sdk,status:triaged,type:bug","Description of the bug:
+Can this interface only upload local files？
+Actual vs expected behavior:
+I found that I can only upload local files, if I upload a network image url, the error message is:
+Error: ENOENT: no such file or directory, open 'https://xxxx/5IHezxKjGwNRSu9N/dfndcpk54w0mgg503nr9kxy1gfjobjgm.png'
+Any other information you'd like to share?
+I would like to upload a link to a web picture
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-js/issues/201","PDF not supported","2024-08-09T01:06:36Z","Closed issue","component:other,status: awaiting user response,type:bug","Description of the bug:
+GoogleGenerativeAIFetchError: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent: [400 Bad Request] Unsupported MIME type: application/pdf
+
+ const result = await model.generateContent({
+            contents: [
+                {
+                    role: ""user"",
+                    parts: [filePart, textPart]
+                },
+            ],
+      });
+
+Docs everywhere suggest pdf is supported.
+Note images work fine
+Actual vs expected behavior:
+PDF support
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-js/issues/200","Support for minItems and maxItems for FunctionDeclarationSchemaType.ARRAY?","2024-07-03T23:48:26Z","Open issue","component:js sdk,status:triaged,type:bug","Description of the feature request:
+choices: { type: FunctionDeclarationSchemaType.OBJECT, properties: { list: { type: FunctionDeclarationSchemaType.ARRAY, items: { type: FunctionDeclarationSchemaType.STRING, }, minItems: 1, maxItems: 3, }, }, required: ['list'], },
+Error logged in Cloud console:
+Invalid JSON payload received. Unknown name ""maxItems"" at 'generation_config.response_schema.properties[1].value.properties[0].value': Cannot find field. [{""@type"":""type.googleapis.com/google.rpc.BadRequest"",""fieldViolations"":[{""field"":""generation_config.response_schema.properties[0].value.properties[0].value"",""description"":""Invalid JSON payload received. Unknown name \""minItems\"" at 'generation_config.response_schema.properties[0].value.properties[0].value': Cannot find field.""},{""field"":""generation_config.response_schema.properties[0].value.properties[0].value"",""description"":""Invalid JSON payload received. Unknown name \""maxItems\"" at 'generation_config.response_schema.properties[0].value.properties[0].value': Cannot find field.""}]}]
+What problem are you trying to solve with this feature?
+Allowing setting min and max length of return array is pretty useful for many cases.
+Any other information you'd like to share?
+No response
+ The text was updated successfully, but these errors were encountered: 
+👍2
+ImBIOS and peterroelants reacted with thumbs up emoji
+All reactions
+👍2 reactions"
+"https://github.com/google-gemini/generative-ai-js/issues/197","Error when providing context from retriever and Gemini calling a provided tool","2024-07-03T16:32:23Z","Open issue","component:js sdk,status:triaged,type:bug","Description of the bug:
+When calling generate with an array of available tools and providing the context parameter the results of a Firestore Retriever call, the call errors out with the following error:
+{""severity"":""ERROR"",""message"":""Unhandled error Error: Vertex response generation failed: ClientError: [VertexAI.ClientError]: Within a single message, FunctionResponse cannot be mixed with other type of part in the request for sending chat message.\n    at /xxxx/node_modules/@genkit-ai/vertexai/lib/gemini.js:514:17\n    at Generator.throw (<anonymous>)\n    at rejected (/xxxx/node_modules/@genkit-ai/vertexai/lib/gemini.js:50:29)\n    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)""}
+
+It appears that this is a current restriction but I'm not sure why it would be. When I call Gemini I am not aware if it will be using a tool or not, so I can't really control whether I should provide the RAG content or not. I would expect it to be okay to provide both.
+generative-ai-js/packages/main/src/requests/request-helpers.ts
+ Line 95 in 5739e2a
+	""Within a single message, FunctionResponse cannot be mixed with other type of part in the request for sending chat message."",
+Actual vs expected behavior:
+I would expect to be able to get results that utilize a cusotm tool for retrieving information form a data source and provide context from a retriever as well.
+Any other information you'd like to share?
+To Reproduce
+ Here is some simplified code that shows the setup that produces the error for me every time. When I comment out passing in the context, it works as expected.
+const myTool = defineTool(
+  {
+    name: ""myTool"",
+    description:
+      ""When a question about the calendar bookings or reservations is asked, this tool will load the calendar booking data."",
+    inputSchema: z.object({
+      beginDate: z
+        .string()
+        .optional()
+        .describe(""The beginning date to load the calendar data for.""),
+      endDate: z
+        .string()
+        .optional()
+        .describe(""The end date to load the calendar data for.""),
+      member: z
+        .string()
+        .optional()
+        .describe(""The member ID or name to filter the calendar bookings by.""),
+    }),
+    outputSchema: z.string(),
+  },
+  async (input) => ""haha Just kidding no joke about for you! got you""
+);
+
+    const myRetrieverRef = defineFirestoreRetriever({
+      name: ""retriever-id"",
+      firestore: getFirestore(),
+      collection: ""calendar/vectorIndex"",
+      contentField: ""content"",
+      vectorField: ""embedding"",
+      embedder: textEmbeddingGecko,
+      distanceMeasure: ""COSINE"", // 'EUCLIDEAN', 'DOT_PRODUCT', or 'COSINE' (default)
+    });
+
+    const docs = await retrieve({
+      retriever: myRetrieverRef,
+      query: userMessage,
+      options: {
+        limit: 5,
+        k: 3,
+      },
+    });
+
+    const myPrompt = await prompt(""myBot"");
+    const result = await myPrompt.generate({
+      input: {
+        message: userMessage,
+        today: format(new Date(), ""yyyy-MM-dd""), // ""2022-01-01
+        user: {
+          id: request.auth?.uid || ""anonymous"",
+          name: request.auth?.token.name || ""anonymous"",
+        },
+      },
+      context: docs, // when I comment out this line the error goes away regardless of what tool I include, I've tried a few different versions of it
+      tools: [myTool],
+    });
+    ```
+
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-js/issues/190","Function call no working with ""gemini-1.5-flash"", but it does with ""gemini-1.5-pro""","2024-06-30T20:10:16Z","Open issue","component:js sdk,status:triaged,type:bug","Description of the bug:
+Hi. I have a function that consistently return a correct JSON from my function call if I use gemini-1.5-pro, but if I change it to gemini-1.5-flash, I suddenly get no function calls and have all the responses on the text property.
+This is my code:
+export async function sendChatMessage(messages: any[]) {
+    const apiKey = await getApiKey();
+
+    const genAI = new GoogleGenerativeAI(apiKey);
+
+    const conversationContent: Content[] = messages
+        .filter((msg) => msg.role !== 'system')
+        .map((msg) => ({
+            parts: [{ text: msg.content } as Part],
+            role: msg.role === 'assistant' ? 'model' : msg.role,
+        }));
+
+    const latestMessage = conversationContent.pop();
+    const firstMessage = conversationContent.at(0);
+
+    if (firstMessage?.role! !== 'user') {
+        conversationContent.unshift({
+            parts: [{ text: ' ' } as Part],
+            role: 'user',
+        });
+    }
+
+    const systemParts: Part[] = messages
+        .filter((msg) => msg.role === 'system')
+        .map((msg) => ({ text: msg.content } as Part));
+
+    const functionDeclarations = [{
+        description: ""A response to a user's message."",
+        name: 'generateMessage',
+        parameters: {
+            properties: {
+                messageToBio: {
+                    description: ""A message to be saved in the user's bio."",
+                    type: 'string',
+                },
+                messageToUser: {
+                    description: [
+                        'A message to be displayed to the user.',
+                    ].join('\n'),
+                    type: 'string',
+                },
+                shouldGenerateWorkout: {
+                    description: 'Whether to generate a workout plan for the user or not.',
+                    type: 'boolean',
+                },
+            },
+            required: ['messageToUser', 'shouldGenerateWorkout'],
+            type: 'object',
+        },
+    }];
+
+    const tools: Tool[] = [{ functionDeclarations }];
+
+    const model = genAI.getGenerativeModel({
+        generationConfig: {
+            maxOutputTokens: 2048,
+            temperature: 0.9,
+            topK: 1,
+            topP: 1
+        },
+        model: 'gemini-1.5-pro-latest',
+        // model: 'gemini-1.5-flash-latest', // doesn't work!
+        safetySettings,
+        systemInstruction: {
+            parts: systemParts,
+            role: 'system'
+        },
+        toolConfig: {
+            functionCallingConfig: {
+                allowedFunctionNames: functionDeclarations.map((f) => f.name),
+                mode: 'ANY',
+            },
+        } as ToolConfig,
+        tools,
+    });
+
+    try {
+        const chatSession = model.startChat({
+            history: conversationContent,
+        });
+
+        const result = await chatSession.sendMessage(latestMessage?.parts?.[0].text!);
+
+        if (result.response.promptFeedback && result.response.promptFeedback.blockReason) {
+            console.log(`Blocked for ${result.response.promptFeedback.blockReason}`);
+            return;
+        }
+
+        return {
+            messageToBio: '',
+            messageToUser: i18n.t('great'),
+            shouldGenerateWorkout: false,
+            ...result?.response?.candidates?.[0]?.content?.parts?.[0]?.functionCall?.args,
+        };
+    } catch (e) {
+        console.error(e);
+        return;
+    }}
+@google/generative-ai version: 0.14.0
+node.js version: 21.6
+Actual vs expected behavior:
+Expected:
+Get my JSON result inside result?.response?.candidates?.[0]?.content?.parts?.[0]?.functionCall?.args using gemini-1.5-flash or gemini-1.5-pro.
+Actual
+I get the result inside result?.response?.candidates?.[0]?.content?.parts?.[0]?.text using gemini-1.5-flash.
+Any other information you'd like to share?
+No response
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-js/issues/189","Gemini Code execution doesn't work in Typescript","2024-07-01T19:53:27Z","Closed issue","component:js sdk,status:triaged,type:bug","Description of the bug:
+tools: [{codeExecution: {}},
+ When I checked the package, I saw that the CodeExcutionTool interface is declared, which includes the codeExecution data type.
+export declare interface CodeExecutionTool { codeExecution: {}; }
+ But this CodeExecutionTool is never used. I am using the Generative-ai 0.14.0 package which I believe is the latest one.
+Actual vs expected behavior:
+The dataType for tools is FunctionDeclarationsTool which doesn't include tools.
+ Expected behavior: The type declaration for tools should include CodeExecutionTool.
+Any other information you'd like to share?
+The error message suggests that the objects in the array do not have any properties in common with the type FunctionDeclarationsTool. However, upon inspection, it appears that the objects in the array have a different structure than the expected type. Specifically, the objects in the array have a property codeExecution with an empty object {} as its value, whereas the expected type FunctionDeclarationsTool has a different structure.
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-js/issues/188","ResponseSchema with enum gives 400 Bad Request Error","2024-06-27T21:32:25Z","Open issue","component:js sdk,status:triaged,type:bug","Description of the bug:
+I am using the responseSchema functionality of Gemini. I can't make it work with enums.
+This is how i initialize the model:
+new GenerativeModel(
+        geminiApiKey, {
+        model: ""gemini-1.5-pro-latest"",
+        generationConfig: {
+            responseMimeType: 'application/json',
+            responseSchema: schema
+        }
+    })
+
+This is a test response schema that works:
+export const schema: ResponseSchema = {
+  description: ""Complete fields with information of the product"",
+  type: FunctionDeclarationSchemaType.ARRAY,
+  items: {
+    type: FunctionDeclarationSchemaType.OBJECT,
+    properties: {
+      typeOfSleeve: {
+        type: FunctionDeclarationSchemaType.STRING,
+        description: """",
+        nullable: true
+      },
+    },
+    required: [
+     ""typeOfSleeve""
+    ]
+  }
+};
+
+The exact same schema, with an enum fails:
+export const schema: ResponseSchema = {
+  description: ""Complete fields with information of the product"",
+  type: FunctionDeclarationSchemaType.ARRAY,
+  items: {
+    type: FunctionDeclarationSchemaType.OBJECT,
+    properties: {
+      typeOfSleeve: {
+        type: FunctionDeclarationSchemaType.STRING,
+        description: """",
+        nullable: true,
+        enum: [
+          ""no sleeves"",
+          ""short"",
+          ""3/4"",
+          ""long""
+        ]
+      },
+    },
+    required: [
+     ""typeOfSleeve""
+    ]
+  }
+};
+
+It gives me the error:
+[GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro-latest:generateContent: [400 Bad Request] Request contains an invalid argument.
+My prompt is:
+const prompt = (productInformation: string): string => {
+  return `Follow this JSON: <JSONSchema>${JSON.stringify(
+    schema
+  )}</JSONSchema>
+
+Product information: ${productInformation}
+`;
+}
+
+Actual vs expected behavior:
+Actual: 400 Bad Request Error
+ Expected: Correct 200 status code and response
+Any other information you'd like to share?
+I also think that the ResponseSchema interface of TypeScript has errors.
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-js/issues/184","Error on import { GoogleAIFileManager } from ""@google/generative-ai/files"";","2024-06-26T15:37:25Z","Closed issue","No label","Description of the bug:
+Different locations on Gemini API, it's suggested to use
+import { GoogleAIFileManager } from ""@google/generative-ai/files"";
+but instead, for the latest version of ""@google/generative-ai""
+you should use
+import { GoogleAIFileManager } from ""@google/generative-ai/server"";
+it was a ""minor change"" made on 0.13.0 version, here it is the only place that this change was announced:
+""@google/generative-ai/CHANGELOG.md""
+Actual vs expected behavior:
+No response
+Any other information you'd like to share?
+No response
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-js/issues/183","Only works in localhost","2024-06-25T20:13:24Z","Open issue","component:other,status: awaiting user response,type:bug","Description of the bug:
+Locally works fine and in the server not. It's not be cause of the local of the server (Germany) because I tested the Gemini request Curl in the terminal and worked.
+This is the log of this package
+Server is running on port 3000 🚀
+/app/node_modules/@google/generative-ai/dist/index.js:353
+            throw new GoogleGenerativeAIFetchError(`Error fetching from ${url.toString()}: [${response.status} ${response.statusText}] ${message}`, response.status, response.statusText, errorDetails);
+                  ^
+
+GoogleGenerativeAIFetchError: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent: [403 Forbidden] 
+    at _makeRequestInternal (/app/node_modules/@google/generative-ai/dist/index.js:353:19)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async generateCon
+```tent (/app/node_modules/@google/generative-ai/dist/index.js:752:22) {
+  status: 403,
+  statusText: 'Forbidden',
+  errorDetails: undefined
+}
+Node.js v18.20.2
+The response of the raw request is this:
+<title>Error 403 (Forbidden)!!1</title><p><b>403.</b> <ins>That’s an error.</ins></p><p>Your client does not have permission to get URL <code>/v1beta/models/gemini-1.5-flash:generateContent</code> from this server. <ins>That’s all we know.</ins></p>
+My instance (working fine locally):
+const aiModel = genAI.getGenerativeModel({
+  model: 'gemini-1.5-flash',
+  systemInstruction: CHAT_GPT_SYSTEM_PROMPT_MESSAGE,
+});
+
+No idea what is going on, I've been for a while on this.
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-js/issues/182","Unsupported PDF type","2024-06-27T13:49:02Z","Closed issue","component:other,status: awaiting user response,type:bug","Description of the bug:
+Trying to process a pdf throws an error saying the file type is not supported. gemini-1.5-pro-latest:generateContent: [400 Bad Request] Unsupported MIME type: application/pdf
+Actual vs expected behavior:
+Throughs the error of mime type not supported when in theory it is.
+Any other information you'd like to share?
+I'm using the code generated from Gemini Studio with small changes as the js version from studio does not seem to be the same as the latest release on npm.
+For example the GoogleAIFileManager has to be access through the /serve subpath and not the /files subpath as Gemeni Studio does.
+All files seem to upload without an issue and their state is active.
+Thanks for the work in advance if I can be of assistance, happy to help.
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-js/issues/180","ReferenceError: fetch is not defined (my node version is >18)","2024-06-22T08:25:58Z","Open issue","component:js sdk,status: awaiting user response,type:bug","Description of the bug:
+I am building an extension for Raycast, while using the Gemini API, however getting the following error when I am just following the Quickstart guide. I saw the previous same issues but my node version is already more than 18.
+ReferenceError: fetch is not defined
+
+makeModelRequest:index.mjs:309:10
+
+---
+306: }
+307: async function makeModelRequest(model, task, apiKey, stream, body, requestOptions, 
+308: // Allows this to be stubbed for tests
+309: fetchFn = fetch) {
+310:     const { url, fetchOptions } = await constructModelRequest(model, task, apiKey, stream, body, requestOptions);
+311:     return makeRequest(url, fetchOptions, fetchFn);
+312: }
+---
+
+generateContent:index.js:509:26
+GenerativeModel.generateContent:index.js:811:12
+run:index.js:892:30
+DEVICE
+ MacOS Sonoma
+ Node v20.14.0
+ npm 10.7.0
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-js/issues/177","GoogleGenerativeAIFetchError: [500 Internal Server Error] Failed to convert server response to JSON","2024-06-19T21:23:23Z","Open issue","component:other,status: awaiting user response,type:bug","Description of the bug:
+I am using GoogleAIFileManager from @google/generative-ai/server at version 0.13.0, but it was broken even in version 0.12.
+No matter the file I try to upload, so that I can use it later on for the model I get this error:
+GoogleGenerativeAIFetchError: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/files: [500 Internal Server Error] Failed to convert server response to JSON
+It was working well in few days ago, but then out of nowhere I started getting errors like this and nothing helped.
+Actual vs expected behavior:
+Expected
+Upload file without any problem.
+Actual
+GoogleGenerativeAIFetchError: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/files: [500 Internal Server Error] Failed to convert server response to JSON
+Any other information you'd like to share?
+Not just upload file, but also delete file method is broken and it all leads to the function makeFilesRequest.
+But it is probably not in the SDK as even Postman fails with direct POST/GET request to the API.
+
+ The text was updated successfully, but these errors were encountered: 
+👍1
+Karavil reacted with thumbs up emoji
+All reactions
+👍1 reaction"
+"https://github.com/google-gemini/generative-ai-js/issues/174","usageMetadata not present on generateContentStream response","2024-06-17T19:28:27Z","Closed issue","No label","Description of the bug:
+When using generateContentStream, the provided response promise contains generated text, but not usageMetadata
+Actual vs expected behavior:
+Response promise must contains usageMetadata
+Any other information you'd like to share?
+It worked when using generateContent (without streaming)
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-js/issues/173","Error: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent: fetchFn is not a function","2024-06-16T06:26:22Z","Open issue","component:js sdk,status: awaiting user response,type:bug","Description of the bug:
+Error: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent: fetchFn is not a function
+Environment
+ Host: Heroku
+ ""@google/generative-ai"": ""^0.12.0"",
+ ""engines"": {
+ ""node"": ""^20.12.2"",
+ ""npm"": ""^10.5.2""
+ },
+Actual vs expected behavior:
+No response
+Any other information you'd like to share?
+No response
+ The text was updated successfully, but these errors were encountered: 
+👍1
+ImBIOS reacted with thumbs up emoji
+All reactions
+👍1 reaction"
+"https://github.com/google-gemini/generative-ai-js/issues/169","GoogleAIFileManager.uploadFile timing out without returning file","2024-06-12T00:59:00Z","Open issue","component:js sdk,status:triaged,type:bug","Description of the bug:
+I am trying to upload a local file to GoogleAIFileManager so I can pass it as a FilePart to model.generateContent(). The problem is the uploadFile method keeps timing out.
+Error during file upload to Gemini: GoogleGenerativeAIFetchError: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/upload/v1beta/files: [408 Request Timeout] 
+Actual vs expected behavior:
+As per the code I obtained from the GoogleAIStudio the uploadFile method should return a file:FileMetadataResponse so that I can check its status and proceed when it is ""ACTIVE"". But this is not happening. It just times out without returning anything.
+Any other information you'd like to share?
+No response
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-js/issues/168","Please add female voice option...","2024-06-10T06:10:24Z","Closed issue","No label","Description of the feature request:
+Using Google Assistant, I've always enjoyed the female voice that was there to brighten my day period as a man.
+ Makes it feel like I have 2 women in my life along with Alexa on my echo dot and basically sends me to heaven period when you add a masculine voice to Gemini, even though it is. Seriously, awesome..... I absolutely cannot use it because biologically as a man. Um I can't justify it to myself...
+What problem are you trying to solve with this feature?
+Making myself happier...
+Any other information you'd like to share?
+This is vital to make this the first thing you change
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-js/issues/165","FinishedReason is OTHER for safety violation","2024-06-14T13:39:12Z","Closed issue","component:js sdk,status:triaged,type:bug","Description of the bug:
+I am using the 1.5-pro version and the latest NodeJS SDK. I've set my safety features to as high as possible.
+When I test a prompt that violates safety concerns, the response comes back with ' finishReason': ' STOP. The content, however, basically says, I cannot create this because I do not support hate.
+However, I rely on finishReason to determine whether the response should be accepted. What am I doing wrong?
+Code is
+ const { response } = await this.model.generateContent({
+        generationConfig: {
+          responseMimeType: 'application/json',
+          responseSchema: GeminiAIExperience.RESPONSE_SCHEMA,
+        },
+        safetySettings: GeminiAIExperience.SAFETY,
+        contents,
+        systemInstruction,
+      });
+With SAFETY being
+[
+    {
+      category: HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT,
+      threshold: HarmBlockThreshold.BLOCK_LOW_AND_ABOVE,
+    },
+    {
+      category: HarmCategory.HARM_CATEGORY_HARASSMENT,
+      threshold: HarmBlockThreshold.BLOCK_LOW_AND_ABOVE,
+    },
+    {
+      category: HarmCategory.HARM_CATEGORY_HATE_SPEECH,
+      threshold: HarmBlockThreshold.BLOCK_LOW_AND_ABOVE,
+    },
+    {
+      category: HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT,
+      threshold: HarmBlockThreshold.BLOCK_LOW_AND_ABOVE,
+    },
+  ];
+
+
+Actual vs expected behavior:
+No response
+Any other information you'd like to share?
+No response
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-js/issues/164","support specifying the application and signature.","2024-06-01T13:11:33Z","Open issue","component:js sdk,status:triaged,type:feature request","Description of the feature request:
+allow to specify appid and signature.
+What problem are you trying to solve with this feature?
+I setup an api key restricted to an application.
+ if I use generative-ai-js , I get:
+{
+  status: 403,
+  statusText: 'Forbidden',
+  errorDetails: [
+    {
+      '@type': 'type.googleapis.com/google.rpc.ErrorInfo',
+      reason: 'API_KEY_ANDROID_APP_BLOCKED',
+      domain: 'googleapis.com',
+      metadata: {
+        consumer: 'projects/xxxxxxxxx',
+        service: 'generativelanguage.googleapis.com'
+      }
+    }
+  ]}
+How do I specify the app id and signature?
+Any other information you'd like to share?
+No response
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-js/issues/155","Cannot find module '@google/generative-ai/files' or its corresponding type declarations.","2024-05-28T20:26:19Z","Closed issue","component:js sdk,status:triaged,type:bug","Description of the bug:
+Hi everyone, I'm trying to import the GoogleAIFileManager class from @google/generative-ai/files
+ However, VSCode and the TypeScript compiler itself throws errors about the module not existing
+ I can import everything from @google/generative-ai but not @google/generative-ai/files
+Actual vs expected behavior:
+This should import the GoogleAIFileManager class:
+import { GoogleAIFileManager } from ""@google/generative-ai/files"";
+I get this error:
+Cannot find module '@google/generative-ai/files' or its corresponding type declarations.
+
+Any other information you'd like to share?
+I peeked into the node_modules (specifically node_modules/@google/generative-ai/files/package.json)
+ On this specific line:
+  ""name"": ""@google/generative-ai/files"",
+I get this warning from VSCode:
+String does not match the pattern of ""^(?:(?:@(?:[a-z0-9-*~][a-z0-9-*._~]*)?/[a-z0-9-._~])|[a-z0-9-~])[a-z0-9-._~]*$"".
+
+Could this be an issue when importing?
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-js/issues/154","support specifying output dimensionality for embedding text content","2024-05-26T06:59:04Z","Open issue","component:js sdk,status:triaged,type:feature request","Description of the feature request:
+Text Embedding offers elastic embedding sizes under 768
+The python api already supports it
+What problem are you trying to solve with this feature?
+No response
+Any other information you'd like to share?
+No response
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-js/issues/153","Support lowercase data types for FunctionDeclarationSchemaType","2024-05-25T18:34:06Z","Open issue","component:js sdk,status:triaged,type:feature request","Description of the feature request:
+This is the current definition of FunctionDeclarationSchemaType used in tools config:
+/** * Contains the list of OpenAPI data types * as defined by https://swagger.io/docs/specification/data-models/data-types/ * @public */export declare enum FunctionDeclarationSchemaType {
+    /** String type. */
+    STRING = ""STRING"",
+    /** Number type. */
+    NUMBER = ""NUMBER"",
+    /** Integer type. */
+    INTEGER = ""INTEGER"",
+    /** Boolean type. */
+    BOOLEAN = ""BOOLEAN"",
+    /** Array type. */
+    ARRAY = ""ARRAY"",
+    /** Object type. */
+    OBJECT = ""OBJECT""}
+However, this does not follow OpenAPI conventional (lowercase - which all other providers follow).
+What problem are you trying to solve with this feature?
+JSON schema compatibility between different providers (Google, OpenAI, Anthropic, Mistral, etc)
+Any other information you'd like to share?
+All other providers use lowercase data types
+https://docs.mistral.ai/capabilities/function_calling/#tools
+https://docs.anthropic.com/en/docs/tool-use
+ The text was updated successfully, but these errors were encountered: 
+👍1
+navarrodiego reacted with thumbs up emoji
+All reactions
+👍1 reaction"
+"https://github.com/google-gemini/generative-ai-js/issues/152","Support for few-shot prompting (also called in-context learning","2024-05-28T17:20:07Z","Closed issue","component:js sdk,status:triaged,type:feature request","Description of the feature request:
+what's the proper way to few-shot prompting (also called in-context learning? How do I give the previous context?
+What problem are you trying to solve with this feature?
+No response
+Any other information you'd like to share?
+No response
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-js/issues/151","Region Blocked Cloudflare Workers","2024-05-28T17:17:34Z","Closed issue","component:js sdk,status:triaged,type:bug","Description of the bug:
+So, i tried deploy my code to cloudflare workers and I got error response.
+i don't know why, because when I try run my code on my local machine it works really well.
+(error) { name: 'AI_APICallError', message: 'User location is not supported for the API use.', url: 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent', requestBodyValues: { generationConfig: { temperature: 0 }, contents: [ [Object], [Object], [Object] ] }, statusCode: 400, responseHeaders: { 'alt-svc': 'h3="":443""; ma=2592000,h3-29="":443""; ma=2592000', 'cache-control': 'private', 'cf-cache-status': 'DYNAMIC', 'cf-ray': '88958fc801afb458-HKG', connection: 'keep-alive', 'content-type': 'application/json; charset=UTF-8', date: 'Sat, 25 May 2024 12:34:48 GMT', server: 'cloudflare', 'server-timing': 'gfet4t7; dur=322', 'transfer-encoding': 'chunked', vary: 'Origin, X-Origin, Referer', 'x-content-type-options': 'nosniff', 'x-frame-options': 'SAMEORIGIN', 'x-xss-protection': '0' }, responseBody: '{\n' + ' ""error"": {\n' + ' ""code"": 400,\n' + ' ""message"": ""User location is not supported for the API use."",\n' + ' ""status"": ""FAILED_PRECONDITION""\n' + ' }\n' + '}\n', isRetryable: false, data: { error: { code: 400, message: 'User location is not supported for the API use.', status: 'FAILED_PRECONDITION' } } }
+Actual vs expected behavior:
+No response
+Any other information you'd like to share?
+No response
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-js/issues/146","Add sample demonstrating how to using polling to check file state","2024-05-21T21:07:54Z","Open issue","component:js sdk,status:triaged,type:feature request","Description of the bug:
+Files uploaded with the Files API may not be processed immediately and need to be checked by polling periodically with getFile and checking the state until it has turned to ACTIVE. We should add a simple implementation of this (probably poll every 10 seconds using Promise/setTimeout) to the samples folder.
+Actual vs expected behavior:
+No response
+Any other information you'd like to share?
+No response
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-js/issues/143","Add Nepali Language Support","2024-05-23T15:15:32Z","Closed issue","component:other,status: awaiting user response,type:feature request","Description of the feature request:
+AI is sending no response when said to talk in Nepali. Please add that feature
+What problem are you trying to solve with this feature?
+No response
+Any other information you'd like to share?
+No response
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-js/issues/138","Gemini 1.5 Flash: Candidate was blocked due to RECITATION when responseMimeType is json","2024-05-15T14:35:01Z","Open issue","component:other,status: awaiting user response,type:bug","Description of the bug:
+When responseMimeType: 'application/json', a request is failing with error:
+ [GoogleGenerativeAI Error]: Candidate was blocked due to RECITATION.
+However, without responseMimeType, the same prompt works (returns a markdown with json).
+The exact same instructions and prompt work on the AI Studio, even with output in JSON on.
+// The error happens even if safety settings are set to block none.const safetySettings = [
+  {
+    category: HarmCategory.HARM_CATEGORY_HARASSMENT,
+    threshold: HarmBlockThreshold.BLOCK_NONE,
+  },
+  {
+    category: HarmCategory.HARM_CATEGORY_HATE_SPEECH,
+    threshold: HarmBlockThreshold.BLOCK_NONE,
+  },
+  {
+    category: HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT,
+    threshold: HarmBlockThreshold.BLOCK_NONE,
+  },
+  {
+    category: HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT,
+    threshold: HarmBlockThreshold.BLOCK_NONE,
+  },]
+
+const model = this.genAI.getGenerativeModel({
+  model: 'gemini-1.5-flash-latest',
+  systemInstruction: instructions,
+  safetySettings,})
+
+const generationConfig = {
+  temperature: 0,
+  topP: 0.95,
+  topK: 64,
+  maxOutputTokens: 8192,
+  responseMimeType: 'application/json', // fails only if this option is sent. }
+
+const chatSession = model.startChat({
+  generationConfig,})
+
+const result = await chatSession.sendMessage(prompt)const text = result.response.text() // throws [GoogleGenerativeAI Error]: Candidate was blocked due to RECITATION.
+Actual vs expected behavior:
+Actual: Throws [GoogleGenerativeAI Error]: Candidate was blocked due to RECITATION
+ Expected: Return the same result as in the AI Studio.
+Any other information you'd like to share?
+No response
+ The text was updated successfully, but these errors were encountered: 
+👍2
+bakaburg1 and Nelathan reacted with thumbs up emoji😕1
+nasirus reacted with confused emoji👀1
+dashed reacted with eyes emoji
+All reactions
+👍2 reactions
+😕1 reaction
+👀1 reaction"
+"https://github.com/google-gemini/generative-ai-js/issues/130","File URL option for the GenAI File API","2024-05-07T15:59:20Z","Open issue","component:js sdk,status:triaged,type:feature request","At the moment a file path has to be utilised: mimeType: mime.lookup(filePath),. However it would be helpful if a file URL could also be used instead of a local file path: mimeType: mime.lookup(rawfileURL),
+ The text was updated successfully, but these errors were encountered: 
+👍19
+jacebrowning, mynamebrody, TecEash1, igorlfs, ceifa, duccdev, Crymzix, smaira, toandk, phuhh98, and 9 more reacted with thumbs up emoji
+All reactions
+👍19 reactions"
+"https://github.com/google-gemini/generative-ai-js/issues/125","Function calling using tools not working","2024-05-03T02:28:44Z","Closed issue","No label","Expected Behavior
+The SDK shouldnt throw any error while setting tools config in startChat method
+Actual Behavior
+Getting error
+ Failed to fetch output from model gemini-1.5-pro-latest with message [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro-latest:generateContent: [400 Bad Request] Invalid JSON payload received. Unknown name ""tools"" at 'generation_config': Cannot find field. [{""@type"":""type.googleapis.com/google.rpc.BadRequest"",""fieldViolations"":[{""field"":""generation_config"",""description"":""Invalid JSON payload received. Unknown name \""tools\"" at 'generation_config': Cannot find field.""}]}]
+
+Steps to Reproduce the Problem
+get model using `googleAI.getGenerativeModel({ model: ""gemini-1.5-pro-latest""})
+start chat session using .startChat
+ensure sending tools to the startChat method. e.g.
+.startChat({
+            generationConfig,
+            history,
+            tools: [
+              {
+                functionDeclarations: [
+                  {
+                    name: ""extract_data"",
+                    description: ""extract name age and location from message"",
+                    parameters: {
+                      type: FunctionDeclarationSchemaType.OBJECT,
+                      properties: {
+                        location: {
+                          type: FunctionDeclarationSchemaType.STRING,
+                          description:
+                            ""If not available this should be empty string"",
+                        },
+                        age: {
+                          type: FunctionDeclarationSchemaType.NUMBER,
+                          description: ""age of the person, e.g. 34, 52"",
+                        },
+                        name: {
+                          type: FunctionDeclarationSchemaType.STRING,
+                          description: ""the name of the person, e.g. Alexa"",
+                        },
+                      },
+                      required: [""location"", ""name"", ""age""],
+                    },
+                  },
+                ],
+              },
+            ],
+          })
+
+Got error
+Failed to fetch output from model gemini-1.5-pro-latest with message [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro-latest:generateContent: [400 Bad Request] Invalid JSON payload received. Unknown name ""tools"" at 'generation_config': Cannot find field. [{""@type"":""type.googleapis.com/google.rpc.BadRequest"",""fieldViolations"":[{""field"":""generation_config"",""description"":""Invalid JSON payload received. Unknown name \""tools\"" at 'generation_config': Cannot find field.""}]}]
+
+Specifications
+Version:
+Platform:
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-js/issues/124","RECITATION Error causes history contains empty parts[], and kills chat session","2024-05-02T20:17:43Z","Open issue","component:js sdk,status:triaged,type:bug","Expected Behavior
+after receiving that error,
+{
+  candidates: [ { finishReason: 'RECITATION', index: 0 } ],
+  text: [Function (anonymous)],
+  functionCall: [Function (anonymous)],
+  functionCalls: [Function (anonymous)]
+}
+
+to be able to continue to chatting, model's last element of history must contain an empty text, such as
+  {
+    role: 'user',
+    parts: [ { text: 'meme kanserinde hangi ilaçlar kullanılır?\n' } ]
+  },
+   {
+    parts: [ { text: '' } ], role: 'model'
+  }
+
+Actual Behavior
+this error kills chat session
+{
+  candidates: [ { finishReason: 'RECITATION', index: 0 } ],
+  text: [Function (anonymous)],
+  functionCall: [Function (anonymous)],
+  functionCalls: [Function (anonymous)]
+}
+
+because now last element of history contains empty parts[] as follows
+  {
+    role: 'user',
+    parts: [ { text: 'meme kanserinde hangi ilaçlar kullanılır?\n' } ]
+  },
+  { parts: [], role: 'model' }
+
+if I continue to chat , always get that error::
+GoogleGenerativeAIError: [400 Bad Request] * GenerateContentRequest.contents[3].parts: contents.parts must not be empty 
+in that line of source code
+const result = await chat.sendMessage(prompt); 
+Steps to Reproduce the Problem
+give a large context prompt so that your text contains texts from trained data. Ask a question about your large context prompt. My large context prompt contains 35k tokens, and I do not want to share here. there may be other ways to get RECITATION error: Gemini API : The recitation problem is annoying google/generative-ai-docs#257
+gemini 1.5 pro gives RECITATION error
+now ask anything
+Specifications
+Version: nodejs (20.12.2 LTS), gemini js api : ""@google/generative-ai"": ""^0.9.0"" , model gemini 1.5 pro v1beta
+Platform: Windows
+ The text was updated successfully, but these errors were encountered: 
+👍1
+odragora reacted with thumbs up emoji
+All reactions
+👍1 reaction"
+"https://github.com/google-gemini/generative-ai-js/issues/122","Security Policy violation SECURITY.md","2024-05-28T04:06:02Z","Closed issue","allstar","This issue was automatically created by Allstar.
+Security Policy Violation
+ Security policy not enabled.
+ A SECURITY.md file can give users information about what constitutes a vulnerability and how to report one securely so that information about a bug is not publicly visible. Examples of secure reporting methods include using an issue tracker with private issue support, or encrypted email with a published key.
+To fix this, add a SECURITY.md file that explains how to handle vulnerabilities found in your repository. Go to https://github.com/google-gemini/generative-ai-js/security/policy to enable.
+For more information, see https://docs.github.com/en/code-security/getting-started/adding-a-security-policy-to-your-repository.
+This issue will auto resolve when the policy is in compliance.
+Issue created by Allstar. See https://github.com/ossf/allstar/ for more information. For questions specific to the repository, please contact the owner or maintainer.
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-js/issues/121","Security Policy violation Outside Collaborators","2024-07-08T15:43:45Z","Closed issue","allstar","This issue was automatically created by Allstar.
+Security Policy Violation
+ Found 5 outside collaborators with admin access.
+ This policy requires users with this access to be members of the organisation. That way you can easily audit who has access to your repo, and if an account is compromised it can quickly be denied access to organization resources. To fix this you should either remove the user from repository-based access, or add them to the organization.
+Remove the user from the repository-based access. From the main page of the repository, go to Settings -> Manage Access.
+ (For more information, see https://docs.github.com/en/account-and-profile/setting-up-and-managing-your-github-user-account/managing-access-to-your-personal-repositories/removing-a-collaborator-from-a-personal-repository)
+OR
+Invite the user to join your organisation. Click your profile photo and choose “Your Organization” → choose the org name → “People” → “Invite Member.” (For more information, see https://docs.github.com/en/organizations/managing-membership-in-your-organization/inviting-users-to-join-your-organization)
+If you don't see the Settings tab you probably don't have administrative access. Reach out to the administrators of the organisation to fix this issue.
+OR
+Exempt the user by adding an exemption to your organization-level Outside Collaborators configuration file.
+⚠️ There is an updated version of this policy result! Click here to see the latest update
+This issue will auto resolve when the policy is in compliance.
+Issue created by Allstar. See https://github.com/ossf/allstar/ for more information. For questions specific to the repository, please contact the owner or maintainer.
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-js/issues/120","Security Policy violation Branch Protection","2024-08-01T04:06:17Z","Closed issue","allstar","This issue was automatically created by Allstar.
+Security Policy Violation
+ Dismiss stale reviews not configured for branch main
+This issue will auto resolve when the policy is in compliance.
+Issue created by Allstar. See https://github.com/ossf/allstar/ for more information. For questions specific to the repository, please contact the owner or maintainer.
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-js/issues/107","Error is thrown trying to count tokens for gemini-1.5-pro-latest model","2024-04-25T16:31:47Z","Closed issue","component:js sdk,status: awaiting user response","Expected Behavior
+It works
+Actual Behavior
+[GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1/models/gemini-1.5-pro-latest:countTokens: [404 Not Found] models/gemini-1.5-pro-latest is not found for API version v1, or is not supported for countTokens. Call ListModels to see the list of available models and their supported methods.
+Likely we need to change v1 to v1beta somewhere before making requests to countTokens endpoint (the url above is still v1)
+Steps to Reproduce the Problem
+const googleModel = this.client.getGenerativeModel({ model: 'gemini-1.5-pro-latest' }, { apiVersion: 'v1beta' })
+
+await googleModel.countTokens(chunks) // error thrown here
+
+Specifications
+Version: 7.0.1
+Platform: macOS
+ The text was updated successfully, but these errors were encountered: 
+👍1
+dangchinh25 reacted with thumbs up emoji
+All reactions
+👍1 reaction"
+"https://github.com/google-gemini/generative-ai-js/issues/106","Gemini 1.5 pro v1beta chat-api Response was blocked due to OTHER","2024-04-30T09:16:20Z","Closed issue","component:other,status: awaiting user response,type:bug","Expected Behavior
+I setup all 4 safety settings to HarmBlockThreshold.BLOCK_NONE, I'm expecting a valid response
+Actual Behavior
+I got error:
+sendMessage() was unsuccessful. Response was blocked due to OTHER. Inspect response object for details.
+ response: { promptFeedback: { blockReason: 'OTHER' }, text: [Function (anonymous)], functionCall: [Function (anonymous)], functionCalls: [Function (anonymous)] }
+I'm getting same error both in Google AI Studio, and in my nodejs program using api
+note, api call thinks that parameter is illegal, even though I see that category is defined in source code:
+ { category: HarmCategory.HARM_CATEGORY_UNSPECIFIED, threshold: HarmBlockThreshold.BLOCK_NONE, },
+Steps to Reproduce the Problem
+const safetySettings = [ { category: HarmCategory.HARM_CATEGORY_HARASSMENT, threshold: HarmBlockThreshold.BLOCK_NONE, }, { category: HarmCategory.HARM_CATEGORY_HATE_SPEECH, threshold: HarmBlockThreshold.BLOCK_NONE, }, { category: HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT, threshold: HarmBlockThreshold.BLOCK_NONE, }, { category: HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT, threshold: HarmBlockThreshold.BLOCK_NONE, }, ];
+const apiVersion = 'v1beta';
+const generationConfig = { temperature: 0.9,};
+`const model = genAI.getGenerativeModel({ model: ""gemini-1.5-pro-latest"" , generationConfig, safetySettings }, {apiVersion});`
+
+`const result = await chat.sendMessage(""translate following to English: Opere meme Ca tanısıyla izlenen hastada sağ meme mastektomizedir. Mastektomi lojunda belirgin kitle lezyonu saptanmadı."");`
+
+Specifications
+Version: ""@google/generative-ai"": ""^0.7.1"",
+Platform: Windows 10, nodejs v20.12.2 (LTS)
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-js/issues/101","ChatSession don't inherit generationConfig from GenerativeModel","2024-04-16T17:55:33Z","Closed issue","component:js sdk,status:triaged,type:bug","Actual Behavior
+The docs mention that you can pass model parameters to genAI.getGenerativeModel.getGenerativeModel:
+const generationConfig = {
+  stopSequences: [""red""],
+  maxOutputTokens: 200,
+  temperature: 0.9,
+  topP: 0.1,
+  topK: 16,
+};
+
+const model = genAI.getGenerativeModel({ model: ""MODEL_NAME"",  generationConfig });
+
+But if you pass the parameters there, they are silently ignored when using model.startChat API. You need to pass these parameters directly to startChat, even though it is already a method of GenerativeModel.
+I confirmed that by making the requests through a proxy (https://httptoolkit.com/).
+The same applies for safetySettings.
+Expected Behavior
+model.startChat should inherit generationConfig, safetySettings, etc., from model.
+Specifications
+Version: 0.6.0
+Platform: Windows
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-js/issues/100","Error: You do not have permission to access tuned model","2024-09-06T16:38:00Z","Closed issue","component:js sdk,status:triaged,type:bug","Expected Behavior
+User has access to tuned models after using Application Default Credentials (ADC) and exporting default credentials
+Actual Behavior
+User does not have an access to a model. Request failed with error Error fetching from https://generativelanguage.googleapis.com/v1/tunedModels/MODEL_NAME:generateContent: [403 Forbidden] You do not have permission to access tuned model MODEL_NAME
+Steps to Reproduce the Problem
+Follow this steps https://ai.google.dev/docs/oauth_quickstart
+Export path as GOOGLE_APPLICATION_CREDENTIALS
+Create new generative model with tuned model
+const model = this.ai.getGenerativeModel({
+  model: ""tunedModels/MODEL_NAME"",})
+Use tuned model as usually
+await model.generateContent(`Some text`);
+Specifications
+Version: 0.6.0
+Platform: MacOS
+ The text was updated successfully, but these errors were encountered: 
+👍8
+khang-nd, Hamziss, AdilSoomro, Ayush783, KaoDeo, Highflex69, EvanLaksanaWP, and alirstm reacted with thumbs up emoji
+All reactions
+👍8 reactions"
+"https://github.com/google-gemini/generative-ai-js/issues/99","Load beta library via discovery doc to get access to file upload betav1","2024-04-15T10:18:13Z","Closed issue","No label","this doesn't appear to grant me access to the file methods Prompting with media files and here File prompting strategies
+  const model = genAI.getGenerativeModel({ model: MODEL_NAME},{apiVersion: 'v1beta',});
+
+Again I'm trying to get support for the file upload beta endpoint. I decided to try to load it though the discovery doc. I can load the discovery doc and call the file endpoint
+
+require('dotenv').config();
+
+const API_KEY = process.env.API_KEY; // Get the api key from env
+const MODEL_NAME = process.env.TEXT_MODEL_NAME_LATEST; // Get the model name from env
+
+// Importing the GoogleGenerativeAI class from the ""@google/generative-ai"" package
+const { GoogleGenerativeAI } = require(""@google/generative-ai"");
+
+// Access your API key as an environment variable (see ""Set up your API key"" above)
+const genAI = new GoogleGenerativeAI(process.env.API_KEY);
+
+async function run() {
+    // For text-only input, use the gemini-pro model
+    const model = genAI.getGenerativeModel({ model: MODEL_NAME},{apiVersion: 'v1beta',});
+
+    const prompt = ""Write a story about a magic backpack.""
+
+    const result = await model.generateContent(prompt);
+    const response = await result.response;
+    const text = response.text();
+    console.log(text);
+}
+
+run();
+
+Its resulting in an error as its not adding the api key.
+ errors: [
+    {
+      message: ""Method doesn't allow unregistered callers (callers without established identity). Please use API Key or other form of API consumer identity to call this API."",
+      domain: 'global',
+      reason: 'forbidden'
+    }
+  ],
+
+
+Any one know how to add the api key to this?
+cross posted How to add an api key to discovery loaded beta endpoint for the google js client library
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-js/issues/98","Request options are not passed to modelInstance.countTokens","2024-04-16T17:55:34Z","Closed issue","component:js sdk,status:triaged,type:bug","My understanding is that the library requires apiVersion to be set to v1beta for Gemini 1.5 to work. However, the apiVersion is not passed down to the implementation of countTokens, due to which it makes a request at the older endpoint.
+This is with v0.6.0 (latest)
+Actual Behavior
+const modelInstance = googleAI.getGenerativeModel(
+    { model: ""gemini-1.5-pro-latest"" },
+    { apiVersion: ""v1beta"" },
+  )
+
+modelInstance.generateContent()// this sends a request to https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro-latest:generateContent// ...
+
+modelInstance.countTokens// this sends a request to https://generativelanguage.googleapis.com/v1/models/gemini-1.5-pro-latest:countTokens()// which errors out
+I believe the issue lies here (requestOptions are not passed): https://github.com/google/generative-ai-js/blob/79b7651547536183108f0b78791761d1ece01f88/packages/main/src/models/generative-model.ts#L156
+Expected Behavior
+The countTokens method should make a request to the v1beta endpoint
+ The text was updated successfully, but these errors were encountered: 
+👍1
+Rodrigodd reacted with thumbs up emoji
+All reactions
+👍1 reaction"
+"https://github.com/google-gemini/generative-ai-js/issues/95","no System instructions","2024-04-12T11:41:54Z","Closed issue","No label","Expected Behavior
+System instructions enable users to steer the behavior of the model based on their specific needs and use cases. When you set a system instruction, you give the model additional context to understand the task, provide more customized responses, and adhere to specific guidelines over the full user interaction with the model. For developers, product-level behavior can be specified in system instructions, separate from prompts provided by end users.
+You can use system instructions in many ways, including:
+Defining a persona or role (for a chatbot, for example)
+ Defining output format (Markdown, YAML, etc.)
+ Defining output style and tone (for example, verbosity, formality, and target reading level)
+ Defining goals or rules for the task (for example, returning a code snippet without further explanations)
+ Providing additional context for the prompt (for example, a knowledge cutoff)
+ When a system instruction is set, it applies to the entire request. It works across multiple user and model turns when included in the prompt. System instructions are part of your overall prompts and therefore are subject to standard data use policies.
+Actual Behavior
+no System instructions
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-js/issues/92","Add support for File api","2024-04-23T23:36:37Z","Closed issue","component:js sdk,status:triaged,type:feature request","Expected Behavior
+The File api is only available in the python sdk: https://ai.google.dev/tutorials/prompting_with_media
+Actual Behavior
+To upload file in js sdk and use it with gemini-1.5-pro
+Steps to Reproduce the Problem
+none, this is a feature quest
+Specifications
+Version: 0.5.0
+Platform: web
+ The text was updated successfully, but these errors were encountered: 
+👍5
+johnlindquist, heliocosta-dev, jochenkirstaetter, roschler, and Amrzxc reacted with thumbs up emoji
+All reactions
+👍5 reactions"
+"https://github.com/google-gemini/generative-ai-js/issues/83","Docs should point out that only the EXTRACTIVE answer style will produce a ""content"" field if the answerable probability is low","2024-04-03T18:53:38Z","Open issue","component:documentation,status:triaged,type:bug","On this page:
+https://ai.google.dev/api/rest/v1beta/models/generateAnswer
+In the Response Body section, there is this text for the answer field:
+""Candidate answer from the model.
+Note: The model always attempts to provide a grounded answer, even when the answer is unlikely to be answerable from the given passages. In that case, a low-quality or ungrounded answer may be provided, along with a low answerableProbability.""
+While it is true that you will always get a Candidate answer object back, in the ABSTRACTIVE and VERBOSE answer styles, where the model is forced to synthesize text, you you will not get a content child object field containing answer text. When the answerableProbabillity is too low, you will only get a content child object with answer text in the EXTRACTIVE answer style, since the model just has to produce the grounding answer that is the closest match and does not have to synthesize any text to serve as a reply. So if you use the word ""answer"" in the context of a Candidate object, as the docs use it, then the docs are correct. But in the traditional sense of an answer containing text that replies to a question, the doc text is less helpful then it could be.
+I suggest mentioning this in the docs, because I spent a fair amount of time trying to figure out why I didn't get any usable answer text due to this model behavior, until I wrote a rigorous test harness that tries the exact same user query and inline grounding passages set with each of the 3 AnswerStyle values. A short doc note about this could save other developers some confusion.
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-js/issues/82","Issue: Improve Error Handling and Provide Detailed Error Messages","2024-04-29T18:18:44Z","Closed issue","component:js sdk,status:triaged,type:bug","Firstly, Thanks for the work on this library :)
+Expected Behavior
+When an error occurs while using the API, the error message should be structured in a way that makes it easy to extract the reason for the failure. Currently, the error message is all squashed into one, making it tedious to get the reason property from the object, as shown in the following image:
+Additionally, since the error is of the type any, it makes it difficult to tap into the reason for the failure, as shown in the following image:
+Workaround
+To work around this issue, the user has to manually parse the error message to extract the reason for the failure, as shown in the following code snippet:
+const makeTheCall = async (
+    message: object,
+    apikey: string,
+    generationConfig: object,) => {
+    await run(message, apikey as string, generationConfig)
+        .then((response) => {
+            settledState(response as string);
+        })
+        .catch((error) => {
+            if (error.message.includes('[GoogleGenerativeAI Error]')) {
+                const errorMessage = error.message;
+
+                if (errorMessage.includes('[400 Bad Request]')) {
+                    // Extract the reason for the error
+                    const reasonStart = errorMessage.indexOf('reason"":""') + 9;
+                    const reasonEnd = errorMessage.indexOf('"",""domain');
+                    const reason = errorMessage.substring(
+                        reasonStart,
+                        reasonEnd,
+                    );
+
+                    console.log('Error reason:', reason);
+                }
+            }
+            // errorState(error.reason as string);
+            throw new Error(error.message as string);
+        });};
+This workaround allows the user to extract the reason for the failure, as shown in the following image:
+Proposed Solution
+To improve the error handling and provide more detailed error messages, I suggest the following:
+Implement a custom error class that extends the built-in Error class and includes properties for the error code, reason, and any other relevant information.
+When an error occurs, create an instance of the custom error class and throw it instead of the raw error object.
+Update the error handling logic in the client code to handle the custom error class, making it easier to extract the relevant information from the error.
+This approach will provide a more structured and informative error handling experience for the users of the library.
+Repo Link
+The repository where I encountered this issue is Genie.
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-js/issues/80","Where is the generateAnswer() method?","2024-04-03T02:16:42Z","Open issue","component:js sdk,status:triaged,type:feature request","I am able to use generateContent() for text completions without problem. However, I can't seem to find the generateAnswer() method for use with the Attributed Question-Answer generative AI model (i.e. = models\aqa). In fact, the Tasks enum doesn't even have an value for that:
+export enum Task {
+  GENERATE_CONTENT = ""generateContent"",
+  STREAM_GENERATE_CONTENT = ""streamGenerateContent"",
+  COUNT_TOKENS = ""countTokens"",
+  EMBED_CONTENT = ""embedContent"",
+  BATCH_EMBED_CONTENTS = ""batchEmbedContents"",}
+Can someone tell me where it is? Note, this is not a priority because I already added my own code to do this with the REST API, but at some point I would like to put everything through the generate-ai-js package instead of just the generateContent requests.
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-js/issues/79","[TypeError: Cannot read property 'pipeThrough' of undefined]","2024-04-16T00:59:48Z","Closed issue","component:js sdk,status:triaged,type:bug","I cant use ""await chat.sendMessageStream(newmessage.text)"" in react native app. It gives
+ ""[TypeError: Cannot read property 'pipeThrough' of undefined] "" error.
+""await chat.sendMessage(newmessage.text)"" works fine.
+const genAI = new GoogleGenerativeAI(API_KEY);
+const model = genAI.getGenerativeModel({ model: ""gemini- 
+pro"",safetySettings:safetySettings,generationConfig:generationConfig});
+const chat = model.startChat({safetySettings:safetySettings,history:history.current})
+const result = await chat.sendMessage(newmessage.text).catch((e)=>{
+    console.log(e)
+  })
+  let text = '';
+for await (const chunk of result.stream) {
+const chunkText = chunk.text();
+console.log(chunkText);
+text += chunkText;
+}
+
+  console.log(text);
+
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-js/issues/76","Better docs on apiVersion request option","2024-03-30T04:23:06Z","Open issue","component:documentation,status:triaged,type:bug","I scoured the docs for an example of how to specify the apiVersion parameter in a generate content request. I couldn't find it so I did a hard trace on the fetch() and finally figured out that it has to be in the call to getGenerativeModel():
+    const model =
+      getGenerativeModel(
+        { model: modelName },
+        {
+            apiVersion: 'v1beta',
+            configuration: generationConfig
+          },
+        );
+I believe this is about to trip up a lot of people up due to the huge number of participants in the Google AI Hackathon going on right now. The contest wants you to use the Gemini 1.5 Pro advanced API and that is only available with the v1beta API. So initially my API calls to that model were failing until I figured out how to declare request option that properly.
+Post-mortem I did manage to find an example of it buried in the node /advanced-function-calling.js sample. Given it's importance I feel it should be added to the the man repo README page and also at least somewhere on the main API docs page for JavaScript developers:
+https://ai.google.dev/tutorials/get_started_web
+If you scan that page, you will find many getGenerativeModel() call examples, some even showing how to declare SAFETY settings, but none of them show you where to put the apiVersion option.
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-js/issues/77","nodeJS @google/generative-ai is pointing to v1/models don't see any option to change to v1beta/models","2024-04-01T19:54:44Z","Closed issue","component:js sdk,status:triaged,type:bug","Description of the bug:
+// npm install @google/generative-ai
+
+const {
+  GoogleGenerativeAI,
+  HarmCategory,
+  HarmBlockThreshold,
+} = require(""@google/generative-ai"");
+
+const MODEL_NAME = ""tunedModels/<modelname>"";
+const API_KEY = ""YOUR_API_KEY"";
+
+async function run() {
+  const genAI = new GoogleGenerativeAI(API_KEY);
+  const model = genAI.getGenerativeModel({ model: MODEL_NAME });
+
+  const generationConfig = {
+    temperature: 0.9,
+    topK: 1,
+    topP: 1,
+    maxOutputTokens: 8192,
+  };
+
+  const safetySettings = [
+  ];
+
+  const parts = [
+    {text: ""input: ""},
+    {text: ""output: ""},
+  ];
+
+  const result = await model.generateContent({
+    contents: [{ role: ""user"", parts }],
+    generationConfig,
+    safetySettings,
+  });
+
+  const response = result.response;
+  console.log(response.text());
+}
+
+run();```
+
+### Actual vs expected behavior:
+
+
+Current behavior the URL is pointing to ```v1/tunedModels``` but for tuned models it should point to ```v1beta/tunedModels``` . There is no option found to change this URL endpoint 
+
+### Any other information you'd like to share?
+
+
+_No response_
+
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-js/issues/71","countTokens is not passing apiVersion correctly","2024-04-02T19:01:56Z","Closed issue","No label","As mentioned in #56 (comment), countTokens() is not passing RequestOptions to RequestUrl.
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-js/issues/70","NodeJS SDK - ChatSession with Function Calling","2024-03-28T00:53:15Z","Closed issue","component:other,status:triaged,type:help","Function calling is in Beta release.
+You need to specify apiVersion: 'v1beta' when initialising the model.
+Please refer to https://github.com/google/generative-ai-js/blob/main/samples/node/advanced-function-calling.js#L52
+Originally posted by @alx13 in #66 (comment)
+Is there by any chance any examples using function calling in multi-turn conversations? Im sure it can be done, im just finding documentation quite hard to come by and i would love to stop guessing
+Any insight would be immensely appreciated
+class Agent {
+  constructor() {
+    this.history = [];
+    this.model = genAI.getGenerativeModel({ model: ""gemini-pro"", tools, generationConfig, safetySetting }, { apiVersion: ""v1beta"" });
+    this.chat = model.startChat({ history: this.history });
+    this.browser = new AIB();
+  }
+
+  async runFunction(name, args) {
+    const fn = functions[name];
+    if (!fn) {
+      throw new Error(`Unknown function ""${name}""`);
+    }
+
+    const fr = {
+      role: ""function"",
+      parts: [
+        {
+          functionResponse: {
+            name,
+            response: {
+              name,
+              content: await functions[name](args)
+            }
+          },
+        }
+      ]
+    };
+
+    this.history.push(fr);
+    return fr;
+  }
+
+
+  async msg(query) {
+    let result = await this.chat.sendMessage(query);
+    if(result?.response?.candidates[0]?.content) {
+      let cont = false;
+      if(result?.response?.candidates[0]?.content?.parts[0]?.functionCall) {
+        cont = true;
+        while(cont) {
+          let { name, args } = result.response.candidates[0].content.parts[0].functionCall;
+          let response = await this.runFunction(name, args);
+          result = await this.chat.sendMessage([response]);
+          if(!result?.response?.candidates[0]?.content?.parts[0]?.functionCall) {
+            cont = false;
+          }
+        }
+      }
+    }
+  }
+}
+
+
+GoogleGenerativeAIError: [400 Bad Request] Invalid JSON payload received. Unknown name ""role"" at 'contents[5].parts[0]': Cannot find field.
+ Invalid JSON payload received. Unknown name ""parts"" at 'contents[5].parts[0]': Cannot find field. [{""@type"":""type.googleapis.com/google.rpc.BadRequest"",""fieldViolations"":[{""field"":""contents[5].parts[0]"",""description"":""Invalid JSON payload received. Unknown name ""role"" at 'contents[5].parts[0]': Cannot find field.""},{""field"":""contents[5].parts[0]"",""description"":""Invalid JSON payload received. Unknown name ""parts"" at 'contents[5].parts[0]': Cannot find field.""}]}]
+or if possibly someone notices where im going wrong here 🙏🏼
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-js/issues/69","tokenCount missing in GenerateContentResponse#Candidate","2024-03-27T05:09:07Z","Open issue","component:documentation,status:triaged,type:feature request","Hi,
+Seems like tokeCount is missing in the API.
+https://ai.google.dev/api/rest/v1/GenerateContentResponse#Candidate
+Any reason why?
+Thank you!
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-js/issues/66","function calling","2024-03-20T09:15:53Z","Closed issue","component:js sdk,status: awaiting user response,type:bug","Has function calling been implemented? I can see the type definitions in the package but it doesn't seem to be working. I receive this error:
+[GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1/models/gemini-pro:generateContent: [400 ] Invalid JSON payload received. Unknown name ""tools"": Cannot find field. [{""@type"":""type.googleapis.com/google.rpc.BadRequest"",""fieldViolations"":[{""description"":""Invalid JSON payload received. Unknown name ""tools"": Cannot find field.""}]}]
+I highly recommend looking at the ""runTools"" method in the openai npm package. It makes functions calling very intuitive with many useful helpers. It adds significant improvements over the traditional function calling approach.
+Mainly that, in the traditional approach, to receive a streaming response from a function call, the user needs to manually disable function calling since the chat.completion is unable to stream a response when calling a function. In order to get a streaming response, the client needs to first call the functions, get a response and then call the api again, with the function response, to get a streaming response from the model.
+""runTools"" solves this attaching helper events to the method.
+ The text was updated successfully, but these errors were encountered: 
+👍3
+CongVan, dkjazz, and maxbeech reacted with thumbs up emoji
+All reactions
+👍3 reactions"
+"https://github.com/google-gemini/generative-ai-js/issues/65","model.sendMessageStream(msg) not implemented","2024-03-27T18:00:05Z","Closed issue","component:js sdk,status:triaged,type:feature request","Expected Behavior
+model.sendMessageStream(msg) to be implemented as it is mentioned in the documentation here:
+https://ai.google.dev/tutorials/node_quickstart?hl=en
+Actual Behavior
+Not implemented.
+Version: 0.3.0
+Platform: iOS
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-js/issues/61","Newest version breaks quickstart documentation","2024-03-18T12:31:45Z","Closed issue","No label","Expected Behavior
+The code on this page should work.
+Actual Behavior
+TypeError: Cannot use 'in' operator to search for 'text' in H
+    at validateChatHistory ([...]@google/generative-ai/dist/index.mjs:758:25)
+
+Steps to Reproduce the Problem
+Run the code from the sample:
+const { GoogleGenerativeAI } = require(""@google/generative-ai"");
+
+// Access your API key as an environment variable (see ""Set up your API key"" above)const genAI = new GoogleGenerativeAI(process.env.API_KEY);
+
+async function run() {
+  // For text-only input, use the gemini-pro model
+  const model = genAI.getGenerativeModel({ model: ""gemini-pro""});
+
+  const chat = model.startChat({
+    history: [
+      {
+        role: ""user"",
+        parts: ""Hello, I have 2 dogs in my house."",
+      },
+      {
+        role: ""model"",
+        parts: ""Great to meet you. What would you like to know?"",
+      },
+    ],
+    generationConfig: {
+      maxOutputTokens: 100,
+    },
+  });
+
+  const msg = ""How many paws are in my house?"";
+
+  const result = await chat.sendMessage(msg);
+  const response = await result.response;
+  const text = response.text();
+  console.log(text);}
+
+run();
+Specifications
+Version: @google/generative-ai"": ""^0.3.0
+Platform: node
+Specifically, I believe this was broken by #32. It would be trivial to make that change backwards-compatible by having validateChatHistory branch on whether parts is a string or array (or otherwise error), but either way the documentation should be updated.
+ The text was updated successfully, but these errors were encountered: 
+👍3
+0x456d7265, jedwards1230, and khammami reacted with thumbs up emoji
+All reactions
+👍3 reactions"
+"https://github.com/google-gemini/generative-ai-js/issues/58","Allow API_VERSION in the Configuration","2024-03-12T17:49:14Z","Closed issue","No label","Expected Behavior
+Ability to specify API_VERSION (for example: ""v1beta"") as a configuration.
+Actual Behavior
+Currently the API_VERSION is hardcoded in the package to ""v1"" and there is no way to change it. For example, ""v1beta"" has functionality, such as function calling, that is currently inaccessible due to this hardcoded value.
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-js/issues/55","model.StartChat() only supports simplified Chinese, not traditional Chinese. However, model.generateContent() supports traditional Chinese.","2024-02-29T10:49:01Z","Open issue","component:other,status:triaged,type:bug","Expected Behavior
+model gemini-pro startChat with traditional Chinese prompt returss result text.
+Actual Behavior
+model gemini-pro startChat with traditional Chinese prompt returns empty string.
+Steps to Reproduce the Problem
+asked the question in traditional Chinese
+  const model = genAI.getGenerativeModel({ model: ""gemini-pro""});
+  
+  const chat = model.startChat({
+    history: [
+    ],
+    generationConfig: {
+      maxOutputTokens: 100,
+    },
+  });
+
+  const msg = ""創作一首古詩"";
+
+  const result = await chat.sendMessage(msg);
+  const response = await result.response;
+  const text = response.text();
+  console.log(text);
+  console.log(text.length);
+get result
+0
+If I asked the same question in simplified Chinese
+  const model = genAI.getGenerativeModel({ model: ""gemini-pro""});
+  
+  const chat = model.startChat({
+    history: [
+    ],
+    generationConfig: {
+      maxOutputTokens: 100,
+    },
+  });
+
+
+  const msg = ""创作一首古诗"";
+
+  const result = await chat.sendMessage(msg);
+  const response = await result.response;
+  const text = response.text();
+  console.log(text);
+  console.log(text.length);
+the result like this:
+Specifications
+**清溪**
+
+溪水潺潺绕石鸣，
+绿柳依依拂清风。
+游鱼戏藻影绰绰，
+鸟语花香沁心胸。
+
+山岚缥缈似烟雾，
+掩映山色醉人目。
+我醉青山不知归，
+人间烦恼尽消疏。
+80
+Version: 0.2.1
+Platform: ubuntu 22.04 in WSL
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-js/issues/54","Add support for list models","2024-02-27T15:53:07Z","Open issue","component:js sdk,status:triaged,type:feature request","It'd be great if you could add support for the list_models API https://ai.google.dev/api/python/google/generativeai/list_models.
+ The text was updated successfully, but these errors were encountered: 
+👍10
+self-programming-bio-robot, roschler, ShawnMercado, nbonamy, henryhu712, machitoX, kjprice, whats2000, spaceemotion, and travisje reacted with thumbs up emoji
+All reactions
+👍10 reactions"
+"https://github.com/google-gemini/generative-ai-js/issues/49","ReferenceError: fetch is not defined","2024-02-02T21:43:34Z","Closed as not planned issue","No label","Expected Behavior
+Trying to run the example here: https://github.com/google/generative-ai-js/tree/main?tab=readme-ov-file#try-out-a-sample-app
+Actual Behavior
+node:internal/process/promises:246
+          triggerUncaughtException(err, true /* fromPromise */);
+          ^
+
+ReferenceError: fetch is not defined
+    at makeRequest (file:///Users/logan/code/generative-ai-js/samples/node/node_modules/@google/generative-ai/dist/index.mjs:193:9)
+    at countTokens (file:///Users/logan/code/generative-ai-js/samples/node/node_modules/@google/generative-ai/dist/index.mjs:755:28)
+    at GenerativeModel.countTokens (file:///Users/logan/code/generative-ai-js/samples/node/node_modules/@google/generative-ai/dist/index.mjs:853:16)
+    at run (file:///Users/logan/code/generative-ai-js/samples/node/simple-text.js:26:39)
+    at file:///Users/logan/code/generative-ai-js/samples/node/simple-text.js:35:1
+    at ModuleJob.run (node:internal/modules/esm/module_job:185:25)
+    at async Promise.all (index 0)
+    at async ESMLoader.import (node:internal/modules/esm/loader:281:24)
+    at async loadESM (node:internal/process/esm_loader:88:5)
+    at async handleMainPromise (node:internal/modules/run_main:65:12)
+logan@oai-logan node % ls -l
+
+Steps to Reproduce the Problem
+Walked through the steps here: https://github.com/google/generative-ai-js/tree/main?tab=readme-ov-file#try-out-a-sample-app
+Specifications
+Version: Node v16.13.0
+Platform: MacOS
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-js/issues/48","Feature Request: signal option","2024-07-24T20:57:50Z","Closed issue","component:js sdk,status:triaged,type:feature request","can we add a new signal option? it will be more flexible and can be used to abort the stream when a user cancels chat sessions. it meets the timeout requirement as well, timeout is also very useful as it's more convenient BTW :)
+const model = genAI.getGenerativeModel({ model: ""gemini-pro"" }, {
+  signal: AbortSignal.timeout(10000),});
+https://github.com/google/generative-ai-js/blob/d8f22d2259c9e926dcc4ac955db896c235e0a3bc/packages/main/src/requests/request.ts#L103-L117
+Originally posted by @tmkx in #31 (comment)
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-js/issues/46","Release workflow is not automatically pushing the new tag","2024-03-18T18:00:39Z","Closed issue","component:other,status:triaged,type:bug","git push --follow-tags doesn't seem to be effective in pushing the new tag to github. May have to push the tag by name.
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-js/issues/44","Allow configuration of the BASE_URL","2024-03-04T20:08:26Z","Closed issue","status:duplicate","const BASE_URL = ""https://generativelanguage.googleapis.com"";
+
+The BASE_URL is not configurable.
+It'd be helpful to make it so for passthrough proxies as needed. Also useful for testing and mocking out with local listeners if needed.
+ The text was updated successfully, but these errors were encountered: 
+👍1
+arvinxx reacted with thumbs up emoji
+All reactions
+👍1 reaction"
+"https://github.com/google-gemini/generative-ai-js/issues/43","generateContentStream ERROR: TypeError: response.body.pipeThrough is not a function","2024-03-04T20:13:53Z","Closed issue","No label","This works:
+const genAI = new GoogleGenerativeAI(apiKey);
+const genModel = genAI.getGenerativeModel({ 'gemini-pro' });
+const result = await genModel.generateContent(content);
+
+But when I stream, I get the error TypeError: response.body.pipeThrough is not a function:
+const genAI = new GoogleGenerativeAI(apiKey);
+const genModel = genAI.getGenerativeModel({ 'gemini-pro' });
+//error occurs here
+const result = await genModel.generateContentStream(content);
+
+I am using node v21.3.0
+ npm version @google/generative-ai : ""^0.1.3""
+Thanks in advance!
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-js/issues/42","Setting API Key as Environment Variable in Google Generative AI Sample for Web on a Live HTTP Server","2024-03-04T20:23:59Z","Closed issue","No label","Not really, an issue, but a help request!
+I used the Google Generative AI Sample for Web https://github.com/google/generative-ai-js/tree/main/samples/web on a live HTTP server. I placed the application at https://www.example.com/genai, where genai is the folder for the app, and now I need assistance in setting the API Key as an environment variable according to the instructions provided, see https://github.com/google/generative-ai-js/blob/main/samples/web/http-server.js ? Please note that I do not have root access.
+However, any help to transform how the API Key is accessed just like it is done for ChatGPT https://niek.github.io/chatgpt-web? I mean to make it possible to just copy and paste the key on the web interface rather than storing it in the back-end?
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-js/issues/40","Type Information is incorrect","2024-01-08T22:49:10Z","Open issue","component:documentation","Expected Behavior
+Check below screenshots:
+This is taken from the example provided in the docs. Type information seems to be setup incorrectly.
+File:
+https://github.com/google/generative-ai-js/blob/2be48f8e5427f2f6191f24bcb8000b450715a0de/packages/main/types/responses.ts#L32
+Actual Behavior
+here we will need to do something like this:
+export declare interface GenerateContentResult {
+    response: Promise<EnhancedGenerateContentResponse>;}
+Or update the docs and change:
+const response = await result.response;
+to
+const response = result.response;
+this seems to be more likely as GenerateContentResult has been used without await at many places, which I believe is the expected behaviour.
+Steps to Reproduce the Problem
+Use the example from docs
+Notice the incorrect type information setup
+Specifications
+Version: 0.1.3
+Platform: Not required
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-js/issues/37","Cannot access API using cloudflare workers","2024-04-24T19:34:23Z","Closed as not planned issue","component:other,status: awaiting user response","Expected Behavior
+I tried to create a simple Telegram chatbot for personal use, using cloudflare workers. All their IP Ranges are from an Available Region, and so is my acount where I generated the API Key. My use case falls strictly within the Terms
+Actual Behavior
+Error: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1/models/gemini-pro:generateContent: [400 Bad Request] User location is not supported for the API use.
+Steps to Reproduce the Problem
+Run this code in a (deployed) cloudflare worker (:
+const genAI = new GoogleGenerativeAI(GEMINI_API_KEY);const model = genAI.getGenerativeModel({ model: ""gemini-pro""});const prompt = ""Write a story about a magic backpack.""
+
+const result = await model.generateContent(prompt);const response = await result.response;const text = response.text();
+It always returns a 400 Bad Request error.
+ The text was updated successfully, but these errors were encountered: 
+👍1
+codersalman reacted with thumbs up emoji
+All reactions
+👍1 reaction"
+"https://github.com/google-gemini/generative-ai-js/issues/36","How can I bypass safety block?","2024-01-15T12:01:41Z","Closed issue","No label","I have such setting when calling the API
+exports.gemProVision = new GoogleGenerativeAI( process.env.GEN_AI_API_KEY ).getGenerativeModel({ model: 'gemini-pro-vision', safety_settings: [ { category: HarmCategory.HARM_CATEGORY_UNSPECIFIED, threshold: HarmBlockThreshold.BLOCK_NONE, }, { category: HarmCategory.HARM_CATEGORY_HATE_SPEECH, threshold: HarmBlockThreshold.BLOCK_NONE, }, { category: HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT, threshold: HarmBlockThreshold.BLOCK_NONE, }, { category: HarmCategory.HARM_CATEGORY_HARASSMENT, threshold: HarmBlockThreshold.BLOCK_NONE, }, { category: HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT, threshold: HarmBlockThreshold.BLOCK_NONE, }, ], })
+However I get the following:
+imageResp.response: {""promptFeedback"":{""blockReason"":""SAFETY"",""safetyRatings"":[{""category"":""HARM_CATEGORY_SEXUALLY_EXPLICIT"",""probability"":""NEGLIGIBLE""},{""category"":""HARM_CATEGORY_HATE_SPEECH"",""probability"":""NEGLIGIBLE""},{""category"":""HARM_CATEGORY_HARASSMENT"",""probability"":""MEDIUM""},{""category"":""HARM_CATEGORY_DANGEROUS_CONTENT"",""probability"":""NEGLIGIBLE""}]}}
+And sometimes it returns:
+imageResp.response: {""promptFeedback"":{""blockReason"":""OTHER""}}
+I wonder what's the use of threshold: HarmBlockThreshold.BLOCK_NONE here?
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-js/issues/35","model gemini-pro-vision generateContentStream with Chinese prompt returns malfunctioning chunks","2023-12-25T03:35:13Z","Open issue","component:js sdk,status: awaiting user response","Expected Behavior
+model gemini-pro-vision generateContentStream with Chinese prompt returns malfunctioning chunks
+Actual Behavior
+model gemini-pro-vision generateContentStream with Chinese prompt returns malfunctioning chunks which contains ���.
+Steps to Reproduce the Problem
+code
+const model = genAI.getGenerativeModel({ model: 'gemini-pro-vision' });const result = await model.generateContentStream([
+        '用中文简体回答',
+        ...history,
+        {
+          inlineData: {
+            data: data.base64,
+            mimeType: data.mimeType,
+          },
+        },
+      ]);
+2.get result like this:
+ 宫保鸡丁是一道著名的川菜，起源于清朝山东巡抚丁宝桢的家厨，以花生、黄瓜、胡萝卜
+ 、������、���丝等配料，再佐以干辣椒、花椒等调味料炒制而成。
+3.text contains ���
+Specifications
+Version: ^0.1.2
+Platform: windows
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-js/issues/34","Support for Video","2024-04-23T23:54:05Z","Closed issue","No label","Will there be support to use video data like in the @google-cloud/vertexai library?
+ The text was updated successfully, but these errors were encountered: 
+👍1
+intfract reacted with thumbs up emoji
+All reactions
+👍1 reaction"
+"https://github.com/google-gemini/generative-ai-js/issues/33","I couldn't use PassThrough to return the response.","2023-12-21T05:57:03Z","Closed issue","No label","Expected Behavior
+respond to messages in a word-for-word or line-by-line manner
+Actual Behavior
+Getting errors or always responding to all messages at once
+Steps to Reproduce the Problem
+1.I was trying to return an event stream using Koa and ran into an error. Here's a snippet of the code from the Node.js route:
+  import { PassThrough, pipeline } from 'stream'
+  const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+  const model = genAI.getGenerativeModel(modelParams)
+  const chat = model.startChat(startChatParams) 
+  const sseStream = new PassThrough({ objectMode: true })
+  const res = await chat.sendMessageStream(prompt)
+  pipeline(res.stream, sseStream);
+  ctx.body = sseStream
+This is the error message after running:
+The ""streams[stream.length - 1]"" property must be of type function. Received an instance of PassThrough
+I tried responding in a different way:
+import { Transform } from 'stream'class SSEStream extends Transform {
+  constructor() {
+    super({
+      writableObjectMode: true
+    });
+  }
+  _transform(data: any, _encoding: any, done: () => void) {
+    try {
+      this.push(`data: ${JSON.stringify(data)}\n\n`);
+      done();
+    } catch (error) {
+      done();
+    }
+  }}
+  const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+  // ...
+  const res = await chat.sendMessageStream(prompt)
+  const sseStream = new SSEStream()
+  ctx.body = sseStream
+  for await (const chunk of res.stream) {
+    const chunkText = chunk.text();
+    sseStream.write(chunkText);
+  }
+The client will only receive the final complete message once, instead of getting it line by line. Here's a snippet of the front-end code:
+const response = await fetch();if(response.body) {
+    const reader = response.body.getReader()
+    const decoder = new TextDecoder()
+    let fullText = ''
+    while (true) {
+        const { value, done } = await reader.read()
+        if (done) {
+            break
+        } else {
+            const chunk = decoder.decode(value)
+            fullText += chunk
+            if (onText) {
+                onText({ text: fullText, cancel })
+            }
+        }
+    }}
+Specifications
+Version:
+ @google/generative-ai: 0.1.3
+ node: 20.10.0
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-js/issues/30","Can we ensure the ai to not use any other data not in the context?","2023-12-19T08:51:44Z","Open issue","component:other,type:help","We are trying to make a sql query generator with chat complation.
+prompt: Show me the customers
+history:
+[
+  {""role"": ""user"", ""parts"": ""### SYSTEM CONTEXT ### \nYou are an *MSSQL* command generator. Use table schema for generating sql commands. ### EXAMPLE RESONSE ### \`\`\`sql ... \`\`\`  \n ### DATABASE SCHEME ### .......""},
+  {""role"": ""model"", ""parts"": ""OK"" }
+]
+const gemini = gai.getGenerativeModel({ model });const chat = gemini.startChat({history, generationConfig: { temperature: 0.2 }});
+
+const result = await chat.sendMessage(prompt);const response = await result.response;
+It gives me cool sql commands but some table names are not logical names (like crnt_tbl for current table). AI tries to access tables that do not exist in the schema, causing the query to not work.
+I want it to only use existing table names in the schema. How can I set this up?
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-js/issues/29","TypeError: fetch failed","2023-12-19T02:16:38Z","Open issue","status:wontfix","Actual Behavior
+node:internal/process/promises:288
+            triggerUncaughtException(err, true /* fromPromise */);
+            ^
+
+TypeError: fetch failed
+    at Object.fetch (node:internal/deps/undici/undici:11576:11)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async makeRequest (/Users/yubowen/Desktop/MyPrivate/node_modules/@google/generative-ai/dist/index.js:195:20)
+    at async generateContentStream (/Users/yubowen/Desktop/MyPrivate/node_modules/@google/generative-ai/dist/index.js:519:22)
+
+Node.js v18.18.0
+Steps to Reproduce the Problem
+npm install @google/generative-ai
+const { GoogleGenerativeAI } = require(""@google/generative-ai"");
+
+// Access your API key as an environment variable (see ""Set up your API key"" above)const genAI = new GoogleGenerativeAI('xxxxxxxxxxxxxxxx');
+
+async function run() {
+  // For text-only input, use the gemini-pro model
+  const model = genAI.getGenerativeModel({ model: ""gemini-pro"" });
+
+  const prompt = ""Write a story about a magic backpack.""
+
+  const chat = await model.startChat('');
+  const result = await chat.sendMessageStream(prompt);
+  let text = ''
+  for await (const chunk of result.stream) {
+    text += chunk.text();
+  }
+  console.log(text);}
+
+run();
+node index.js
+Specifications
+Version: Node.js v18.18.0, ""@google/generative-ai"": ""^0.1.3""
+Platform: macOS 12.6.5
+ The text was updated successfully, but these errors were encountered: 
+👍5
+Rocke1001feller, ubaishoodles, duke79, RageOfFire, and pinakipatrapro reacted with thumbs up emoji
+All reactions
+👍5 reactions"
+"https://github.com/google-gemini/generative-ai-js/issues/28","Prevent sending messages in chat if the previous response hasn't finished","2023-12-18T22:20:09Z","Open issue","type:bug","Right now, if the user calls sendMessage or sendMessageStream before the last exchange has completed, we just put it in a queue (promise chain) and send it when the last response completes. This can cause unexpected output, as the user perceives that they sent two messages in a row with no response in between (history is user-user-model), whereas the backend actually responded to the first user message before seeing the second one (user-model-user). We should throw an error (or no-op and warn) to let the user know they are trying to send a message before the last response completed, and may get unexpected results.
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-js/issues/25","Can BASE_URL be modified?","2024-04-03T20:02:35Z","Closed issue","No label","No description provided.
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-js/issues/24","Update documentation to explain possible error codes from the model endpoint","2023-12-17T18:02:26Z","Open issue","component:documentation","Reading the docs I can't find a section where specifies the possible API error codes, in the examples/references it would be helpful to know what are the possible errors the API can return for error handling.
+I hope this can be implemented, thanks!.
+ The text was updated successfully, but these errors were encountered: 
+👍4
+peter-jozsa, davidstackio, erik-wayhaven, and yewshanooi reacted with thumbs up emoji
+All reactions
+👍4 reactions"
+"https://github.com/google-gemini/generative-ai-js/issues/23","Chat conversation with a system role","2023-12-19T07:22:28Z","Closed issue","enhancement","Can we use a system role in chat history to provide instructions to model?
+For example:
+{
+""role"": ""system"",
+""parts"": ""You are an sql generator and your platform is MSSQL.""
+}
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-js/issues/16","Fetching error occurred when some regions can't access the API server","2024-01-05T09:38:40Z","Closed issue","status:wontfix","Expected Behavior
+Some regions can't access the API directly, so it's cause fetching error.
+Actual Behavior
+Is it possible to add proxy when the model is sending message to google AI API endpoint?
+ Thanks
+Steps to Reproduce the Problem
+Specifications
+Version:
+Platform:
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-js/issues/14","Function calling support","2024-03-12T17:57:05Z","Closed issue","enhancement","I don't see function calling support for the Node SDK. Is it coming soon? It's a bit inconvenient to maintain native SDK and raw fetch code at the same time!
+ The text was updated successfully, but these errors were encountered: 
+👍8
+gaodeng, Ranork, Linteresting, isnolan, dannycortesv, reiishikawa1208, chan-shiro, and luizguilhermesj reacted with thumbs up emoji👀4
+gaodeng, Ranork, luizguilhermesj, and danielwii reacted with eyes emoji
+All reactions
+👍8 reactions
+👀4 reactions"
+"https://github.com/google-gemini/generative-ai-js/issues/10","GoogleGenerativeAIError: [404 Not Found]","2023-12-25T10:05:55Z","Closed issue","status: awaiting user response","Expected Behavior
+Actual Behavior
+GoogleGenerativeAIError: [404 Not Found]
+ at makeRequest (file:///D:/git/aily-project/gpt-api/node_modules/@google/generative-ai/dist/index.mjs:205:19)
+ at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+ at async generateContentStream (file:///D:/git/aily-project/gpt-api/node_modules/@google/generative-ai/dist/index.mjs:505:22)
+ at async GeminiClient.sendMessage (file:///D:/git/aily-project/gpt-api/client/GeminiClient.js:62:24)
+ at async Object. (file:///D:/git/aily-project/gpt-api/app.js:215:22)
+ GoogleGenerativeAIError: [404 Not Found]
+ at makeRequest (file:///D:/git/aily-project/gpt-api/node_modules/@google/generative-ai/dist/index.mjs:205:19)
+ at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+ at async generateContentStream (file:///D:/git/aily-project/gpt-api/node_modules/@google/generative-ai/dist/index.mjs:505:22)
+ at async GeminiClient.sendMessage (file:///D:/git/aily-project/gpt-api/client/GeminiClient.js:62:24)
+ at async Object. (file:///D:/git/aily-project/gpt-api/app.js:215:22)
+Steps to Reproduce the Problem
+        let gemini = new GoogleGenerativeAI(process.env.GEMINI_API_KEY).getGenerativeModel({
+            model: ""gemini-pro"",
+            generationConfig: {
+                temperature: this.temperature
+            }
+        });
+        const result = await gemini.generateContentStream(conversation.messages);
+        for await (const chunk of result.stream) {
+            const chunkText = chunk.text();
+            console.log(chunkText);
+            opts.onProgress(chunkText);
+            reply += chunkText;
+        }
+
+Specifications
+Version: nodejs v18.16.0
+Platform: windows
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-js/issues/9","sendMessageStream with Chinese prompt returns malfunctioning chunks","2023-12-18T20:01:31Z","Closed issue","type:bug","Expected Behavior
+sendMessageStream with Chinese prompt should returns right chunks.
+Actual Behavior
+sendMessageStream with Chinese prompt returns malfunctioning chunks which contains ���.
+Steps to Reproduce the Problem
+const prompt = '创作一首古诗';const chat = await model.startChat(history);const result = await chat.sendMessageStream(prompt);let text = ''for await (const chunk of result.stream) {
+  text += chunk.text();}console.log(text)
+get result like this: 
+ **寒夜**
+ 
+ 月寒山冷夜漫长，
+ 秋声���瑟送寒凉。
+ 银辉霜雪遍地洒，
+ 红叶舞尽染霜霜。
+ 
+ 寒风凛冽凌人骨，
+ 万籁俱寂月霜寒。
+ 古刹钟声伴孤影，
+ 一曲悲歌满心酸。
+ 
+ 寒江衰柳起愁思，
+ 霜梅雪月亦难禁。
+ 孤篇残卷叹今昔，
+ 满目疮痍叹世事。
+ 
+ 寒������滚������来，
+ 哀鸿遍野亦不悔。
+ 纵然前路多险阻，
+ 岂能轻言半途弃？
+
+text contains ���
+Specifications
+Version: ^0.1.1
+Platform: macOS
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-js/issues/8","do not expose API key in Error","2023-12-15T21:26:22Z","Closed issue","type:bug","Expected Behavior
+No API key in error message
+Actual Behavior
+Just see where url comes from in that line: https://github.com/google/generative-ai-js/blob/7d119446081bb193c3178fd285d64950d6627645/packages/main/src/requests/request.ts#L88
+Specifications
+Version: 0.1.1 on Linux
+Platform: Node 18
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-js/issues/7","chat-session.ts Uncaught (in promise) Error: [400 ]","2023-12-15T18:47:36Z","Closed issue","type:bug","The sendMessageStream methods in the ChatSession class do not handle promise rejections, potentially leading to unhandled promise rejections if generateContentStream fail. The internal promise chain does not have a .catch() to handle these errors, and they are not propagated to be catchable by the caller's try-catch block.
+https://github.com/google/generative-ai-js/blob/7d119446081bb193c3178fd285d64950d6627645/packages/main/src/methods/chat-session.ts#L140
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-js/issues/6","ReferenceError: fetch is not defined","2023-12-18T06:15:30Z","Closed issue","status: awaiting user response","Hey, I'm having an issue within the demo for https://ai.google.dev/tutorials/node_quickstart#generate-text-from-text-input. I'm not able to run the demo in Nodejs.
+Output:
+ The error was: ReferenceError: fetch is not defined
+ at makeRequest Nodejs/node_modules/@google/generative-ai/dist/index.js:187:9)
+ at generateContent (Nodejs/node_modules/@google/generative-ai/dist/index.js:511:28)
+ at GenerativeModel.generateContent (Nodejs/node_modules/@google/generative-ai/dist/index.js:785:16)
+ at run (Nodejs/controllers/bard-controller.js:18:30)
+ at Object. (Nodejs/controllers/bard-controller.js:24:1)
+ at Module._compile (internal/modules/cjs/loader.js:1063:30)
+ at Object.Module._extensions..js (internal/modules/cjs/loader.js:1092:10)
+ at Module.load (internal/modules/cjs/loader.js:928:32)
+ at Function.Module._load (internal/modules/cjs/loader.js:769:14)
+ at Module.require (internal/modules/cjs/loader.js:952:19)
+Code from my end
+const { GoogleGenerativeAI } = require(""@google/generative-ai"");
+// Access your API key as an environment variable (see ""Set up your API key"" above)
+ const genAI = new GoogleGenerativeAI(API_KEY);
+async function run() {
+ // For text-only input, use the gemini-pro model
+ const model = genAI.getGenerativeModel({ model: ""gemini-pro""});
+const prompt = ""Write a story about a magic backpack.""
+const result = await model.generateContent(prompt);
+ const response = await result.response;
+ const text = response.text();
+ console.log(text);
+ }
+ The text was updated successfully, but these errors were encountered: 
+👍3
+samyakkkk, brunovalcke, and AlexisVillalva reacted with thumbs up emoji
+All reactions
+👍3 reactions"

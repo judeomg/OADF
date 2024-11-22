@@ -1,0 +1,1386 @@
+﻿"https://github.com/google-gemini/generative-ai-android/issues/219","What is the Max length for the prompt for the Gemini 1.5 Flash Android model ?","2024-09-27T05:26:48Z","Open issue","component:android sdk,status:triaged,type:help","Description of the bug:
+Dear Google,
+What is the Max length for the prompt for the Gemini 1.5 Flash Android model ?
+When using the case 1 prompt, the function (val response = generativeModel.generateContent(prompt)) returns the following error.
+ the error mesaage : Prompt was blocked: OTHER
+The case 1 prompt's character length is 3101.
+ The case 1 prompt's Token length is 2072.
+When using the case 2 prompt which is cut from the case 1 prompt, it's working well.
+ The case 2 prompt's character length is 694.
+ The case 2 prompt's Token length is 382.
+safetySettings are already set as below.
+
+                    val harassmentSafety = SafetySetting(HarmCategory.HARASSMENT, BlockThreshold.NONE)
+                    val hateSpeechSafety = SafetySetting(HarmCategory.HATE_SPEECH, BlockThreshold.NONE)
+                    val SEXUALLY_EXPLICIT_Safety = SafetySetting(HarmCategory.SEXUALLY_EXPLICIT, BlockThreshold.NONE)
+                    val DANGEROUS_CONTENT_Safety = SafetySetting(HarmCategory.DANGEROUS_CONTENT, BlockThreshold.NONE)
+                    val UNKNOWNSafety = SafetySetting(HarmCategory.UNKNOWN, BlockThreshold.NONE)
+                    val generativeModel = GenerativeModel(
+                        modelName = ""gemini-1.5-flash-latest"",
+                        apiKey = BuildConfig.apiKey,
+                        generationConfig = config,
+                        safetySettings = listOf(harassmentSafety, hateSpeechSafety, SEXUALLY_EXPLICIT_Safety, DANGEROUS_CONTENT_Safety)
+                    )
+                    SummarizeViewModel(generativeModel)
+                }
+                
+               
+
+The case 1 prompt
+ Here is the retrieved context -------------------------------------------------- 예비인가 요건의 심사에 필요한 서류로서 금융위원회가 정하여 고시하는 서류
+ □ 은행업감독규정
+ 제5조(은행업의 인가) ① 법 제8조에 따라 은행업 인가를 받고자 하는 자는 감독 원장이 정하는 인가신청서 및 <별표 2-6>에 따른 첨부서류를 금융위에 제출하여야 한다. ② 영 제1조의7제3항에 따라 금융위가 정하여 고시하는 은행업 인가의 세부요건은 <별표2-2>와 같다.
+ ③ 제1항에 따른 신청서를 제출받은 금융위는 「전자정부법」 제36조제1항 또는 제2항에 따른 행정정보의 공동이용을 통하여 법인 등기사항증명서를 확인하여야 한다. ④ 감독원장은 제1항에 따른 신청 내용에 관한 사실 여부를 확인하고, 이해관계자 등으로부터 수렴된 의견을 고려하여 신청내용이 법 제8조, 영 제1조의7제3항 및 이 규정 제2항에 따른 인가요건을 충족하는지 심사하여야 한다.
+ ⑤ 금융위는 제1항에 따라 신청서를 받은 경우에는 3개월(법 제11조의2에 따른 예비인가를 받은 경우에는 1개월) 이내에 은행업 인가 여부를 결정하고, 그 결과와 이유를 지체 없이 신청인에게 문서로 통지하여야 한다. 이 경우 신청서에 흠결이 있을 때에는 보완을 요구할 수 있다.
+ ⑥ 제5항에 따른 심사기간을 산정할 때에는 다음 각 호의 어느 하나에 해당하는 기간은 심사기간에 산입하지 아니한다. 다만, 금융위원회는 제3호에 따라 심사를 중단한 경우 소송이나 조사ㆍ검사 등의 진행경과 등을 고려하여 필요하다고 인정하는 경우 심사를 재개할 수 있으며, 심사를 중단한 날부터 매 6개월이 경과할 때마다 심사 재개 여부를 판단하여야 한다.
+11 - 
+법 제8조제2항 각 호의 요건을 충족하는지를 확인하기 위하여 다른 기관 등으로부터 필요한 자료를 제공받는 데에 걸리는 기간
+제5항에 따라 인가신청서 흠결의 보완을 요구한 경우에는 그 보완기간
+은행업 인가를 받으려는 자의 주주(은행의 주식을 보유하기 위해 금융위로부터 승인을 받아야 하는 주주를 말한다. 다만, 경영참여형 제재가 확정될 경우 대상임원에 대한조치계획 등 신청인의 계획을 제출토록 하고 외부평가위원회에서 그 적정성을 심사
+ ※ 금융사고 발생 은행에 대해서는 세부심사요건 중 ‘내부통제체계의 적정성’ 관련 사항은 보다 엄격하게 심사할 계획
+ Ⅲ. 향후 계획
+ □ 향후 지방은행이 시중은행 전환 위한 인가 신청시 해당 절차로 진행
+ □ 추후 은행법 개정 통해 은행업 종류의 전환절차를 명시적으로 반영
+7 -
+ 참고 3 관련 조문
+ □ 은행법
+ 제8조(은행업의 인가) ① 은행업을 경영하려는 자는 금융위원회의 인가를 받아야 한다.
+ ② 제1항에 따른 은행업 인가를 받으려는 자는 다음 각 호의 요건을 모두 갖추어야 한다. 
+자본금이 1천억원 이상일 것. 다만, 지방은행의 자본금은 250억원 이상으로 할 수 있다.
+ 2 인 경우에는 조건의 이행을 증명하는 서류
+그 밖에 인가요건의 심사에 필요한 서류로서 금융위원회가 정하여 고시하는 서류 ③ 예비인가를 신청한 자로서 은행업 인가를 받으려는 자는 예비인가를 신청할
+ 때 제출한 예비인가 신청서 및 첨부서류의 내용이 변경되지 아니한 경우에는 그 부분을 구체적으로 제시하여 이를 참조하는 뜻을 적는 방법으로 제1항에 따른 인가신청서의 기재사항 중 일부를 적지 아니하거나 제2항에 따른 첨부서류 중 일부의 제출을 생략할 수 있다.
+ ④ 제1항부터 제3항까지에서 규정한 사항 외에 은행업 인가 신청과 심사에 필요한 사항은 금융위원회가 정하여 고시한다.
+ 제3조의2(예비인가) ① 법 제11조의2제1항에 따라 예비인가를 신청하려는 자는 다음 각 호의 사항을 적은 예비인가 사고라면 은행법상 인가요건 중 대주주 결격 사유나 은행업감독규정상 인가심사 중단 사유에 해당하지 않기 때문입니다. 다만, 금융사고와 관련하여 임원의 제재가 예상되는 경우, 인가신청시 관련서류에 향후 제재가 확정될 경우 대상임원에 대한 조치계획 등 신청인의 계획을 제출토록 하고 외부평가위원회를 통해 그 적정성을 심사하겠습니다.
+ 또한, 금융사고 발생 은행에 대해서는 심사과정에서 세부심사요건 중 “내부통제체계의 적정성” 관련 사항을 보다 엄격하게 심사하겠습니다. 향후 지방은행이 시중은행 전환을 위해 인가내용 변경을 신청하는 경우 해당 인가방식 및 절차에 따라 진행할 계획입니다. 아울러, 추후 은행법 개정을 통해 전환 방식·절차를 명시적으로 반영하는 것도 추진할 예정입니다.
+ [별첨] 지방은행의 시중은행 전환시 인가방식 및 절차
+ 책임자 과 장 강영수 (02-2100-2950)
+ 금융산업국
+ 은행과
+ 담당자 사무관 김경호 (02-2100-2953)
+ 담당 부서
+ 책임자 국 장 정우현 (02-3145-8020)
+ 금융감독원
+ 은행감독국
+ 담당자 팀 장 김지웅 (02-3145-8022)
+3 -
+ 붙 임 주요 QA
+지방은행의 시중은행 전환 인가방식 및 절차를 발표한 이유는?
+ □ 정부는 작년 7.5일 은행권 경쟁촉진을 위해 지방은행의 시중은행 전환 등 은행 신규인가를 적극 추진하겠다고 발표한 바 있음
+ ㅇ 다만, 현행 은행법령상에는 은행 종류의 전환에 관한 명시적인 규정이 없고, 과거에도 전환 사례는 없었음
+ □ 이에 은행법령 체계 下에서 지방은행의 시중은행 전환 방식·절차등을 명확히 하여 법적 불확실성을 해소하고자 함
+이미 은행업을 영위중인 지방은행에 대해 신규인가에 준해서 심사절차를 진행하는 이유는?
+ □ 과거 인가를 받아 은행업을 영위중인 지방은행이라 하더라도,
+ ㅇ 지방은행에서 시중은행으로의 전환은 중요사항의 변경인 만큼 법령상 모든 세부심사요건에 대한 심사가 필요하다고 판단함
+ □ 참고로 대법원도 처분의 내용을 실질적으로 변경하는 결과를
+Here is the user's query: 이미 은행업을 영위중인 지방은행에 대해 신규인가에 준해서 심사절차를 진행하는 이유는?
+The case 2 prompt
+ Here is the retrieved context --------------------------------------------------
+ 붙 임 주요 QA
+지방은행의 시중은행 전환 인가방식 및 절차를 발표한 이유는?
+ □ 정부는 작년 7.5일 은행권 경쟁촉진을 위해 지방은행의 시중은행 전환 등 은행 신규인가를 적극 추진하겠다고 발표한 바 있음
+ ㅇ 다만, 현행 은행법령상에는 은행 종류의 전환에 관한 명시적인 규정이 없고, 과거에도 전환 사례는 없었음
+ □ 이에 은행법령 체계 下에서 지방은행의 시중은행 전환 방식·절차등을 명확히 하여 법적 불확실성을 해소하고자 함
+이미 은행업을 영위중인 지방은행에 대해 신규인가에 준해서 심사절차를 진행하는 이유는?
+ □ 과거 인가를 받아 은행업을 영위중인 지방은행이라 하더라도,
+ ㅇ 지방은행에서 시중은행으로의 전환은 중요사항의 변경인 만큼 법령상 모든 세부심사요건에 대한 심사가 필요하다고 판단함
+ □ 참고로 대법원도 처분의 내용을 실질적으로 변경하는 결과를
+Here is the user's query: 이미 은행업을 영위중인 지방은행에 대해 신규인가에 준해서 심사절차를 진행하는 이유는?
+Best regards,
+Actual vs expected behavior:
+No response
+Any other information you'd like to share?
+No response
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-android/issues/217","Missing Java and Kotlin Code Snippets in Capability Docs","2024-08-21T12:02:08Z","Open issue","status:triaged,type:feature request","Description of the feature request:
+The Capability Docs currently provide clear documentation and code snippets for Python, Node.js, and Go. However, there is a lack of equivalent documentation for Java and Kotlin. This makes it difficult for mobile developers to effectively utilize the Gemini API within their applications.
+What problem are you trying to solve with this feature?
+Problem:
+The absence of Java and Kotlin code snippets can hinder mobile developers' productivity and understanding of the Gemini API. It requires them to spend extra time searching for examples or trying to reverse-engineer the API usage.
+Solution:
+Providing comprehensive documentation and code snippets for Java and Kotlin would greatly benefit mobile developers. It would enable them to seamlessly integrate the Gemini API into their applications without referring to external resources.
+Any other information you'd like to share?
+Please include documentation for all necessary packages and dependencies required for using the Gemini API in Java and Kotlin projects. This will ensure that developers have a clear understanding of the setup process and can effectively implement the API.
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-android/issues/213","Video samples are missing","2024-08-13T04:07:52Z","Open issue","type:bug","Description of the bug:
+text_gen_multimodal_video_prompt and text_gen_multimodal_video_prompt_streaming are defined but the contents of the sample is TODO. This shows up on the site as a TODO.
+Actual vs expected behavior:
+No response
+Any other information you'd like to share?
+I'll remove these from the site to prevent the TODO from being published but it'd be great to have the samples in place to show users.
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-android/issues/212","1.0 Release","2024-07-25T03:31:37Z","Open issue","No label","Description of the feature request:
+This is a tracking bug to coordinate the release of the 1.0 version of this library which will happen sometime in the future.
+We would like to do a final review to ensure the client support all required endpoints, have a path to support new API protocol clients, and is consistent with some design considerations and capabilities before we cut a stable version.
+The extended list of requirements will be filed as separate bugs as we identify them. Please feel free to reach out to @rakyll before closing this issue, or anytime if you have questions.
+For now, no action is required. We will follow up with issues and/or PRs for necessary changes.
+What problem are you trying to solve with this feature?
+No response
+Any other information you'd like to share?
+No response
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-android/issues/210","Missing Android Integration for Gemini Audio Processing","2024-07-19T05:44:22Z","Open issue","component:android sdk,status:triaged,type:feature request","Description of the feature request:
+The Gemini API offers powerful functionalities for processing audio data, including tasks like transcription, summarization, and content analysis. However, the current documentation and available tools lack direct integration for Android development.
+What problem are you trying to solve with this feature?
+This feature request proposes enhancing the Gemini API by providing resources and tools specifically for Android developers. This could include:
+Desired Behavior:
+This feature request proposes enhancing the Gemini API by providing resources and tools specifically for Android developers. This could include:
+Android SDK or Library: A dedicated Android library or SDK that simplifies interactions between Android applications and the Gemini audio processing features. This would handle tasks like:
+ Uploading audio files or providing inline audio data.
+ Sending prompts related to the audio content.
+ Receiving and parsing the response from the Gemini API (e.g., transcript, summary).
+ Code Samples and Tutorials: Documentation with code samples and tutorials demonstrating how to integrate Gemini audio processing into Android applications. This would showcase common use cases and best practices.
+Any other information you'd like to share?
+Benefits:
+Direct Android integration for Gemini audio processing would offer several benefits:
+Simplified Development: Streamline the process for Android developers to leverage Gemini's audio capabilities within their applications.
+ Improved User Experience: Enable Android apps to interact with audio data using Gemini's advanced features, leading to richer user experiences.
+ Expanded Adoption: Broader adoption of Gemini's functionalities by making it more accessible to the large Android developer community.
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-android/issues/209","Sudden constant Error code 500 (Internal Error) with the Gemini API in my Android app","2024-07-25T05:16:24Z","Closed issue","No label","Description of the bug:
+Hello! Today, I've suddenly been having this error constantly, across Google Accounts and API keys when using the Gemini API through my Android app. It was working perfectly fine the last few days.
+ I'm using the free API, and I was planning to pay for it but I'm having second thoughts now.
+Error: Unexpected Response:
+
+""error"": {
+""code"": 500,
+""message"": ""An internal error has occurred. Please retry or report in https://developers.generativeai.google/guide/troubleshooting"",
+""status"": ""INTERNAL""
+
+kotlinx. serialization. MissingFieldException: Field 'details' is required for type with serial name 'com.google.ai.client.generativeai.common.server. GRpcError', but it was missing at path: $.error
+
+The following is my model initialisation code. Is it because I'm doing something wrong here?
+        Content systemInstructionsContent = new Content.Builder()
+                .addText(systemInstructions)
+                .build();
+
+
+        GenerativeModel gm = new GenerativeModel(
+                ""gemini-1.5-pro"",
+                apiKey,
+                null,
+                null,
+                new RequestOptions(), // Use default RequestOptions
+                null,
+                null,
+                systemInstructionsContent
+        );
+
+I'm leaving some of the parameters as null, as I want them at the default and only want to add a system prompt.
+ I'm using Java to call the model from my Android app!
+Thanks so so much for the help!
+Actual vs expected behavior:
+Expected behaviour: API calls work, without randomly sometimes returning Error code 500
+Actual behaviour: For the last day, requests have been constantly returning error code 500 almost all the time
+Any other information you'd like to share?
+No response
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-android/issues/197","Firebase data using google gemini","2024-07-15T09:01:48Z","Closed issue","component:android sdk,status:awaiting user response,type:bug","Description of the feature request:
+How Can I get the data related to my firebase account.
+ I want all the data and the required info of firebase.
+ so, that I can do a heath check up.
+What problem are you trying to solve with this feature?
+No response
+Any other information you'd like to share?
+No response
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-android/issues/196","apache.org/licenses/LICENSE-2.0.txt","2024-07-17T18:11:09Z","Closed issue","component:android sdk,status:awaiting user response,type:bug","""
+ Apache License
+ Version 2.0, January 2004
+http://www.apache.org/licenses/
+TERMS AND CONDITIONS FOR USE, REPRODUCTION, AND DISTRIBUTION
+Definitions.
+""License"" shall mean the terms and conditions for use, reproduction,
+ and distribution as defined by Sections 1 through 9 of this document.
+""Licensor"" shall mean the copyright owner or entity authorized by
+ the copyright owner that is granting the License.
+""Legal Entity"" shall mean the union of the acting entity and all
+ other entities that control, are controlled by, or are under common
+ control with that entity. For the purposes of this definition,
+ ""control"" means (i) the power, direct or indirect, to cause the
+ direction or management of such entity, whether by contract or
+ otherwise, or (ii) ownership of fifty percent (50%) or more of the
+ outstanding shares, or (iii) beneficial ownership of such entity.
+""You"" (or ""Your"") shall mean an individual or Legal Entity
+ exercising permissions granted by this License.
+""Source"" form shall mean the preferred form for making modifications,
+ including but not limited to software source code, documentation
+ source, and configuration files.
+""Object"" form shall mean any form resulting from mechanical
+ transformation or translation of a Source form, including but
+ not limited to compiled object code, generated documentation,
+ and conversions to other media types.
+""Work"" shall mean the work of authorship, whether in Source or
+ Object form, made available under the License, as indicated by a
+ copyright notice that is included in or attached to the work
+ (an example is provided in the Appendix below).
+""Derivative Works"" shall mean any work, whether in Source or Object
+ form, that is based on (or derived from) the Work and for which the
+ editorial revisions, annotations, elaborations, or other modifications
+ represent, as a whole, an original work of authorship. For the purposes
+ of this License, Derivative Works shall not include works that remain
+ separable from, or merely link (or bind by name) to the interfaces of,
+ the Work and Derivative Works thereof.
+""Contribution"" shall mean any work of authorship, including
+ the original version of the Work and any modifications or additions
+ to that Work or Derivative Works thereof, that is intentionally
+ submitted to Licensor for inclusion in the Work by the copyright owner
+ or by an individual or Legal Entity authorized to submit on behalf of
+ the copyright owner. For the purposes of this definition, ""submitted""
+ means any form of electronic, verbal, or written communication sent
+ to the Licensor or its representatives, including but not limited to
+ communication on electronic mailing lists, source code control systems,
+ and issue tracking systems that are managed by, or on behalf of, the
+ Licensor for the purpose of discussing and improving the Work, but
+ excluding communication that is conspicuously marked or otherwise
+ designated in writing by the copyright owner as ""Not a Contribution.""
+""Contributor"" shall mean Licensor and any individual or Legal Entity
+ on behalf of whom a Contribution has been received by Licensor and
+ subsequently incorporated within the Work.
+Grant of Copyright License. Subject to the terms and conditions of
+ this License, each Contributor hereby grants to You a perpetual,
+ worldwide, non-exclusive, no-charge, royalty-free, irrevocable
+ copyright license to reproduce, prepare Derivative Works of,
+ publicly display, publicly perform, sublicense, and distribute the
+ Work and such Derivative Works in Source or Object form.
+Grant of Patent License. Subject to the terms and conditions of
+ this License, each Contributor hereby grants to You a perpetual,
+ worldwide, non-exclusive, no-charge, royalty-free, irrevocable
+ (except as stated in this section) patent license to make, have made,
+ use, offer to sell, sell, import, and otherwise transfer the Work,
+ where such license applies only to those patent claims licensable
+ by such Contributor that are necessarily infringed by their
+ Contribution(s) alone or by combination of their Contribution(s)
+ with the Work to which such Contribution(s) was submitted. If You
+ institute patent litigation against any entity (including a
+ cross-claim or counterclaim in a lawsuit) alleging that the Work
+ or a Contribution incorporated within the Work constitutes direct
+ or contributory patent infringement, then any patent licenses
+ granted to You under this License for that Work shall terminate
+ as of the date such litigation is filed.
+Redistribution. You may reproduce and distribute copies of the
+ Work or Derivative Works thereof in any medium, with or without
+ modifications, and in Source or Object form, provided that You
+ meet the following conditions:
+(a) You must give any other recipients of the Work or
+ Derivative Works a copy of this License; and
+(b) You must cause any modified files to carry prominent notices
+ stating that You changed the files; and
+(c) You must retain, in the Source form of any Derivative Works
+ that You distribute, all copyright, patent, trademark, and
+ attribution notices from the Source form of the Work,
+ excluding those notices that do not pertain to any part of
+ the Derivative Works; and
+(d) If the Work includes a ""NOTICE"" text file as part of its
+ distribution, then any Derivative Works that You distribute must
+ include a readable copy of the attribution notices contained
+ within such NOTICE file, excluding those notices that do not
+ pertain to any part of the Derivative Works, in at least one
+ of the following places: within a NOTICE text file distributed
+ as part of the Derivative Works; within the Source form or
+ documentation, if provided along with the Derivative Works; or,
+ within a display generated by the Derivative Works, if and
+ wherever such third-party notices normally appear. The contents
+ of the NOTICE file are for informational purposes only and
+ do not modify the License. You may add Your own attribution
+ notices within Derivative Works that You distribute, alongside
+ or as an addendum to the NOTICE text from the Work, provided
+ that such additional attribution notices cannot be construed
+ as modifying the License.
+You may add Your own copyright statement to Your modifications and
+ may provide additional or different license terms and conditions
+ for use, reproduction, or distribution of Your modifications, or
+ for any such Derivative Works as a whole, provided Your use,
+ reproduction, and distribution of the Work otherwise complies with
+ the conditions stated in this License.
+Submission of Contributions. Unless You explicitly state otherwise,
+ any Contribution intentionally submitted for inclusion in the Work
+ by You to the Licensor shall be under the terms and conditions of
+ this License, without any additional terms or conditions.
+ Notwithstanding the above, nothing herein shall supersede or modify
+ the terms of any separate license agreement you may have executed
+ with Licensor regarding such Contributions.
+Trademarks. This License does not grant permission to use the trade
+ names, trademarks, service marks, or product names of the Licensor,
+ except as required for reasonable and customary use in describing the
+ origin of the Work and reproducing the content of the NOTICE file.
+Disclaimer of Warranty. Unless required by applicable law or
+ agreed to in writing, Licensor provides the Work (and each
+ Contributor provides its Contributions) on an ""AS IS"" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+ implied, including, without limitation, any warranties or conditions
+ of TITLE, NON-INFRINGEMENT, MERCHANTABILITY, or FITNESS FOR A
+ PARTICULAR PURPOSE. You are solely responsible for determining the
+ appropriateness of using or redistributing the Work and assume any
+ risks associated with Your exercise of permissions under this License.
+Limitation of Liability. In no event and under no legal theory,
+ whether in tort (including negligence), contract, or otherwise,
+ unless required by applicable law (such as deliberate and grossly
+ negligent acts) or agreed to in writing, shall any Contributor be
+ liable to You for damages, including any direct, indirect, special,
+ incidental, or consequential damages of any character arising as a
+ result of this License or out of the use or inability to use the
+ Work (including but not limited to damages for loss of goodwill,
+ work stoppage, computer failure or malfunction, or any and all
+ other commercial damages or losses), even if such Contributor
+ has been advised of the possibility of such damages.
+Accepting Warranty or Additional Liability. While redistributing
+ the Work or Derivative Works thereof, You may choose to offer,
+ and charge a fee for, acceptance of support, warranty, indemnity,
+ or other liability obligations and/or rights consistent with this
+ License. However, in accepting such obligations, You may act only
+ on Your own behalf and on Your sole responsibility, not on behalf
+ of any other Contributor, and only if You agree to indemnify,
+ defend, and hold each Contributor harmless for any liability
+ incurred by, or claims asserted against, such Contributor by reason
+ of your accepting any such warranty or additional liability.
+END OF TERMS AND CONDITIONS
+APPENDIX: How to apply the Apache License to your work.
+  To apply the Apache License to your work, attach the following
+  boilerplate notice, with the fields enclosed by brackets ""[]""
+  replaced with your own identifying information. (Don't include
+  the brackets!)  The text should be enclosed in the appropriate
+  comment syntax for the file format. We also recommend that a
+  file or class name and description of purpose be included on the
+  same ""printed page"" as the copyright notice for easier
+  identification within third-party archives.
+
+Copyright [yyyy] [name of copyright owner]
+Licensed under the Apache License, Version 2.0 (the ""License"");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+   http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an ""AS IS"" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.""
+https://www.apache.org/licenses/LICENSE-2.0.txt#:~:text=Apache%20License%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20Version,under%20the%20License.
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-android/issues/195","apache.org/licenses/LICENSE-2.0.txt","2024-07-17T18:11:09Z","Closed issue","component:android sdk,status:awaiting user response,type:bug","https://www.apache.org/licenses/LICENSE-2.0.txt
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-android/issues/193","README Note has dead-ish link","2024-07-08T02:31:53Z","Open issue","component:documentation,status:awaiting user response,type:bug","Description of the bug:
+In the README.md file in the root of the project there is the following broken link:
+Note
+
+If you want to access Gemini on-device (Gemini Nano), check out the [Google AI Edge SDK for Android](https://ai.google.dev/tutorials/android_aicore), which is enabled via Android AICore.
+
+
+This link leads to a dead end error page with the following text:
+Android Early Access Preview for On-Device Generative AI
+Actual vs expected behavior:
+Some useful link with guidance on how to use it & where to get things would be useful.
+Any other information you'd like to share?
+No response
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-android/issues/192","Simple Tasks","2024-07-05T19:33:59Z","Open issue","component:android sdk,status:triaged,type:feature request","Description of the feature request:
+Feature requests:
+1 >>>
+I am trying to develop an application using Gemini but it is not able to do very simple and easy tasks which can be done by a simple Google search.
+Example: I asked Gemini ""1$ in Rs"" but it is not able to give me the answer, whereas other AI models can.
+Gemini's response to the same question:
+2>>>
+Currently, there is no direct method of giving audio as input. So, please add this feature also, so that I can use this feature.
+3>>>
+Location-based search: I can search in Google Maps for things like ""restaurants near me,"" but Gemini is not able to answer this. I even tried to provide latitude and longitude but it did not work. Other AI models can provide some sort of answer, not super efficient but giving some answer, i.e.,
+Gemini's response:
+4>>>
+Adding documents like CSV, PDF, PPT, etc. There is no direct method for now. We can extract and then feed the data to Gemini, but it's an overhead and can cause errors if Gemini interprets the data incorrectly.
+Conclusion:
+The biggest plus point of the Gemini API should be that it should be interconnected with other Google services, but for now, it feels very disconnected. Also, it won't provide answers that can be given in one simple Google search.
+What problem are you trying to solve with this feature?
+Simple tasks which can be done in one simple search.
+Audio Input.
+Location-based search.
+Adding different documents.
+Any other information you'd like to share?
+No response
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-android/issues/189","Multiple Images","2024-07-15T09:02:27Z","Closed issue","component:android sdk,status:awaiting user response","Description of the feature request:
+I am developing an chat bot using the Gemini API but in this I wanted to Insert multiple images using some kind of loop.
+But for the content builder I am not able to find any method in the Docs to do so.
+ val inputContent = content {
+ image(image1)
+ image(image2)
+ text(""What's different between these pictures?"")
+ }
+ If I wanted to add multiple images recursively of dynamically How can I do so ?
+What problem are you trying to solve with this feature?
+Trying to add multiple images dynamically.
+Any other information you'd like to share?
+No response
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-android/issues/175","Gemini 1.5 Pro charges six times more tokens than expected on text prompts.","2024-06-07T17:24:20Z","Open issue","No label","Description of the bug:
+At the beginning, I calculate the ratio between characters and tokens, so it matters whether we use the model in English or, as in my case, in Bulgarian (Cyrillic).
+val response: GenerateContentResponse = generativeModel.generateContent(content)
+val promptTokenCount = response.usageMetadata?.promptTokenCount
+val ratio = promptText.length.toDouble() / response.usageMetadata?.promptTokenCount!!
+...
+
+Although I have limited the candidates to one, I am calculating all the candidates as shown in the image below.
+ I calculated the allCandidateCharsCount by taking into account those from the text those from the functionCalls.arg.values.
+val responseTextLength = response.text?.length ?: 0
+val responseArgsSum = response.functionCalls.sumOf { it.args.values.mapNotNull { it?.length }.sum() }
+val expectCandidatesTokenCount = (responseTextLength + responseArgsSum) / ratio
+
+promptCharsCount  = 3729
+promptTokenCount = 1925
+
+ratio [chars:tokens]= 1.94:1
+
+allCandidateCharsCount = 1463 (totalCandidates = 1, totalTextChars = 801, totalArgsValuesChars = 662)
+
+expectCandidatesTokenCount = 755.24 (1463 / 1.94)
+actualCandidatesTokenCount = 4597
+errorCandidates = 608.68%
+
+expectTotalTokenCount = 2680.24
+actualTotalTokenCount = 6522
+errorTotal = 243.34%
+
+I have used the following model configuration:
+Actual vs expected behavior:
+Using large language models is quite an expensive process, where costs must be carefully optimized.
+Regardless of solutions like Context Caching etc., If the token accounting is not correct, it can be a serious waste of money!
+In our case, if you expect to pay $100 at the end of the month, you may, due to a token miscalculation, end up paying $600 for the same thing.
+I expect to pay $100 dollars per month, but as a result of a token calculation error, I pay $600.
+Any other information you'd like to share?
+It would be a good idea to give a credit, as with some other products, to see the real costs. If using the free plan, the actual token consumption is not visible. It is not reported anywhere in the billing.
+Here is an example of a similar product, how they solved the problem. Please consider a similar option and this case.
+Build with Google AI Forum
+https://discuss.ai.google.dev/t/gemini-1-5-pro-charges-x6-more-tokens-than-expected-on-text-prompts
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-android/issues/173","The count of received tokens is many times higher than expected!","2024-06-07T14:44:21Z","Closed issue","No label","Description of the bug:
+Here I am describing a problem where when the received information from Gemini is about 2.1KB (in which half is official because of JSON and it can be said that it is about 1KB) I am charged 8KB tokens.
+Which means that for one received character I spend 8 tokens
+(1 character = 8 tokens).
+ Is this normal?
+I will clarify that the symbols are in Cyrillic and the token cost may be higher. I still don't know exactly how they are calculated.
+ In the normal case, an average of 4 symbols consumes one token
+(4 characters = 1 token)
+On the other hand, I will say that I limited the candidates to only 1, but I found no difference when they were 4 by default.
+
+
+Actual vs expected behavior:
+I ended up getting a spend x30 tokens over expected.
+ Otherwise it looks like this.
+ If you expect to pay $100 at the end of the month, you will pay $3,000. I say that quite responsibly.
+Any other information you'd like to share?
+I sent an email with many details about this case to your colleague, but since I didn't get a reply, I thought I'd share my observations here.
+I feel that using this Gemini 1.5 Pro has many risks. It should be used very carefully and one of the solutions is to have a credit in the billing as with other products.
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-android/issues/172","Error trying to inject GenerativeModel object into a viewModel","2024-06-05T12:02:09Z","Closed issue","status:awaiting user response","Description of the bug:
+I am facing an issue when trying to inject with Hilt a GenerativeModel object into a viewModel as below. I am using Jetpack Compose:
+@AndroidEntryPoint
+class ExampleActivity : ComponentActivity() {
+....
+
+    @Composable
+    fun ExampleNavHost(
+        navController: NavHostController,
+        modifier: Modifier
+    ) {
+        NavHost(
+            navController = navController,
+            startDestination = route1
+        ) {
+            composable(route1) {
+                val exampleViewModel = hiltViewModel<ExampleViewModel>()
+                ExampleScreen(viewModel = exampleViewModel)
+            }
+            composable(route2) {
+
+            }
+            composable(route3) {
+
+            }
+        }
+    }
+
+}
+
+@Module
+@InstallIn(SingletonComponent::class)
+class GeminiModule {
+
+    @Provides
+    @Singleton
+    fun provideGemini(): GenerativeModel {
+        return GenerativeModel(
+            modelName = BuildConfig.gemini_1_5_flash,
+            apiKey = BuildConfig.apiKey,
+            generationConfig = generationConfig {
+                temperature = 1f
+                topK = 64
+                topP = 0.95f
+                maxOutputTokens = 8192
+                responseMimeType = ""application/json""
+            },
+            safetySettings = listOf(
+                SafetySetting(HarmCategory.HARASSMENT, BlockThreshold.MEDIUM_AND_ABOVE),
+                SafetySetting(HarmCategory.HATE_SPEECH, BlockThreshold.MEDIUM_AND_ABOVE),
+                SafetySetting(HarmCategory.SEXUALLY_EXPLICIT, BlockThreshold.MEDIUM_AND_ABOVE),
+                SafetySetting(HarmCategory.DANGEROUS_CONTENT, BlockThreshold.MEDIUM_AND_ABOVE),
+            )
+        )
+    }
+}
+
+@HiltViewModel
+class ExampleViewModel @Inject constructor(val generativeModel: GenerativeModel) : ViewModel() {
+}
+
+java.lang.RuntimeException: Cannot create an instance of class com.example.presentation.ExampleViewModel
+ at androidx.lifecycle.ViewModelProvider$NewInstanceFactory.create(ViewModelProvider.kt:201)
+ at androidx.lifecycle.ViewModelProvider$AndroidViewModelFactory.create(ViewModelProvider.kt:320)
+ at androidx.lifecycle.ViewModelProvider$AndroidViewModelFactory.create(ViewModelProvider.kt:302)
+ at androidx.lifecycle.ViewModelProvider$AndroidViewModelFactory.create(ViewModelProvider.kt:276)
+ at androidx.lifecycle.SavedStateViewModelFactory.create(SavedStateViewModelFactory.kt:128)
+ at dagger.hilt.android.internal.lifecycle.HiltViewModelFactory.create(HiltViewModelFactory.java:172)
+ at androidx.lifecycle.ViewModelProvider.get(ViewModelProvider.kt:184)
+ at androidx.lifecycle.ViewModelProvider.get(ViewModelProvider.kt:150)
+ at androidx.lifecycle.viewmodel.compose.ViewModelKt.get(ViewModel.kt:215)
+Caused by: java.lang.NoSuchMethodException: com.example.presentation.ExampleViewModel. [] (Ask Gemini)
+ at java.lang.Class.getConstructor0(Class.java:2332)
+ at java.lang.Class.getDeclaredConstructor(Class.java:2170)
+ at androidx.lifecycle.ViewModelProvider$NewInstanceFactory.create(ViewModelProvider.kt:199)
+Actual vs expected behavior:
+No response
+Any other information you'd like to share?
+No response
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-android/issues/170","Issue setting up Android gemini API key restriction","2024-06-03T17:34:27Z","Open issue","component:android app,status:triaged,type:bug","Description of the bug:
+Hi, I followed the tutorial for Android to set Android application key restriction from the cloud console , but I’m not able to get it to work. I get the error “Requests from this Android client application are blocked.
+Is this a known issue? Or maybe I’m doing something wrong?
+Thanks,
+ Andres
+Actual vs expected behavior:
+Accept requests from my Android app after setting up the cloud console restriction
+Any other information you'd like to share?
+My cloud console configuration. I'm testing different variations to see if it works. I'm using an App bundle with Google app signing
+
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-android/issues/169","FunctionDeclaration with optional function","2024-07-17T18:12:10Z","Closed issue","component:android sdk,status:triaged,type:feature request","Description of the feature request:
+Currently the FunctionDeclaration requires a function suspend parameter. Would it be possible to declare a FunctionDeclaration instance with the function as optional?
+What problem are you trying to solve with this feature?
+In my use case, when a specific function is called, it doesn't fetch the data immediately, it actually requires user input and only after gathering the data from the users' input it sends the parameters back to gemini. I found this incompatibility when I was porting the vertex-ai implementation to the generative-ai-android library. I'll keep using the vertext-ai implementation for now
+Any other information you'd like to share?
+No response
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-android/issues/168","Trying to compile it on github... errors","2024-06-13T19:53:18Z","Closed issue","component:android sdk,needs-info,status:triaged,type:bug","JAVA_HOME=/usr/lib/jvm/temurin-17-jdk-amd64 gradle .
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Task '.' not found in root project 'GenerativeAiSampleApp' and its subprojects.
+
+* Try:
+> Run gradle tasks to get a list of available tasks.
+> For more on name expansion, please refer to https://docs.gradle.org/8.7/userguide/command_line_interface.html#sec:name_abbreviation in the Gradle documentation.
+> Run with --stacktrace option to get the stack trace.
+> Run with --info or --debug option to get more log output.
+> Run with --scan to get full insights.
+> Get more help at https://help.gradle.org.
+
+Deprecated Gradle features were used in this build, making it incompatible with Gradle 9.0.
+
+You can use '--warning-mode all' to show the individual deprecation warnings and determine if they come from your own scripts or plugins.
+
+For more on this, please refer to https://docs.gradle.org/8.7/userguide/command_line_interface.html#sec:command_line_warnings in the Gradle documentation.
+
+BUILD FAILED in 1s
+
+### Actual vs expected behavior:
+
+
+compiling an APK.
+
+### Any other information you'd like to share?
+
+
+please add instructions on how to compile the android example using github...```
+
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-android/issues/167","Recitation Error","2024-07-17T18:12:22Z","Closed issue","component:android sdk,status:awaiting user response,type:bug","Description of the bug:
+Whenever I am asking for a general code its giving me error.
+Actual vs expected behavior:
+Actually it should give me code
+Any other information you'd like to share?
+No response
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-android/issues/164","Financial damages caused by received errors $$$$","2024-06-03T19:01:31Z","Closed issue","component:android sdk,status:triaged,type:bug","I used this library (generative-ai-android) v0.6.0 on Gemini 1.5 Pro and it caused me financial damage!
+I was getting errors instead of replies from Gemini and ended up getting charged.
+Something went wrong while trying to deserialize a response from the server. for: (Ask Gemini)
+Caused by: kotlinx.serialization.json.internal.JsonDecodingException: Unexpected 'null' literal when non-nullable string was expected (Ask Gemini) 
+200 prompts cycled through, which I had to repeat every few seconds until I got a result other than an error.
+So I was charged millions of tokens <128k.
+Since Gemini 1.5 Pro is still in preview, and the Android library itself is not stable, who should bear the brunt, when I have not received other than errors.
+How at such an early stage, something that is still a prototype can cause financial damage to my company?
+We've wasted enough time testing, and now money.
+I stopped the Gemini API because I don't plan on using the library until this issue is resolved.
+I'm sure I won't be the only one, but I might be the first to suffer.
+These mistakes are paid with real money.
+Please tell me in this situation, which I have provided you with the most detailed information by email, who will take responsibility for the recovery of damages?
+Actual vs expected behavior:
+At first, I was very happy that there is already such a library, although the problem of storing the API key is not solved. Such a library is vital for the next generation of Android applications that need to quickly and conveniently implement generative AI solutions. I used the library for testing, and instead of contributing to its improvement, I managed to waste money and a lot of time. My expectations were not met. I expect that such decisions should be given some credit so that one can realistically assess how they are charged. Until May 30th, I didn't have any token counting accuracy, and now suddenly, in addition to them, the bills came in the billing. I think such incidents should be taken into account because there will be many people like me.
+Any other information you'd like to share?
+No response
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-android/issues/162","PLEASE FIX THIS! ""Something went wrong while trying to deserialize a response from the server.""","2024-05-30T17:43:06Z","Closed issue","No label","Description of the bug:
+Currently reporting requests to Gemini which I'm being billed for even though I'm getting errors from the library, no fault of mine.
+Please tell me what to do? This library has a serialization error. I repeatedly repeat the request until I get a response that is not an error and thus incur insanely large amounts of money.
+ Is there a way to not charge these errors?
+dump.txt
+Actual vs expected behavior:
+I expect not to be charged for a library error!
+Any other information you'd like to share?
+When I do a prompt, even though I get an error, it gets charged. Since errors are not handled well, I repeat the prompt until it returns a non-error result. This is done every 15 seconds. After all, for about 20 replies, I can have 2000 inquiries charged. I don't know how to avoid this problem. I use functional calling and prompts for in Bulgarian.
+ The text was updated successfully, but these errors were encountered: 
+😕1
+karloti reacted with confused emoji
+All reactions
+😕1 reaction"
+"https://github.com/google-gemini/generative-ai-android/issues/160","Gemini 1.5 Pro Error: ""Something went wrong while trying to deserialize a response from the server.""","2024-06-12T02:17:27Z","Closed issue","component:android sdk,status:awaiting user response,type:bug","Description of the bug:
+I get this error very, very often. I wait about 15 seconds and repeat the prompt until I get a normal response. The prompt is not in English. This wastes a lot of time and I don't know how to fix it. Is there a way to handle errors? The model returns them to normal text that I have to parse. So far I have received over x3 types of different errors from Gemini 1.5 Pro.
+Actual vs expected behavior:
+No response
+Any other information you'd like to share?
+No response
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-android/issues/158","Support for files upload / File API","2024-05-29T14:04:42Z","Open issue","component:android sdk,status:triaged,type:feature request","Description of the feature request:
+To allow full multimodal use in the Android SDK, we need support for fileData and/or have the ability to upload files using the File API as in Python/Go/NodeJS.
+What problem are you trying to solve with this feature?
+Send a prompt from Android SDK to Gemini including a long video.
+Any other information you'd like to share?
+No response
+ The text was updated successfully, but these errors were encountered: 
+👍1
+diousk reacted with thumbs up emoji
+All reactions
+👍1 reaction"
+"https://github.com/google-gemini/generative-ai-android/issues/153","Facing error while using a Video as an input","2024-05-25T13:42:24Z","Open issue","component:android sdk,status:awaiting user response,type:bug","Description of the bug:
+Configuration:
+private val config by lazy {
+        generationConfig {
+            temperature = 0.7f
+        }
+    }
+    private val generativeModel by lazy {
+        GenerativeModel(
+            modelName = ""gemini-1.5-pro-latest"",
+            apiKey = """",
+            generationConfig = config
+        )
+    }
+
+val input = content {
+            blob(
+                mimeType,
+                file.readBytes())
+            text(message)
+        }
+        val resp =generativeModel.generateContent(input)
+
+mimeType is video/mp4
+ video link: drive
+Actual vs expected behavior:
+Getting error:
+ com.google.ai.client.generativeai.type.ServerException: An internal error has occurred. Please retry or report in https://developers.generativeai.google/guide/troubleshooting at com.google.ai.client.generativeai.type.GoogleGenerativeAIException$Companion.from(Exceptions.kt:43) at com.google.ai.client.generativeai.GenerativeModel.generateContent(GenerativeModel.kt:115) at com.google.ai.client.generativeai.GenerativeModel$generateContent$1.invokeSuspend(Unknown Source:15) at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:33) at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:108) at kotlinx.coroutines.internal.LimitedDispatcher$Worker.run(LimitedDispatcher.kt:115) at kotlinx.coroutines.scheduling.TaskImpl.run(Tasks.kt:103) at kotlinx.coroutines.scheduling.CoroutineScheduler.runSafely(CoroutineScheduler.kt:584) at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.executeTask(CoroutineScheduler.kt:793) at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.runWorker(CoroutineScheduler.kt:697) at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.run(CoroutineScheduler.kt:684) Suppressed: kotlinx.coroutines.internal.DiagnosticCoroutineContextException: [StandaloneCoroutine{Cancelling}@a7848d2, Dispatchers.IO]
+Any other information you'd like to share?
+No response
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-android/issues/147","Docs: add responseMimeType to the helper method example usage","2024-05-17T04:52:08Z","Closed issue","component:documentation,status:triaged,type:feature request","Description of the bug:
+Just asked about responseMimeType in the forum while ago forum. It just got updated in 0.6.0 what a perfect timing.
+But I found some catch (not a big deal tho, but maybe it will help in the future) on the helper method example usage there is no responseMimeType written on it. But I can still use it perfectly normal.
+Actual vs expected behavior:
+Actual:
+
+
+Expected: responseMimeType parameter example
+Any other information you'd like to share?
+No response
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-android/issues/143","Could not resolve com.google.ai.client.generativeai:generativeai:0.5.0.","2024-05-09T13:43:14Z","Closed issue","No label","I got the error in my compose for desktop project when implementation ** com.google.ai.client.generativeai:generativeai:0.5.0.**。
+my build.gradle.kts
+import org.jetbrains.compose.desktop.application.dsl.TargetFormat
+
+plugins {
+    kotlin(""jvm"")
+    id(""org.jetbrains.compose"")
+}
+
+group = ""com.pop.composedemo""
+version = ""1.0-SNAPSHOT""
+
+repositories {
+    google()
+    mavenCentral()
+    gradlePluginPortal()
+    maven(""https://maven.pkg.jetbrains.space/public/p/compose/dev"")
+}
+
+dependencies {
+    implementation(compose.desktop.currentOs)
+
+    implementation(libs.gson)
+    implementation(libs.generativeai)
+
+}
+
+compose.desktop {
+    application {
+        mainClass = ""MainKt""
+
+        nativeDistributions {
+            targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
+            packageName = ""demo""
+            packageVersion = ""1.0.0""
+        }
+    }
+}
+
+and my settings.gradle.kts
+pluginManagement {
+    repositories {
+        google()
+        mavenCentral()
+        gradlePluginPortal()
+        maven(""https://maven.pkg.jetbrains.space/public/p/compose/dev"")
+    }
+
+    plugins {
+        kotlin(""jvm"").version(extra[""kotlin.version""] as String)
+        id(""org.jetbrains.compose"").version(extra[""compose.version""] as String)
+    }
+}
+
+
+rootProject.name = ""demo""
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-android/issues/140","Get api key","2024-05-07T02:42:50Z","Closed issue","component:android sdk,status:awaiting user response,type:help","How i can get api key from user account like using auth2 or Google signin library to get api key without get it from website ate there any library for android kotlin?. Thankd
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-android/issues/139","Something went wrong while trying to deserialize a response from the server (2)","2024-05-13T14:29:32Z","Closed issue","component:android sdk,status:triaged,type:bug","Hello, we solved the problem mentioned in #17 by adding the relevant line to the proguard file, but it does not work in any version after v.0.2.0. We continue to receive the same error in the release version. I tried all versions one by one and tested it on the internal channel, only v0.2.0 works.
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-android/issues/134","Illegal input: Fields [promptTokenCount, totalTokenCount] are required for type with serial name","2024-05-03T16:44:40Z","Closed issue","component:android sdk,status:triaged,type:bug","I was trying out the SDK and got everything looking GTG, but was unable to get past the error in the title. I then pulled down the sample project and I'm seeing the same error when running the summarization bit, only change is adding my API key to local.properties.
+Idk if this is a server-side issue or not but figured I'd log an issue. I tried API keys from accounts with and without whatever Gemini pro access is called, if that's relevant.
+OnePlus 8, Android 13
+ com.google.ai.client.generativeai.type.SerializationException: Something went wrong while trying to deserialize a response from the server.
+2024-05-02 21:43:09.062 27617-27617 System.err              com.google.ai.sample                 W  	at com.google.ai.client.generativeai.type.GoogleGenerativeAIException$Companion.from(Exceptions.kt:41)
+2024-05-02 21:43:09.063 27617-27617 System.err              com.google.ai.sample                 W  	at com.google.ai.client.generativeai.GenerativeModel$generateContentStream$1.invokeSuspend(GenerativeModel.kt:128)
+2024-05-02 21:43:09.064 27617-27617 System.err              com.google.ai.sample                 W  	at com.google.ai.client.generativeai.GenerativeModel$generateContentStream$1.invoke(Unknown Source:9)
+2024-05-02 21:43:09.066 27617-27617 System.err              com.google.ai.sample                 W  	at com.google.ai.client.generativeai.GenerativeModel$generateContentStream$1.invoke(Unknown Source:6)
+2024-05-02 21:43:09.067 27617-27617 System.err              com.google.ai.sample                 W  	at kotlinx.coroutines.flow.FlowKt__ErrorsKt$catch$$inlined$unsafeFlow$1.collect(SafeCollector.common.kt:115)
+2024-05-02 21:43:09.068 27617-27617 System.err              com.google.ai.sample                 W  	at kotlinx.coroutines.flow.FlowKt__ErrorsKt$catch$$inlined$unsafeFlow$1$1.invokeSuspend(Unknown Source:15)
+2024-05-02 21:43:09.069 27617-27617 System.err              com.google.ai.sample                 W  	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:33)
+2024-05-02 21:43:09.070 27617-27617 System.err              com.google.ai.sample                 W  	at kotlinx.coroutines.internal.DispatchedContinuationKt.resumeCancellableWith(DispatchedContinuation.kt:367)
+2024-05-02 21:43:09.071 27617-27617 System.err              com.google.ai.sample                 W  	at kotlinx.coroutines.internal.DispatchedContinuationKt.resumeCancellableWith$default(DispatchedContinuation.kt:278)
+2024-05-02 21:43:09.072 27617-27617 System.err              com.google.ai.sample                 W  	at kotlinx.coroutines.internal.ScopeCoroutine.afterCompletion(Scopes.kt:27)
+2024-05-02 21:43:09.072 27617-27617 System.err              com.google.ai.sample                 W  	at kotlinx.coroutines.JobSupport.continueCompleting(JobSupport.kt:940)
+2024-05-02 21:43:09.074 27617-27617 System.err              com.google.ai.sample                 W  	at kotlinx.coroutines.JobSupport.access$continueCompleting(JobSupport.kt:25)
+2024-05-02 21:43:09.074 27617-27617 System.err              com.google.ai.sample                 W  	at kotlinx.coroutines.JobSupport$ChildCompletion.invoke(JobSupport.kt:1159)
+2024-05-02 21:43:09.075 27617-27617 System.err              com.google.ai.sample                 W  	at kotlinx.coroutines.JobSupport.notifyCompletion(JobSupport.kt:1497)
+2024-05-02 21:43:09.075 27617-27617 System.err              com.google.ai.sample                 W  	at kotlinx.coroutines.JobSupport.completeStateFinalization(JobSupport.kt:325)
+2024-05-02 21:43:09.076 27617-27617 System.err              com.google.ai.sample                 W  	at kotlinx.coroutines.JobSupport.finalizeFinishingState(JobSupport.kt:242)
+2024-05-02 21:43:09.076 27617-27617 System.err              com.google.ai.sample                 W  	at kotlinx.coroutines.JobSupport.continueCompleting(JobSupport.kt:939)
+2024-05-02 21:43:09.077 27617-27617 System.err              com.google.ai.sample                 W  	at kotlinx.coroutines.JobSupport.access$continueCompleting(JobSupport.kt:25)
+2024-05-02 21:43:09.078 27617-27617 System.err              com.google.ai.sample                 W  	at kotlinx.coroutines.JobSupport$ChildCompletion.invoke(JobSupport.kt:1159)
+2024-05-02 21:43:09.078 27617-27617 System.err              com.google.ai.sample                 W  	at kotlinx.coroutines.JobSupport.notifyCompletion(JobSupport.kt:1497)
+2024-05-02 21:43:09.079 27617-27617 System.err              com.google.ai.sample                 W  	at kotlinx.coroutines.JobSupport.completeStateFinalization(JobSupport.kt:325)
+2024-05-02 21:43:09.079 27617-27617 System.err              com.google.ai.sample                 W  	at kotlinx.coroutines.JobSupport.finalizeFinishingState(JobSupport.kt:242)
+2024-05-02 21:43:09.080 27617-27617 System.err              com.google.ai.sample                 W  	at kotlinx.coroutines.JobSupport.tryMakeCompletingSlowPath(JobSupport.kt:910)
+2024-05-02 21:43:09.080 27617-27617 System.err              com.google.ai.sample                 W  	at kotlinx.coroutines.JobSupport.tryMakeCompleting(JobSupport.kt:867)
+2024-05-02 21:43:09.081 27617-27617 System.err              com.google.ai.sample                 W  	at kotlinx.coroutines.JobSupport.makeCompletingOnce$kotlinx_coroutines_core(JobSupport.kt:832)
+2024-05-02 21:43:09.082 27617-27617 System.err              com.google.ai.sample                 W  	at kotlinx.coroutines.AbstractCoroutine.resumeWith(AbstractCoroutine.kt:100)
+2024-05-02 21:43:09.082 27617-27617 System.err              com.google.ai.sample                 W  	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:46)
+2024-05-02 21:43:09.083 27617-27617 System.err              com.google.ai.sample                 W  	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:108)
+2024-05-02 21:43:09.083 27617-27617 System.err              com.google.ai.sample                 W  	at android.os.Handler.handleCallback(Handler.java:942)
+2024-05-02 21:43:09.084 27617-27617 System.err              com.google.ai.sample                 W  	at android.os.Handler.dispatchMessage(Handler.java:99)
+2024-05-02 21:43:09.084 27617-27617 System.err              com.google.ai.sample                 W  	at android.os.Looper.loopOnce(Looper.java:240)
+2024-05-02 21:43:09.084 27617-27617 System.err              com.google.ai.sample                 W  	at android.os.Looper.loop(Looper.java:351)
+2024-05-02 21:43:09.085 27617-27617 System.err              com.google.ai.sample                 W  	at android.app.ActivityThread.main(ActivityThread.java:8412)
+2024-05-02 21:43:09.085 27617-27617 System.err              com.google.ai.sample                 W  	at java.lang.reflect.Method.invoke(Native Method)
+2024-05-02 21:43:09.086 27617-27617 System.err              com.google.ai.sample                 W  	at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:584)
+2024-05-02 21:43:09.086 27617-27617 System.err              com.google.ai.sample                 W  	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:1013)
+2024-05-02 21:43:09.089 27617-27617 System.err              com.google.ai.sample                 W  Caused by: kotlinx.serialization.MissingFieldException: Fields [promptTokenCount, totalTokenCount] are required for type with serial name 'com.google.ai.client.generativeai.common.UsageMetadata', but they were missing at path: $.usageMetadata
+2024-05-02 21:43:09.090 27617-27617 System.err              com.google.ai.sample                 W  	at kotlinx.serialization.json.internal.StreamingJsonDecoder.decodeSerializableValue(StreamingJsonDecoder.kt:93)
+2024-05-02 21:43:09.090 27617-27617 System.err              com.google.ai.sample                 W  	at kotlinx.serialization.encoding.AbstractDecoder.decodeSerializableValue(AbstractDecoder.kt:43)
+2024-05-02 21:43:09.091 27617-27617 System.err              com.google.ai.sample                 W  	at kotlinx.serialization.encoding.AbstractDecoder.decodeNullableSerializableElement(AbstractDecoder.kt:79)
+2024-05-02 21:43:09.091 27617-27617 System.err              com.google.ai.sample                 W  	at com.google.ai.client.generativeai.common.GenerateContentResponse$$serializer.deserialize(Response.kt:26)
+2024-05-02 21:43:09.092 27617-27617 System.err              com.google.ai.sample                 W  	at com.google.ai.client.generativeai.common.GenerateContentResponse$$serializer.deserialize(Response.kt:26)
+2024-05-02 21:43:09.092 27617-27617 System.err              com.google.ai.sample                 W  	at kotlinx.serialization.json.internal.StreamingJsonDecoder.decodeSerializableValue(StreamingJsonDecoder.kt:70)
+2024-05-02 21:43:09.092 27617-27617 System.err              com.google.ai.sample                 W  	at kotlinx.serialization.json.Json.decodeFromString(Json.kt:107)
+2024-05-02 21:43:09.093 27617-27617 System.err              com.google.ai.sample                 W  	at com.google.ai.client.generativeai.common.APIController$generateContentStream$$inlined$postStream$1$1$1$1$1.invokeSuspend(ktor.kt:103)
+2024-05-02 21:43:09.093 27617-27617 System.err              com.google.ai.sample                 W  	at com.google.ai.client.generativeai.common.APIController$generateContentStream$$inlined$postStream$1$1$1$1$1.invoke(Unknown Source:8)
+2024-05-02 21:43:09.094 27617-27617 System.err              com.google.ai.sample                 W  	at com.google.ai.client.generativeai.common.APIController$generateContentStream$$inlined$postStream$1$1$1$1$1.invoke(Unknown Source:4)
+2024-05-02 21:43:09.094 27617-27617 System.err              com.google.ai.sample                 W  	at com.google.ai.client.generativeai.common.util.KtorKt.onEachLine(ktor.kt:52)
+2024-05-02 21:43:09.095 27617-27617 System.err              com.google.ai.sample                 W  	at com.google.ai.client.generativeai.common.APIController$generateContentStream$$inlined$postStream$1$1$1$1.invokeSuspend(ktor.kt:82)
+2024-05-02 21:43:09.095 27617-27617 System.err              com.google.ai.sample                 W  	at com.google.ai.client.generativeai.common.APIController$generateContentStream$$inlined$postStream$1$1$1$1.invoke(Unknown Source:8)
+2024-05-02 21:43:09.096 27617-27617 System.err              com.google.ai.sample                 W  	at com.google.ai.client.generativeai.common.APIController$generateContentStream$$inlined$postStream$1$1$1$1.invoke(Unknown Source:4)
+2024-05-02 21:43:09.096 27617-27617 System.err              com.google.ai.sample                 W  	at kotlinx.coroutines.flow.ChannelFlowBuilder.collectTo$suspendImpl(Builders.kt:320)
+2024-05-02 21:43:09.096 27617-27617 System.err              com.google.ai.sample                 W  	at kotlinx.coroutines.flow.ChannelFlowBuilder.collectTo(Unknown Source:0)
+2024-05-02 21:43:09.097 27617-27617 System.err              com.google.ai.sample                 W  	at kotlinx.coroutines.flow.internal.ChannelFlow$collectToFun$1.invokeSuspend(ChannelFlow.kt:60)
+2024-05-02 21:43:09.097 27617-27617 System.err              com.google.ai.sample                 W  	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:33)
+2024-05-02 21:43:09.098 27617-27617 System.err              com.google.ai.sample                 W  	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:108)
+2024-05-02 21:43:09.098 27617-27617 System.err              com.google.ai.sample                 W  	at kotlinx.coroutines.EventLoop.processUnconfinedEvent(EventLoop.common.kt:68)
+2024-05-02 21:43:09.099 27617-27617 System.err              com.google.ai.sample                 W  	at kotlinx.coroutines.internal.DispatchedContinuation.resumeWith(DispatchedContinuation.kt:347)
+2024-05-02 21:43:09.099 27617-27617 System.err              com.google.ai.sample                 W  	at io.ktor.util.pipeline.SuspendFunctionGun.resumeRootWith(SuspendFunctionGun.kt:135)
+2024-05-02 21:43:09.099 27617-27617 System.err              com.google.ai.sample                 W  	at io.ktor.util.pipeline.SuspendFunctionGun.loop(SuspendFunctionGun.kt:109)
+2024-05-02 21:43:09.100 27617-27617 System.err              com.google.ai.sample                 W  	at io.ktor.util.pipeline.SuspendFunctionGun.access$loop(SuspendFunctionGun.kt:11)
+2024-05-02 21:43:09.100 27617-27617 System.err              com.google.ai.sample                 W  	at io.ktor.util.pipeline.SuspendFunctionGun$continuation$1.resumeWith(SuspendFunctionGun.kt:59)
+2024-05-02 21:43:09.100 27617-27617 System.err              com.google.ai.sample                 W  	... 10 more
+2024-05-02 21:43:09.103 27617-27617 System.err              com.google.ai.sample                 W  Caused by: kotlinx.serialization.MissingFieldException: Fields [promptTokenCount, totalTokenCount] are required for type with serial name 'com.google.ai.client.generativeai.common.UsageMetadata', but they were missing
+2024-05-02 21:43:09.103 27617-27617 System.err              com.google.ai.sample                 W  	at kotlinx.serialization.internal.PluginExceptionsKt.throwMissingFieldException(PluginExceptions.kt:20)
+2024-05-02 21:43:09.104 27617-27617 System.err              com.google.ai.sample                 W  	at com.google.ai.client.generativeai.common.UsageMetadata.<init>(Response.kt:39)
+2024-05-02 21:43:09.104 27617-27617 System.err              com.google.ai.sample                 W  	at com.google.ai.client.generativeai.common.UsageMetadata$$serializer.deserialize(Response.kt:39)
+2024-05-02 21:43:09.105 27617-27617 System.err              com.google.ai.sample                 W  	at com.google.ai.client.generativeai.common.UsageMetadata$$serializer.deserialize(Response.kt:39)
+2024-05-02 21:43:09.105 27617-27617 System.err              com.google.ai.sample                 W  	at kotlinx.serialization.json.internal.StreamingJsonDecoder.decodeSerializableValue(StreamingJsonDecoder.kt:70)
+2024-05-02 21:43:09.105 27617-27617 System.err              com.google.ai.sample                 W  	... 34 more
+
+ The text was updated successfully, but these errors were encountered: 
+👍5
+hoanv810, aeroechelon, mightyfrog, ProHussain, and thatfiredev reacted with thumbs up emoji
+All reactions
+👍5 reactions"
+"https://github.com/google-gemini/generative-ai-android/issues/132","Security Policy violation SECURITY.md","2024-05-28T04:05:47Z","Closed issue","allstar","This issue was automatically created by Allstar.
+Security Policy Violation
+ Security policy not enabled.
+ A SECURITY.md file can give users information about what constitutes a vulnerability and how to report one securely so that information about a bug is not publicly visible. Examples of secure reporting methods include using an issue tracker with private issue support, or encrypted email with a published key.
+To fix this, add a SECURITY.md file that explains how to handle vulnerabilities found in your repository. Go to https://github.com/google-gemini/generative-ai-android/security/policy to enable.
+For more information, see https://docs.github.com/en/code-security/getting-started/adding-a-security-policy-to-your-repository.
+This issue will auto resolve when the policy is in compliance.
+Issue created by Allstar. See https://github.com/ossf/allstar/ for more information. For questions specific to the repository, please contact the owner or maintainer.
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-android/issues/131","Security Policy violation Outside Collaborators","2024-05-12T04:05:40Z","Closed issue","allstar","This issue was automatically created by Allstar.
+Security Policy Violation
+ Found 3 outside collaborators with admin access.
+ This policy requires users with this access to be members of the organisation. That way you can easily audit who has access to your repo, and if an account is compromised it can quickly be denied access to organization resources. To fix this you should either remove the user from repository-based access, or add them to the organization.
+Remove the user from the repository-based access. From the main page of the repository, go to Settings -> Manage Access.
+ (For more information, see https://docs.github.com/en/account-and-profile/setting-up-and-managing-your-github-user-account/managing-access-to-your-personal-repositories/removing-a-collaborator-from-a-personal-repository)
+OR
+Invite the user to join your organisation. Click your profile photo and choose “Your Organization” → choose the org name → “People” → “Invite Member.” (For more information, see https://docs.github.com/en/organizations/managing-membership-in-your-organization/inviting-users-to-join-your-organization)
+If you don't see the Settings tab you probably don't have administrative access. Reach out to the administrators of the organisation to fix this issue.
+OR
+Exempt the user by adding an exemption to your organization-level Outside Collaborators configuration file.
+⚠️ There is an updated version of this policy result! Click here to see the latest update
+This issue will auto resolve when the policy is in compliance.
+Issue created by Allstar. See https://github.com/ossf/allstar/ for more information. For questions specific to the repository, please contact the owner or maintainer.
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-android/issues/130","Security Policy violation Branch Protection","2024-05-07T04:05:40Z","Closed issue","allstar","This issue was automatically created by Allstar.
+Security Policy Violation
+ Dismiss stale reviews not configured for branch main
+This issue will auto resolve when the policy is in compliance.
+Issue created by Allstar. See https://github.com/ossf/allstar/ for more information. For questions specific to the repository, please contact the owner or maintainer.
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-android/issues/129","Security Policy violation Binary Artifacts","2024-05-07T04:05:36Z","Closed issue","allstar","This issue was automatically created by Allstar.
+Security Policy Violation
+ Project is out of compliance with Binary Artifacts policy: binaries present in source code
+Rule Description
+ Binary Artifacts are an increased security risk in your repository. Binary artifacts cannot be reviewed, allowing the introduction of possibly obsolete or maliciously subverted executables. For more information see the Security Scorecards Documentation for Binary Artifacts.
+Remediation Steps
+ To remediate, remove the generated executable artifacts from the repository.
+Artifacts Found
+generativeai-android-sample/gradle/wrapper/gradle-wrapper.jar
+gradle/wrapper/gradle-wrapper.jar
+Additional Information
+ This policy is drawn from Security Scorecards, which is a tool that scores a project's adherence to security best practices. You may wish to run a Scorecards scan directly on this repository for more details.
+This issue will auto resolve when the policy is in compliance.
+Issue created by Allstar. See https://github.com/ossf/allstar/ for more information. For questions specific to the repository, please contact the owner or maintainer.
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-android/issues/119","Port API Key security suggestions to the README","2024-04-16T21:21:45Z","Open issue","component:documentation,status:awaiting user response,status:triaged,type:feature request","Right now, in the README, we suggest people not check their API key into the repo, we should do the same in this README like we do in the docs: https://ai.google.dev/tutorials/quickstart#android
+ The text was updated successfully, but these errors were encountered: 
+👍1
+matthewmccg reacted with thumbs up emoji
+All reactions
+👍1 reaction"
+"https://github.com/google-gemini/generative-ai-android/issues/114","Remove Android Dependencies","2024-04-07T23:47:01Z","Open issue","component:android sdk,status:triaged,type:feature request","This library seems to have some relatively unnecessary android dependencies, which prevent the library from being used in a server-side JVM environment. This issue can request/track the removal of Android dependencies from the library, making this library into something like generative-ai-jvm or generative-ai-kotlin.
+ The text was updated successfully, but these errors were encountered: 
+👍7
+thatfiredev, bpavuk, Kishore007raj, aladh, krisbitney, sergiolopes, and BFergerson reacted with thumbs up emoji
+All reactions
+👍7 reactions"
+"https://github.com/google-gemini/generative-ai-android/issues/111","Error in accessing TunedGenerativeModel in Android","2024-04-04T20:21:24Z","Open issue","component:android sdk,status:triaged,type:bug","Im developing an Android chat app using a custom-tuned model from Gemini AI. However, I'm stuck with an error (see screenshot below) Error : models/tuned-test-model-g8tvOuyp9i6i is not found for API version v1 . when trying to integrate the model into my code. Any insights on resolving this issue would be greatly appreciated!
+ Android code for reference
+ val generativeModel = GenerativeModel(
+ modelName = ""tuned-test-model-g8tv0uyp9i6i"",
+ apiKey = BuildConfig.apiKey,
+ generationConfig = config
+ )
+
+
+ The text was updated successfully, but these errors were encountered: 
+👍1
+Unshd0012 reacted with thumbs up emoji
+All reactions
+👍1 reaction"
+"https://github.com/google-gemini/generative-ai-android/issues/105","Error in accessing gemini-1.5-pro-latest","2024-04-20T00:34:07Z","Closed issue","component:android sdk,status:triaged,type:help","Is gemini-1.5-pro-latest model available in Android SDK ?
+ Getting following error
+API Error: models/gemini-1.5-pro-latest is not found for API version v1, or is not supported for GenerateContent. Call ListModels to see the list of available models and their supported methods.
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-android/issues/102","Could not find com.google.ai.client.generativeai:generativeai:0.2.2.","2024-05-07T14:21:59Z","Closed issue","component:android sdk,needs-info,status:awaiting user response,status:triaged,type:help","I'm attempting to use the generativeai library version 0.2.2 in my project . but i get this error Could not find com.google.ai.client.generativeai:generativeai:0.2.2.
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-android/issues/96","Show ""Unresolved reference: apiKey""","2024-06-06T16:32:32Z","Closed issue","component:android sdk,status:triaged,type:bug","When we import generativeai-android-sample app in Android Studio shows an ""Unresolved reference: apiKey"" error
+
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-android/issues/80","Obs project contribute","2024-03-14T15:04:33Z","Closed issue","No label","No description provided.
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-android/issues/79","New release","2024-03-14T19:06:40Z","Closed issue","No label","A new official release because the current version does not yet contain the fix for the ""API Error 400: please use a valid role: user, model error"" #75 issue.
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-android/issues/78","Sample","2024-03-14T15:06:23Z","Closed issue","No label","No description provided.
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-android/issues/75","[v0.2.1] API Error 400: please use a valid role: user, model","2024-03-08T06:07:58Z","Closed issue","No label","Issue
+In the recently released v0.2.1, while using Chat methods, a server error like following occurs even if we provide a role.
+please use a valid role: user, model
+
+Steps to reproduce
+In the sample app, change the Generative AI SDK version to the 0.2.1
+Run the app
+Go to chat
+Type a prompt
+Click send
+Reason
+After I checked a diff between v0.2.0← v0.2.1, observed following issues:
+The default role parameter has been removed from all methods of Chat class. (This is not issue).
+The default value of role field in internal class Content changed from null to ""user""
+https://github.com/google/generative-ai-android/blob/7abb340e595a042eed2f4f539e57df4007736fde/generativeai/src/main/java/com/google/ai/client/generativeai/internal/api/shared/Types.kt#L43
+Changing a default value in the above internal class is ineffective since it's not a public API that will be instantiated from a public API. Instead, when a public Content is converted to an internal Content, it will be replaced by a value null since the same default value has not been provided to the public class Content. At the time of conversion from public type to internal type, this role's default value will be lost by the following code:
+https://github.com/google/generative-ai-android/blob/7abb340e595a042eed2f4f539e57df4007736fde/generativeai/src/main/java/com/google/ai/client/generativeai/internal/util/conversions.kt#L49-L50
+Possible fixes
+So as per my understanding, the default value for role is needed in the following files:
+Public class field
+https://github.com/google/generative-ai-android/blob/7abb340e595a042eed2f4f539e57df4007736fde/generativeai/src/main/java/com/google/ai/client/generativeai/type/Content.kt#L28
+Builder parameter
+https://github.com/google/generative-ai-android/blob/7abb340e595a042eed2f4f539e57df4007736fde/generativeai/src/main/java/com/google/ai/client/generativeai/type/Content.kt#L31
+Builder function
+https://github.com/google/generative-ai-android/blob/7abb340e595a042eed2f4f539e57df4007736fde/generativeai/src/main/java/com/google/ai/client/generativeai/type/Content.kt#L59
+OR
+We can also make changes in a conversion function as follows:
+internal fun com.google.ai.client.generativeai.type.Content.toInternal() =
+- Content(this.role, this.parts.map { it.toInternal() })+ Content(this.role ?: ""user"", this.parts.map { it.toInternal() }) 
+ The text was updated successfully, but these errors were encountered: 
+👍2
+ilyassesalama and Tolansoft reacted with thumbs up emoji❤️2
+thatfiredev and Tolansoft reacted with heart emoji
+All reactions
+👍2 reactions
+❤️2 reactions"
+"https://github.com/google-gemini/generative-ai-android/issues/69","Failed to send message","2024-04-18T04:52:40Z","Closed issue","component:android sdk,status:triaged,type:bug","After a request fails once, subsequent requests will fail every time.
+java.util.concurrent.CancellationException: Parent job is Canceled error reported
+The log is as follows：
+2024-02-26 21:43:10.633 32688-2795  System.err                  W  com.google.ai.client.generativeai.type.UnknownException: Something unexpected happened.
+2024-02-26 21:43:10.634 32688-2795  System.err                  W  	at com.google.ai.client.generativeai.type.GoogleGenerativeAIException$Companion.from(Exceptions.kt:45)
+2024-02-26 21:43:10.634 32688-2795  System.err                  W  	at com.google.ai.client.generativeai.GenerativeModel.generateContent(GenerativeModel.kt:88)
+2024-02-26 21:43:10.634 32688-2795  System.err                  W  	at com.google.ai.client.generativeai.GenerativeModel$generateContent$1.invokeSuspend(Unknown Source:15)
+2024-02-26 21:43:10.634 32688-2795  System.err                  W  	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:33)
+2024-02-26 21:43:10.634 32688-2795  System.err                  W  	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:106)
+2024-02-26 21:43:10.634 32688-2795  System.err                  W  	at android.os.Handler.handleCallback(Handler.java:888)
+2024-02-26 21:43:10.634 32688-2795  System.err                  W  	at android.os.Handler.dispatchMessage(Handler.java:100)
+2024-02-26 21:43:10.634 32688-2795  System.err                  W  	at android.os.Looper.loop(Looper.java:213)
+2024-02-26 21:43:10.634 32688-2795  System.err                  W  	at android.app.ActivityThread.main(ActivityThread.java:8178)
+2024-02-26 21:43:10.634 32688-2795  System.err                  W  	at java.lang.reflect.Method.invoke(Native Method)
+2024-02-26 21:43:10.634 32688-2795  System.err                  W  	at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:513)
+2024-02-26 21:43:10.634 32688-2795  System.err                  W  	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:1101)
+2024-02-26 21:43:10.634 32688-2795  System.err                  W  Caused by: java.util.concurrent.CancellationException: Parent job is Cancelled
+2024-02-26 21:43:10.634 32688-2795  System.err                  W  	at io.ktor.client.engine.UtilsKt$attachToUserJob$cleanupHandler$1.invoke(Utils.kt:97)
+2024-02-26 21:43:10.635 32688-2795  System.err                  W  	at io.ktor.client.engine.UtilsKt$attachToUserJob$cleanupHandler$1.invoke(Utils.kt:95)
+2024-02-26 21:43:10.635 32688-2795  System.err                  W  	at kotlinx.coroutines.JobSupport.invokeOnCompletion(JobSupport.kt:1529)
+2024-02-26 21:43:10.635 32688-2795  System.err                  W  	at kotlinx.coroutines.Job$DefaultImpls.invokeOnCompletion$default(Job.kt:357)
+2024-02-26 21:43:10.635 32688-2795  System.err                  W  	at io.ktor.client.engine.HttpClientEngineKt.createCallContext(HttpClientEngine.kt:166)
+2024-02-26 21:43:10.635 32688-2795  System.err                  W  	at io.ktor.client.engine.HttpClientEngine$DefaultImpls.executeWithinCallContext(HttpClientEngine.kt:91)
+2024-02-26 21:43:10.635 32688-2795  System.err                  W  	at io.ktor.client.engine.HttpClientEngine$DefaultImpls.access$executeWithinCallContext(HttpClientEngine.kt:24)
+2024-02-26 21:43:10.635 32688-2795  System.err                  W  	at io.ktor.client.engine.HttpClientEngine$install$1.invokeSuspend(HttpClientEngine.kt:70)
+2024-02-26 21:43:10.635 32688-2795  System.err                  W  	at io.ktor.client.engine.HttpClientEngine$install$1.invoke(Unknown Source:15)
+2024-02-26 21:43:10.635 32688-2795  System.err                  W  	at io.ktor.client.engine.HttpClientEngine$install$1.invoke(Unknown Source:4)
+2024-02-26 21:43:10.635 32688-2795  System.err                  W  	at io.ktor.util.pipeline.SuspendFunctionGun.loop(SuspendFunctionGun.kt:120)
+2024-02-26 21:43:10.635 32688-2795  System.err                  W  	at io.ktor.util.pipeline.SuspendFunctionGun.proceed(SuspendFunctionGun.kt:78)
+2024-02-26 21:43:10.635 32688-2795  System.err                  W  	at io.ktor.util.pipeline.SuspendFunctionGun.execute$ktor_utils(SuspendFunctionGun.kt:98)
+2024-02-26 21:43:10.635 32688-2795  System.err                  W  	at io.ktor.util.pipeline.Pipeline.execute(Pipeline.kt:77)
+2024-02-26 21:43:10.635 32688-2795  System.err                  W  	at io.ktor.client.plugins.HttpSend$DefaultSender.execute(HttpSend.kt:138)
+2024-02-26 21:43:10.635 32688-2795  System.err                  W  	at io.ktor.client.plugins.HttpTimeout$Plugin$install$1.invokeSuspend(HttpTimeout.kt:174)
+2024-02-26 21:43:10.635 32688-2795  System.err                  W  	at io.ktor.client.plugins.HttpTimeout$Plugin$install$1.invoke(Unknown Source:15)
+2024-02-26 21:43:10.635 32688-2795  System.err                  W  	at io.ktor.client.plugins.HttpTimeout$Plugin$install$1.invoke(Unknown Source:6)
+2024-02-26 21:43:10.635 32688-2795  System.err                  W  	at io.ktor.client.plugins.HttpSend$InterceptedSender.execute(HttpSend.kt:116)
+2024-02-26 21:43:10.635 32688-2795  System.err                  W  	at io.ktor.client.plugins.HttpRedirect$Plugin$install$1.invokeSuspend(HttpRedirect.kt:64)
+2024-02-26 21:43:10.635 32688-2795  System.err                  W  	at io.ktor.client.plugins.HttpRedirect$Plugin$install$1.invoke(Unknown Source:15)
+2024-02-26 21:43:10.635 32688-2795  System.err                  W  	at io.ktor.client.plugins.HttpRedirect$Plugin$install$1.invoke(Unknown Source:6)
+2024-02-26 21:43:10.635 32688-2795  System.err                  W  	at io.ktor.client.plugins.HttpSend$InterceptedSender.execute(HttpSend.kt:116)
+2024-02-26 21:43:10.635 32688-2795  System.err                  W  	at io.ktor.client.plugins.HttpCallValidator$Companion$install$3.invokeSuspend(HttpCallValidator.kt:151)
+2024-02-26 21:43:10.635 32688-2795  System.err                  W  	at io.ktor.client.plugins.HttpCallValidator$Companion$install$3.invoke(Unknown Source:13)
+2024-02-26 21:43:10.635 32688-2795  System.err                  W  	at io.ktor.client.plugins.HttpCallValidator$Companion$install$3.invoke(Unknown Source:6)
+2024-02-26 21:43:10.636 32688-2795  System.err                  W  	at io.ktor.client.plugins.HttpSend$InterceptedSender.execute(HttpSend.kt:116)
+2024-02-26 21:43:10.636 32688-2795  System.err                  W  	at io.ktor.client.plugins.HttpSend$Plugin$install$1.invokeSuspend(HttpSend.kt:104)
+2024-02-26 21:43:10.636 32688-2795  System.err                  W  	at io.ktor.client.plugins.HttpSend$Plugin$install$1.invoke(Unknown Source:15)
+2024-02-26 21:43:10.636 32688-2795  System.err                  W  	at io.ktor.client.plugins.HttpSend$Plugin$install$1.invoke(Unknown Source:4)
+2024-02-26 21:43:10.636 32688-2795  System.err                  W  	at io.ktor.util.pipeline.SuspendFunctionGun.loop(SuspendFunctionGun.kt:120)
+2024-02-26 21:43:10.636 32688-2795  System.err                  W  	at io.ktor.util.pipeline.SuspendFunctionGun.proceed(SuspendFunctionGun.kt:78)
+2024-02-26 21:43:10.636 32688-2795  System.err                  W  	at io.ktor.util.pipeline.SuspendFunctionGun.proceedWith(SuspendFunctionGun.kt:88)
+2024-02-26 21:43:10.636 32688-2795  System.err                  W  	at io.ktor.client.plugins.DefaultTransformKt$defaultTransformers$1.invokeSuspend(DefaultTransform.kt:57)
+2024-02-26 21:43:10.636 32688-2795  System.err                  W  	at io.ktor.client.plugins.DefaultTransformKt$defaultTransformers$1.invoke(Unknown Source:11)
+2024-02-26 21:43:10.636 32688-2795  System.err                  W  	at io.ktor.client.plugins.DefaultTransformKt$defaultTransformers$1.invoke(Unknown Source:4)
+2024-02-26 21:43:10.636 32688-2795  System.err                  W  	at io.ktor.util.pipeline.SuspendFunctionGun.loop(SuspendFunctionGun.kt:120)
+2024-02-26 21:43:10.636 32688-2795  System.err                  W  	at io.ktor.util.pipeline.SuspendFunctionGun.proceed(SuspendFunctionGun.kt:78)
+2024-02-26 21:43:10.636 32688-2795  System.err                  W  	at io.ktor.util.pipeline.SuspendFunctionGun.proceedWith(SuspendFunctionGun.kt:88)
+2024-02-26 21:43:10.636 32688-2795  System.err                  W  	at io.ktor.client.plugins.contentnegotiation.ContentNegotiation$Plugin$install$1.invokeSuspend(ContentNegotiation.kt:252)
+2024-02-26 21:43:10.636 32688-2795  System.err                  W  	at io.ktor.client.plugins.contentnegotiation.ContentNegotiation$Plugin$install$1.invoke(Unknown Source:11)
+2024-02-26 21:43:10.636 32688-2795  System.err                  W  	at io.ktor.client.plugins.contentnegotiation.ContentNegotiation$Plugin$install$1.invoke(Unknown Source:4)
+2024-02-26 21:43:10.636 32688-2795  System.err                  W  	at io.ktor.util.pipeline.SuspendFunctionGun.loop(SuspendFunctionGun.kt:120)
+2024-02-26 21:43:10.636 32688-2795  System.err                  W  	at io.ktor.util.pipeline.SuspendFunctionGun.proceed(SuspendFunctionGun.kt:78)
+2024-02-26 21:43:10.636 32688-2795  System.err                  W  	at io.ktor.util.pipeline.SuspendFunctionGun.proceedWith(SuspendFunctionGun.kt:88)
+2024-02-26 21:43:10.636 32688-2795  System.err                  W  	at io.ktor.client.plugins.HttpCallValidator$Companion$install$1.invokeSuspend(HttpCallValidator.kt:130)
+2024-02-26 21:43:10.636 32688-2795  System.err                  W  	at io.ktor.client.plugins.HttpCallValidator$Companion$install$1.invoke(Unknown Source:13)
+2024-02-26 21:43:10.636 32688-2795  System.err                  W  	at io.ktor.client.plugins.HttpCallValidator$Companion$install$1.invoke(Unknown Source:4)
+2024-02-26 21:43:10.636 32688-2795  System.err                  W  	at io.ktor.util.pipeline.SuspendFunctionGun.loop(SuspendFunctionGun.kt:120)
+2024-02-26 21:43:10.636 32688-2795  System.err                  W  	at io.ktor.util.pipeline.SuspendFunctionGun.proceed(SuspendFunctionGun.kt:78)
+2024-02-26 21:43:10.636 32688-2795  System.err                  W  	at io.ktor.client.plugins.HttpRequestLifecycle$Plugin$install$1.invokeSuspend(HttpRequestLifecycle.kt:38)
+2024-02-26 21:43:10.636 32688-2795  System.err                  W  	at io.ktor.client.plugins.HttpRequestLifecycle$Plugin$install$1.invoke(Unknown Source:11)
+2024-02-26 21:43:10.636 32688-2795  System.err                  W  	at io.ktor.client.plugins.HttpRequestLifecycle$Plugin$install$1.invoke(Unknown Source:4)
+2024-02-26 21:43:10.636 32688-2795  System.err                  W  	at io.ktor.util.pipeline.SuspendFunctionGun.loop(SuspendFunctionGun.kt:120)
+2024-02-26 21:43:10.637 32688-2795  System.err                  W  	at io.ktor.util.pipeline.SuspendFunctionGun.proceed(SuspendFunctionGun.kt:78)
+2024-02-26 21:43:10.637 32688-2795  System.err                  W  	at io.ktor.util.pipeline.SuspendFunctionGun.execute$ktor_utils(SuspendFunctionGun.kt:98)
+2024-02-26 21:43:10.637 32688-2795  System.err                  W  	at io.ktor.util.pipeline.Pipeline.execute(Pipeline.kt:77)
+2024-02-26 21:43:10.637 32688-2795  System.err                  W  	at io.ktor.client.HttpClient.execute$ktor_client_core(HttpClient.kt:191)
+2024-02-26 21:43:10.637 32688-2795  System.err                  W  	at io.ktor.client.statement.HttpStatement.executeUnsafe(HttpStatement.kt:108)
+2024-02-26 21:43:10.637 32688-2795  System.err                  W  	at io.ktor.client.statement.HttpStatement.execute(HttpStatement.kt:47)
+2024-02-26 21:43:10.637 32688-2795  System.err                  W  	at io.ktor.client.statement.HttpStatement.execute(HttpStatement.kt:62)
+2024-02-26 21:43:10.637 32688-2795  System.err                  W  	at com.google.ai.client.generativeai.internal.api.APIController.generateContent(APIController.kt:185)
+2024-02-26 21:43:10.637 32688-2795  System.err                  W  	at com.google.ai.client.generativeai.GenerativeModel.generateContent(GenerativeModel.kt:86)
+2024-02-26 21:43:10.637 32688-2795  System.err                  W  	at com.google.ai.client.generativeai.Chat.sendMessage(Chat.kt:60)
+2024-02-26 21:43:10.637 32688-2795  System.err                  W  	at com.google.ai.client.generativeai.java.ChatFutures$FuturesImpl$sendMessage$1.invokeSuspend(ChatFutures.kt:54)
+2024-02-26 21:43:10.637 32688-2795  System.err                  W  	at com.google.ai.client.generativeai.java.ChatFutures$FuturesImpl$sendMessage$1.invoke(Unknown Source:8)
+2024-02-26 21:43:10.637 32688-2795  System.err                  W  	at com.google.ai.client.generativeai.java.ChatFutures$FuturesImpl$sendMessage$1.invoke(Unknown Source:4)
+2024-02-26 21:43:10.637 32688-2795  System.err                  W  	at kotlinx.coroutines.intrinsics.UndispatchedKt.startCoroutineUndispatched(Undispatched.kt:44)
+2024-02-26 21:43:10.637 32688-2795  System.err                  W  	at kotlinx.coroutines.CoroutineStart.invoke(CoroutineStart.kt:112)
+2024-02-26 21:43:10.637 32688-2795  System.err                  W  	at kotlinx.coroutines.AbstractCoroutine.start(AbstractCoroutine.kt:126)
+2024-02-26 21:43:10.637 32688-2795  System.err                  W  	at kotlinx.coroutines.BuildersKt__Builders_commonKt.async(Builders.common.kt:91)
+2024-02-26 21:43:10.637 32688-2795  System.err                  W  	at kotlinx.coroutines.BuildersKt.async(Unknown Source:1)
+2024-02-26 21:43:10.637 32688-2795  System.err                  W  	at androidx.concurrent.futures.SuspendToFutureAdapter.launchFuture(SuspendToFutureAdapter.kt:86)
+2024-02-26 21:43:10.637 32688-2795  System.err                  W  	at androidx.concurrent.futures.SuspendToFutureAdapter.launchFuture$default(SuspendToFutureAdapter.kt:81)
+2024-02-26 21:43:10.637 32688-2795  System.err                  W  	at com.google.ai.client.generativeai.java.ChatFutures$FuturesImpl.sendMessage(ChatFutures.kt:54)
+
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-android/issues/64","not available in Europe","2024-02-29T15:26:32Z","Closed issue","No label","when will be available in Europe countries?
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-android/issues/63","add generative-ai-java on springboot","2024-02-19T15:00:19Z","Open issue","status:awaiting user response,status:triaged,type:help","https://github.com/xlorne/springboot-starter-gemini
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-android/issues/51","API available to more countries","2024-02-16T22:13:04Z","Closed issue","No label","While Bard was updated to provide service in many more countries, I wonder when will the API be general available to those countries too?
+Do you have an ETA?
+Thank you in advance
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-android/issues/42","Using the sdk on my flutter app through MethodChannel","2024-02-02T18:44:10Z","Closed issue","No label","Hi,
+ I am trying to use the SDK to communicate with my flutter app using methodchannel but i am getting this error
+First this error
+ERROR:C:\Users\xxxx\.gradle\caches\transforms-3\5d19816a0b04a46bdd05877142eefa50\transformed\jetified-generativeai-0.1.2-runtime.jar: D8: com.android.tools.r8.internal.Hc: Sealed classes are not supported as program classes
+
+then this again
+Execution failed for task ':app:mergeExtDexDebug'.
+> Could not resolve all files for configuration ':app:debugRuntimeClasspath'.
+   > Failed to transform generativeai-0.1.2.aar (com.google.ai.client.generativeai:generativeai:0.1.2) to match attributes {artifactType=android-dex, asm-transformed-variant=NONE, dexing-enable-desugaring=true, dexing-enable-jacoco-instrumentation=false, dexing-is-debuggable=true, dexing-min-sdk=26, org.gradle.category=library, org.gradle.dependency.bundling=external, org.gradle.libraryelements=aar, org.gradle.status=release, org.gradle.usage=java-runtime}.
+      > Execution failed for DexingNoClasspathTransform: C:\Users\Arafat Benson\.gradle\caches\transforms-3\5d19816a0b04a46bdd05877142eefa50\transformed\jetified-generativeai-0.1.2-runtime.jar.
+         > Error while dexing.
+
+could you help me with the cause of this? thanks
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-android/issues/40","Request for Function Calling Feature","2024-04-10T15:06:50Z","Closed issue","component:android sdk,status:triaged,type:feature request","I'd like to propose the addition of a Function Calling feature to enhance communication between Android device and the model
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-android/issues/39","Expose the HttpClient to allow proxies etc","2024-01-08T11:19:14Z","Open issue","component:android sdk,status:triaged,type:bug","https://github.com/google/generative-ai-android/blob/7043908ce793a6d424f8c10985d4654bc1b010e5/generativeai/src/main/java/com/google/ai/client/generativeai/internal/api/APIController.kt#L71
+Doesn't allow changing the HttpClient, for example adding logging, or configuring a proxy.
+Ideally a Ktor engine could be passed in, or if not possible a OkHttp Call.Factory.
+ The text was updated successfully, but these errors were encountered: 
+👍1
+thatfiredev reacted with thumbs up emoji
+All reactions
+👍1 reaction"
+"https://github.com/google-gemini/generative-ai-android/issues/33","kotlin version","2024-01-04T19:32:43Z","Closed issue","No label","implementation ""com.google.ai.client.generativeai:generativeai:0.1.1"" appears incompatible version of Kotlin issue：Module was compiled with an incompatible version of Kotlin. The binary version of its metadata is 1.9.0, expected version is 1.7.1. But I cannot upgrade kotlin & gradle in my project.
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-android/issues/29","I am getting issue in Release build","2024-01-02T17:46:07Z","Closed issue","No label","Hey, I am using Gemini AI and in the release build, I get generativeai.type.InvalidStateException.
+ I know this is not the right place to ask the question but I google things and I won't able to find any.
+Here is the code
+GeminiModule
+@Module
+@InstallIn(SingletonComponent::class)
+object GeminiModule {
+    @Provides
+    @Singleton
+    fun provideGemini(): GenerativeModel {
+        val harassmentSafety =
+            SafetySetting(HarmCategory.HARASSMENT, BlockThreshold.ONLY_HIGH)
+
+        val hateSpeechSafety =
+            SafetySetting(HarmCategory.HATE_SPEECH, BlockThreshold.MEDIUM_AND_ABOVE)
+        val config = generationConfig {
+            stopSequences = listOf(
+                ""fuck"",
+                ""sex"",
+            )
+            temperature = 0.9f
+            topK = 16
+            topP = 0.1f
+        }
+        return GenerativeModel(
+            modelName = ""gemini-pro"",
+            apiKey = BuildConfig.apiKey,
+            generationConfig = config,
+            safetySettings = listOf(
+                harassmentSafety, hateSpeechSafety
+            )
+        )
+    }
+}
+and it's viewModel
+@HiltViewModel
+class ChatViewModel @Inject constructor(
+    private val generativeModel: GenerativeModel,
+    private val case: ChatUseCases,
+    private val mapper: ChatMessageToModelMapper
+) : ViewModel() {
+
+    private var chat: Chat? = null
+
+    private val _uiState: MutableState<ChatUiState> =
+        mutableStateOf(ChatUiState())
+    val uiState: State<ChatUiState> = _uiState
+
+    private val _isLoading = mutableStateOf<Boolean>(false)
+    val isLoading: State<Boolean> get() = _isLoading
+    private var job: Job? = null
+
+    init {
+        getChat()
+    }
+
+    private fun getChat() = viewModelScope.launch {
+        val history = mapper.mapFromEntityList(case.getAllChat.invoke()).toContent()
+        chat = generativeModel.startChat(history)
+        _uiState.value = ChatUiState(
+            chat?.history?.map { content ->
+                // Map the initial messages
+                ChatMessage(
+                    text = content.parts.first().asTextOrNull() ?: """",
+                    participant = if (content.role == ""user"") Participant.USER else Participant.MODEL,
+                )
+            } ?: emptyList()
+        )
+    }
+
+
+    fun cancelJob() {
+        try {
+            _isLoading.value = false
+            job?.cancel()
+        } catch (e: Exception) {
+            Log.e(TAGS.BIT_ERROR.name, ""cancelJob: ${e.localizedMessage}"")
+        }
+    }
+
+    fun sendMessage(userMessage: String) {
+        // Add a pending message
+        val userInput = ChatMessage(
+            text = userMessage, participant = Participant.USER,
+        )
+        _isLoading.value = true
+        _uiState.value.addMessage(
+            userInput
+        )
+        job = viewModelScope.launch {
+            try {
+                val response = chat!!.sendMessage(userMessage)
+                _isLoading.value = false
+                response.text?.let { modelResponse ->
+                    val modelRes = ChatMessage(
+                        text = modelResponse, participant = Participant.MODEL
+                    )
+                    mapper.mapToEntityList(
+                        listOf(
+                            _uiState.value.getLastMessage()!!
+                                .copy(
+                                    linkedId = modelRes.id
+                                ),
+                            modelRes.copy(
+                                linkedId = _uiState.value.getLastMessage()!!.id
+                            )
+                        )
+                    ).forEach {
+                        case.insertChat.invoke(it)
+                    }
+                    _uiState.value.addMessage(
+                        modelRes
+                    )
+                }
+            } catch (e: Exception) {
+                Log.d(""AAA"", ""sendMessage: $e"")
+                if (e is PromptBlockedException) {
+                    _uiState.value.addMessage(
+                        ChatMessage(
+                            text = ""The input you provided contains offensive language, which goes against our community guidelines "" +
+                                    ""and standards. Please refrain from using inappropriate language and ensure that your input is "" +
+                                    ""respectful and adheres to our guidelines. If you have any questions or concerns, feel free "" +
+                                    ""to contact our support team."",
+                            participant = Participant.ERROR
+                        )
+                    )
+                    return@launch
+                }
+                _uiState.value.addMessage(
+                    ChatMessage(
+                        text = e.localizedMessage ?: ""Unknown error"",
+                        participant = Participant.ERROR
+                    )
+                )
+            } finally {
+                _isLoading.value = false
+                job = null
+            }
+        }
+    }
+
+}
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-android/issues/26","Request payload size exceeds the limit: 4194304 bytes.","2024-01-02T21:33:27Z","Closed issue","No label","private fun imageConvertText(uri: Uri) {
+        loadingDialog.show()
+        try {
+            Log.d(""result"", ""bitmap start"")
+            val bitmap =
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                    val source = ImageDecoder.createSource(this.contentResolver, uri)
+                    ImageDecoder.decodeBitmap(source)
+                } else {
+                    MediaStore.Images.Media.getBitmap(this.contentResolver, uri)
+                }
+            val baos = ByteArrayOutputStream()
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
+            val size = baos.toByteArray()
+            Log.d(""result"", size.size.toString())
+            Log.d(""result"", ""bitmap completed"")
+            val inputContent = content {
+                image(bitmap)
+                text(""Read text from image"")
+            }
+            Log.d(""result"", ""api start"")
+
+            try {
+                var mainResult = """"
+                CoroutineScope(Dispatchers.IO).launch {
+                    generativeModel.generateContentStream(inputContent)
+                        .collect { response ->
+                            val result = response.text.toString().trim()
+                            Log.d(""result"", ""api end"")
+                            runOnUiThread {
+                                loadingDialog.dismiss()
+                                if (result.isNotEmpty()) {
+                                    mainResult += result
+                                    Log.d(""result"", ""set Text"")
+
+                                    menuBinding.outputImg.setImageBitmap(null)
+                                    menuBinding.outputImg.setImageBitmap(bitmap)
+                                    menuBinding.outputImg.visible()
+                                    menuBinding.edNumber.setText(mainResult)
+                                } else {
+                                    Log.d(""result"", ""No text found in the photo"")
+                                    menuBinding.outputImg.gone()
+                                    menuBinding.outputImg.setImageBitmap(null)
+                                    showToast(""No text found in the photo"")
+                                }
+                            }
+                        }
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+                loadingDialog.dismiss()
+                showToast(e.message.toString())
+            }
+
+        } catch (e: Exception) {
+            e.printStackTrace()
+            loadingDialog.dismiss()
+            showToast(e.message.toString())
+        }
+
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-android/issues/24","Use the same version of gradle-wrapper and agp","2023-12-21T15:08:17Z","Closed issue","No label","in generativeai-android-sample it use gradle-8.0.2 and agp with 8.1.0, but others with gradle-8.4 and 8.1.3.
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-android/issues/17","Something went wrong while trying to deserialize a response from the server","2023-12-21T15:08:44Z","Closed issue","type:bug","When testing app from Google Play console internal test channel with release build with ;
+        minifyEnabled true
+        shrinkResources true
+
+""Something went wrong while trying to deserialize a response from the server"" error occurs on Model answer
+There is no Logcat info on Android Studio when it occurs.
+What i tried is : Added lines below to my proguard-rules.pro
+-keep class androidx.compose.ui.*.*{*;} -keep class com.google.ai.*.*{*;}
+but not works
+Thank you!
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-android/issues/16","As a programming enthusiast, I had some problems deploying projects","2023-12-25T17:24:02Z","Closed issue","needs-info","FAILURE: Build failed with an exception.
+Where:
+ Build file 'C:\Users\14130\AndroidStudioProjects\generative-ai-android\plugins\build.gradle.kts' line: 17
+What went wrong:
+ Plugin [id: 'org.gradle.kotlin.kotlin-dsl', version: '4.1.2'] was not found in any of the following sources:
+Gradle Core Plugins (plugin is not in 'org.gradle' namespace)
+Plugin Repositories (could not resolve plugin artifact 'org.gradle.kotlin.kotlin-dsl:org.gradle.kotlin.kotlin-dsl.gradle.plugin:4.1.2')
+ Searched in the following repositories:
+ Google
+ MavenRepo
+ Gradle Central Plugin Repository
+Try:
+Run with --info or --debug option to get more log output.
+ Run with --scan to get full insights.
+ Get more help at https://help.gradle.org.
+Exception is:
+ org.gradle.api.plugins.UnknownPluginException: Plugin [id: 'org.gradle.kotlin.kotlin-dsl', version: '4.1.2'] was not found in any of the following sources:
+at org.gradle.internal.concurrent.AbstractManagedExecutor$1.run(AbstractManagedExecutor.java:47)
+CONFIGURE FAILED in 27s
+As a programming enthusiast, I had some problems deploying projects
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-android/issues/14","Migrate to Kotlin Multiplatform","2023-12-14T07:56:42Z","Open issue","component:android sdk,status:triaged,type:feature request","Migrate to Kotlin Multiplatform in order to target more platforms
+ The text was updated successfully, but these errors were encountered: 
+👍14
+thatfiredev, daymxn, rlazo, christiandeange, rukonpro, iurysza, joelhandwell, ghishadow, Unshd0012, jimgoog, and 4 more reacted with thumbs up emoji
+All reactions
+👍14 reactions"

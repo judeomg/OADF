@@ -1,0 +1,1900 @@
+﻿"https://github.com/meta-llama/llama-stack-apps/issues/95","attachment_behavior not working for accessing remote files","2024-10-20T02:17:58Z","Open issue","No label","Hi, I ran the following examples in agents, but it looks like there is a problem with accessing the file content when executing
+iterator = agent.execute_turn(
+            [turn.message],
+            turn.attachments,
+        )
+
+podcast_transcript.py
+rag_as_attachments.py
+inflation.py
+Output
+For example, with podcast_transcript.py, I got the following output:
+inference> I'd be happy to help you summarize the podcast transcript. 
+Can you please provide me with the contents of the file at 
+""/var/folders/2g/07kbk1350b98fd_msglwdr440000gn/T/tmp354ikrbz/CAMZO2Cjtranscript_shorter.txt""?
+
+Inspecting further, it looks like the following code in common/execute_with_custom_tools.py is not returning the correct response.
+response = self.client.agents.turn.create(
+    agent_id=self.agent_id,
+    session_id=self.session_id,
+    messages=current_messages,
+    attachments=attachments,
+    stream=True,
+)
+
+I got the following in response.response.content:
+'Traceback (most recent call last):\n  File ""/Users/friedahuang/.vscode/extensions/ms-python.debugpy-2024.12.0-darwin-
+arm64/bundled/libs/debugpy/_vendored/pydevd/_pydevd_bundle/pydevd_resolver.py"", line 193, in _get_py_dictionary\n
+attr = getattr(var, name)\n  File ""/opt/anaconda3/envs/llamastack-csye7230-searchagent-stack/lib/python3.10/site-
+packages/httpx/_models.py"", line 572, in content\n    raise ResponseNotRead()\nhttpx.ResponseNotRead: Attempted to access
+streaming response content, without having called `read()`.\n'
+
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/meta-llama/llama-stack-apps/issues/89","TypeError: LlamaForSequenceClassification.forward() got an unexpected keyword argument 'token_type_ids'","2024-10-15T21:24:16Z","Closed issue","No label","Running PYTHONPATH=. mesop app/main.py results in the following error regarding 'token_type_ids'. It seems to be related to the transformers package as shown here, but after I updating to the latest version, the same error still occurs.
+Traceback (most recent call last):
+  File ""/Users/friedahuang/local/llama-stack/llama_stack/distribution/server/server.py"", line 215, in sse_generator
+    async for item in event_gen:
+  File ""/Users/friedahuang/local/llama-stack/llama_stack/providers/impls/meta_reference/agents/agents.py"", line 127, in create_agent_turn
+    async for event in agent.create_and_execute_turn(request):
+  File ""/Users/friedahuang/local/llama-stack/llama_stack/providers/impls/meta_reference/agents/agent_instance.py"", line 174, in create_and_execute_turn
+    async for chunk in self.run(
+  File ""/Users/friedahuang/local/llama-stack/llama_stack/providers/impls/meta_reference/agents/agent_instance.py"", line 239, in run
+    async for res in self.run_multiple_shields_wrapper(
+  File ""/Users/friedahuang/local/llama-stack/llama_stack/providers/impls/meta_reference/agents/agent_instance.py"", line 294, in run_multiple_shields_wrapper
+    await self.run_multiple_shields(messages, shields)
+  File ""/Users/friedahuang/local/llama-stack/llama_stack/providers/impls/meta_reference/agents/safety.py"", line 37, in run_multiple_shields
+    responses = await asyncio.gather(
+  File ""/Users/friedahuang/local/llama-stack/llama_stack/distribution/routers/routers.py"", line 168, in run_shield
+    return await self.routing_table.get_provider_impl(shield_type).run_shield(
+  File ""/Users/friedahuang/local/llama-stack/llama_stack/providers/impls/meta_reference/safety/safety.py"", line 65, in run_shield
+    res = await shield.run(messages)
+  File ""/Users/friedahuang/local/llama-stack/llama_stack/providers/impls/meta_reference/safety/shields/base.py"", line 54, in run
+    return await self.run_impl(text)
+  File ""/Users/friedahuang/local/llama-stack/llama_stack/providers/impls/meta_reference/safety/shields/prompt_guard.py"", line 84, in run_impl
+    outputs = self.model(**inputs)
+  File ""/opt/anaconda3/envs/llamastack-my-local-stack/lib/python3.10/site-packages/torch/nn/modules/module.py"", line 1553, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File ""/opt/anaconda3/envs/llamastack-my-local-stack/lib/python3.10/site-packages/torch/nn/modules/module.py"", line 1562, in _call_impl
+    return forward_call(*args, **kwargs)
+TypeError: LlamaForSequenceClassification.forward() got an unexpected keyword argument 'token_type_ids'
+
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/meta-llama/llama-stack-apps/issues/88","llama_stack_client.PermissionDeniedError: Error code: 403 after running PYTHONPATH=. mesop app/main.py","2024-10-14T17:32:07Z","Closed issue","No label","Running it on
+Mac M2
+Ollama
+Llama3.1-8B-Instruct
+Llama-Guard-3-8B
+I1005 20:37:58.358263 8372277056 _client.py:1038] HTTP Request: POST http://localhost:5000/agents/create ""HTTP/1.1 403 Forbidden""
+Traceback (most recent call last):
+  File ""/opt/anaconda3/envs/llamastack-my-local-stack/bin/mesop"", line 8, in <module>
+    sys.exit(run_main())
+  File ""/opt/anaconda3/envs/llamastack-my-local-stack/lib/python3.10/site-packages/mesop/bin/bin.py"", line 285, in run_main
+    app.run(main)
+  File ""/opt/anaconda3/envs/llamastack-my-local-stack/lib/python3.10/site-packages/absl/app.py"", line 308, in run
+    _run_main(main, args)
+  File ""/opt/anaconda3/envs/llamastack-my-local-stack/lib/python3.10/site-packages/absl/app.py"", line 254, in _run_main
+    sys.exit(main(argv))
+  File ""/opt/anaconda3/envs/llamastack-my-local-stack/lib/python3.10/site-packages/mesop/bin/bin.py"", line 99, in main
+    app = create_app(
+  File ""/opt/anaconda3/envs/llamastack-my-local-stack/lib/python3.10/site-packages/mesop/server/wsgi_app.py"", line 37, in create_app
+    run_block()
+  File ""/opt/anaconda3/envs/llamastack-my-local-stack/lib/python3.10/site-packages/mesop/bin/bin.py"", line 101, in <lambda>
+    run_block=lambda: execute_main_module(absolute_path=absolute_path),
+  File ""/opt/anaconda3/envs/llamastack-my-local-stack/lib/python3.10/site-packages/mesop/bin/bin.py"", line 272, in execute_main_module
+    raise e
+  File ""/opt/anaconda3/envs/llamastack-my-local-stack/lib/python3.10/site-packages/mesop/bin/bin.py"", line 262, in execute_main_module
+    execute_module(
+  File ""/opt/anaconda3/envs/llamastack-my-local-stack/lib/python3.10/site-packages/mesop/cli/execute_module.py"", line 12, in execute_module
+    spec.loader.exec_module(module)
+  File ""<frozen importlib._bootstrap_external>"", line 883, in exec_module
+  File ""<frozen importlib._bootstrap>"", line 241, in _call_with_frames_removed
+  File ""/Users/friedahuang/Documents/llama-stack-apps/app/main.py"", line 16, in <module>
+    client_manager.init_client(
+  File ""/Users/friedahuang/Documents/llama-stack-apps/app/utils/client.py"", line 46, in init_client
+    self.client = asyncio.run(
+  File ""/opt/anaconda3/envs/llamastack-my-local-stack/lib/python3.10/asyncio/runners.py"", line 44, in run
+    return loop.run_until_complete(main)
+  File ""/opt/anaconda3/envs/llamastack-my-local-stack/lib/python3.10/asyncio/base_events.py"", line 649, in run_until_complete
+    return future.result()
+  File ""/Users/friedahuang/Documents/llama-stack-apps/common/client_utils.py"", line 183, in get_agent_with_custom_tools
+    create_response = client.agents.create(
+  File ""/opt/anaconda3/envs/llamastack-my-local-stack/lib/python3.10/site-packages/llama_stack_client/resources/agents/agents.py"", line 110, in create
+    return self._post(
+  File ""/opt/anaconda3/envs/llamastack-my-local-stack/lib/python3.10/site-packages/llama_stack_client/_base_client.py"", line 1251, in post
+    return cast(ResponseT, self.request(cast_to, opts, stream=stream, stream_cls=stream_cls))
+  File ""/opt/anaconda3/envs/llamastack-my-local-stack/lib/python3.10/site-packages/llama_stack_client/_base_client.py"", line 943, in request
+    return self._request(
+  File ""/opt/anaconda3/envs/llamastack-my-local-stack/lib/python3.10/site-packages/llama_stack_client/_base_client.py"", line 1046, in _request
+    raise self._make_status_error_from_response(err.response) from None
+llama_stack_client.PermissionDeniedError: Error code: 403
+
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/meta-llama/llama-stack-apps/issues/87","AgentsTurnStreamChunk(event=None, error={'message': '400: Invalid value: Could not find provider for Llama-Guard-3-8B'})","2024-10-15T21:25:29Z","Closed issue","No label","I ran python3 -m examples.agents.hello localhost 11434 and got the following error
+Error
+ INFO:     ::1:63769 - ""POST /agents/create HTTP/1.1"" 200 OK
+INFO:     ::1:63769 - ""POST /agents/session/create HTTP/1.1"" 200 OK
+INFO:     ::1:63769 - ""POST /agents/turn/create HTTP/1.1"" 200 OK
+Traceback (most recent call last):
+  File ""/Users/friedahuang/local/llama-stack/llama_stack/distribution/server/server.py"", line 215, in sse_generator
+    async for item in event_gen:
+  File ""/Users/friedahuang/local/llama-stack/llama_stack/providers/impls/meta_reference/agents/agents.py"", line 127, in create_agent_turn
+    async for event in agent.create_and_execute_turn(request):
+  File ""/Users/friedahuang/local/llama-stack/llama_stack/providers/impls/meta_reference/agents/agent_instance.py"", line 174, in create_and_execute_turn
+    async for chunk in self.run(
+  File ""/Users/friedahuang/local/llama-stack/llama_stack/providers/impls/meta_reference/agents/agent_instance.py"", line 239, in run
+    async for res in self.run_multiple_shields_wrapper(
+  File ""/Users/friedahuang/local/llama-stack/llama_stack/providers/impls/meta_reference/agents/agent_instance.py"", line 294, in run_multiple_shields_wrapper
+    await self.run_multiple_shields(messages, shields)
+  File ""/Users/friedahuang/local/llama-stack/llama_stack/providers/impls/meta_reference/agents/safety.py"", line 37, in run_multiple_shields
+    responses = await asyncio.gather(
+  File ""/Users/friedahuang/local/llama-stack/llama_stack/distribution/routers/routers.py"", line 168, in run_shield
+    return await self.routing_table.get_provider_impl(shield_type).run_shield(
+  File ""/Users/friedahuang/local/llama-stack/llama_stack/providers/impls/meta_reference/safety/safety.py"", line 80, in run_shield
+    res = await shield.run(messages)
+  File ""/Users/friedahuang/local/llama-stack/llama_stack/providers/impls/meta_reference/safety/shields/llama_guard.py"", line 197, in run
+    async for chunk in self.inference_api.chat_completion(
+  File ""/Users/friedahuang/local/llama-stack/llama_stack/distribution/routers/routers.py"", line 117, in chat_completion
+    async for chunk in self.routing_table.get_provider_impl(model).chat_completion(
+  File ""/Users/friedahuang/local/llama-stack/llama_stack/distribution/routers/routing_tables.py"", line 55, in get_provider_impl
+    raise ValueError(f""Could not find provider for {routing_key}"")
+ValueError: Could not find provider for Llama-Guard-3-8B
+
+python3 -m examples.agents.hello localhost 11434 
+
+> created agents with agent_id=ea0bca18-91e7-4083-a82e-123bd7eaab95
+User> Hello
+DEBUGGING!!!
+AgentsTurnStreamChunk(event=TurnStreamEvent(payload=PayloadAgentTurnResponseTurnStartPayload(event_type='turn_start', turn_id='f1b53315-fc45-407d-be09-5b50639ad6cb')))
+DEBUGGING!!!
+AgentsTurnStreamChunk(event=TurnStreamEvent(payload=PayloadAgentTurnResponseStepStartPayload(event_type='step_start', step_id='72cf1faa-296a-40af-9eea-ce372e2ad422', step_type='shield_call', metadata={'touchpoint': 'user-input'})))
+DEBUGGING!!!
+AgentsTurnStreamChunk(event=None, error={'message': '400: Invalid value: Could not find provider for Llama-Guard-3-8B'})
+Traceback (most recent call last):
+  File ""/opt/anaconda3/envs/app/lib/python3.10/runpy.py"", line 196, in _run_module_as_main
+    return _run_code(code, main_globals, None,
+  File ""/opt/anaconda3/envs/app/lib/python3.10/runpy.py"", line 86, in _run_code
+    exec(code, run_globals)
+  File ""/Users/friedahuang/Documents/llama-stack-apps/examples/agents/hello.py"", line 52, in <module>
+    fire.Fire(main)
+  File ""/opt/anaconda3/envs/app/lib/python3.10/site-packages/fire/core.py"", line 135, in Fire
+    component_trace = _Fire(component, args, parsed_flag_args, context, name)
+  File ""/opt/anaconda3/envs/app/lib/python3.10/site-packages/fire/core.py"", line 468, in _Fire
+    component, remaining_args = _CallAndUpdateTrace(
+  File ""/opt/anaconda3/envs/app/lib/python3.10/site-packages/fire/core.py"", line 684, in _CallAndUpdateTrace
+    component = fn(*varargs, **kwargs)
+  File ""/Users/friedahuang/Documents/llama-stack-apps/examples/agents/hello.py"", line 48, in main
+    asyncio.run(run_main(host, port, disable_safety))
+  File ""/opt/anaconda3/envs/app/lib/python3.10/asyncio/runners.py"", line 44, in run
+    return loop.run_until_complete(main)
+  File ""/opt/anaconda3/envs/app/lib/python3.10/asyncio/base_events.py"", line 649, in run_until_complete
+    return future.result()
+  File ""/Users/friedahuang/Documents/llama-stack-apps/examples/agents/hello.py"", line 31, in run_main
+    await execute_turns(
+  File ""/Users/friedahuang/Documents/llama-stack-apps/examples/agents/multi_turn.py"", line 54, in execute_turns
+    async for log in EventLogger().log(iterator):
+  File ""/opt/anaconda3/envs/app/lib/python3.10/site-packages/llama_stack_client/lib/agents/event_logger.py"", line 58, in log
+    async for chunk in event_generator:
+  File ""/Users/friedahuang/Documents/llama-stack-apps/common/execute_with_custom_tools.py"", line 57, in execute_turn
+    if chunk.event.payload.event_type != ""turn_complete"":
+AttributeError: 'NoneType' object has no attribute 'payload'
+
+my-local-stack-run.yaml
+version: v1
+built_at: '2024-10-03T15:09:27.825714'
+image_name: my-local-stack
+docker_image: null
+conda_env: my-local-stack
+version: v1
+built_at: '2024-10-03T15:09:27.825714'
+image_name: my-local-stack
+docker_image: null
+conda_env: my-local-stack
+apis_to_serve:
+version: v1
+version: v1
+version: v1
+version: v1
+built_at: '2024-10-03T15:09:27.825714'
+image_name: my-local-stack
+docker_image: null
+conda_env: my-local-stack
+apis_to_serve:
+- agents
+- shields
+- models
+- memory
+- safety
+- inference
+- memory_banks
+api_providers:
+  inference:
+    providers:
+    - remote::ollama
+  safety:
+    providers:
+    - meta-reference
+  agents:
+    provider_type: meta-reference
+    config:
+      persistence_store:
+        namespace: null
+        type: sqlite
+        db_path: /Users/friedahuang/.llama/runtime/kvstore.db
+  memory:
+    providers:
+    - meta-reference
+  telemetry:
+    provider_type: meta-reference
+    config: {}
+routing_table:
+  inference:
+  - provider_type: remote::ollama
+    config:
+      host: localhost
+      port: 11434
+    routing_key: Llama3.1-8B-Instruct
+  safety:
+  - provider_type: meta-reference
+    config:
+      llama_guard_shield:
+        model: Llama-Guard-3-8B
+        excluded_categories: []
+        disable_input_check: false
+        disable_output_check: false
+      prompt_guard_shield: null
+    routing_key:
+    - llama_guard
+    - code_scanner_guard
+    - injection_shield
+    - jailbreak_shield
+  memory:
+  - provider_type: meta-reference
+    config: {}
+    routing_key: vector
+
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/meta-llama/llama-stack-apps/issues/86","what is the minimum requirements to run in local?","2024-10-01T07:32:16Z","Open issue","No label","torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 20.00 MiB. GPU 0 has a total capacity of 7.69 GiB of which 13.94 MiB is free. Including non-PyTorch memory, this process has 7.64 GiB memory in use. Of the allocated memory 7.34 GiB is allocated by PyTorch, and 121.77 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation. ```
+
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/meta-llama/llama-stack-apps/issues/84","config.json not found","2024-10-15T21:33:29Z","Closed issue","No label",".llama/checkpoints/Llama-Guard-3-8B does not appear to have a file named config.json. Checkout 'https://huggingface.co//home/user/.llama/checkpoints/Llama-Guard-3-8B/tree/None' for available files.
+I have download it from this link llama download --source meta --model-id Prompt-Guard-86M --meta-url META_URL
+ but it looks missing the config.json file
+├── checklist.chk
+ ├── consolidated.00.pth
+ ├── LICENSE
+ ├── params.json
+ ├── README.md
+ └── tokenizer.model
+the model was big 15GB and I waited so long . do you have a way run this
+llama stack run local-ollama --port 5000 --disable-ipv6
+ The text was updated successfully, but these errors were encountered: 
+👍1
+bimehasia25815 reacted with thumbs up emoji
+All reactions
+👍1 reaction"
+"https://github.com/meta-llama/llama-stack-apps/issues/81","error 405 'Forbidden' on download of 8B instruct model","2024-09-26T08:58:20Z","Closed issue","No label","httpx.HTTPStatusError: Client error '405 Forbidden.' for url 'https://llama3-1.llamameta.net/Meta-Llama-3.1-8B-Instruct/consolidated.00.pth?Policy=eyJTdGF0ZW1lbnQiOlt7InVuaXF1ZV9oYXNoIjoieHFscmZwM2dwejdiM213M2NkcmZra2FzIiwiUmVzb3VyY2UiOiJodHRwczpcL1wvbGxhbWEzLTEubGxhbWFtZXRhLm5ldFwvKiIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiQVdTOkVwb2NoVGltZSI6MTcyNzM2NjA4M319fV19&Signature=Ahvs1ORtioU3GDzraGgDKf62GX6p58HHITuj-DMls6kvNa4bbo95QnVDzFb9JF2hutxckmQJgtchtrkWosNNZW2Xaa80pCeDBSourzFav2FXxJUBHB9yHbrpQDBtTGHUrcAvpQ1aJCCVzkBrrBlJH-PM3okhxl9DZ6oP33pGGWRB6ULpAV855y7kOJCrTVl3IfCbz6Pi%7EiCqK95vX3Qtvd1geCtWRNFbB07YVBtK9qtfUe5tRcPQiINneHk6nLFN5I3GeTPKldR4IbAaIZouEv2zFLGUPBPgocAvhn1DWmv7gniu8oqD187ZCpDqXQCixaPzQll8CCrlE7z5SDNitg__&Key-Pair-Id=K15QRJLYKIFSLZ&Download-Request-ID=408088232311102' 
+Above is the error, which raises after partial download even after passing the meta-url from email
+@ashwinb
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/meta-llama/llama-stack-apps/issues/76","Unable to import: from llama_stack import LlamaStack","2024-09-25T22:53:43Z","Closed issue","No label","Path to file: /llama-stack-apps/sdk_examples/agents/client.py
+ Line 11
+ from llama_stack import LlamaStack
+Steps to recreate:
+Created a conda venv with python3.10
+pip install -r requirements.txt
+Ran the llama-stack server on port 8081(For starting the server check out the llama stack repo)
+python -m sdk_examples.agents.client localhost 8081
+The following error is given after the above command
+Traceback (most recent call last):
+  File ""/usr/local/Caskroom/miniconda/base/envs/llama-stack/lib/python3.10/runpy.py"", line 196, in _run_module_as_main
+    return _run_code(code, main_globals, None,
+  File ""/usr/local/Caskroom/miniconda/base/envs/llama-stack/lib/python3.10/runpy.py"", line 86, in _run_code
+    exec(code, run_globals)
+  File ""/Users/sarthakdeshpande/engati/llama-stack-apps/sdk_examples/agents/client.py"", line 11, in <module>
+    from llama_stack import LlamaStack
+ImportError: cannot import name 'LlamaStack' from 'llama_stack' (/usr/local/Caskroom/miniconda/base/envs/llama-stack/lib/python3.10/site-packages/llama_stack/__init__.py)
+
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/meta-llama/llama-stack-apps/issues/73","ModuleNotFoundError: No module named 'llama_toolchain.memory.common'","2024-09-16T20:16:23Z","Closed issue","No label","llama stack run /home/guilherme/.llama/builds/local/conda/8b-instruct.yaml --port 5000 --disable-ipv6
+ Valor de args.config: /home/guilherme/.llama/builds/local/conda/8b-instruct.yaml
+initializing model parallel with size 1
+ initializing ddp with size 1
+ initializing pipeline with size 1
+/tmp/a/llama/conda/envs/llamastack-8b-instruct/lib/python3.10/site-packages/torch/init.py:955: UserWarning: torch.set_default_tensor_type() is deprecated as of PyTorch 2.1, please use torch.set_default_dtype() and torch.set_default_device() as alternatives. (Triggered internally at ../torch/csrc/tensor/python_tensor.cpp:432.)
+ _C._set_default_tensor_type(t)
+ Loaded in 29.10 seconds
+ Finished model load YES READY
+ Traceback (most recent call last):
+ File ""/tmp/a/llama/conda/envs/llamastack-8b-instruct/lib/python3.10/runpy.py"", line 196, in _run_module_as_main
+ return _run_code(code, main_globals, None,
+ File ""/tmp/a/llama/conda/envs/llamastack-8b-instruct/lib/python3.10/runpy.py"", line 86, in _run_code
+ exec(code, run_globals)
+ File ""/tmp/a/llama/conda/envs/llamastack-8b-instruct/lib/python3.10/site-packages/llama_toolchain/core/server.py"", line 372, in 
+ fire.Fire(main)
+ File ""/home/guilherme/.local/lib/python3.10/site-packages/fire/core.py"", line 143, in Fire
+ component_trace = _Fire(component, args, parsed_flag_args, context, name)
+ File ""/home/guilherme/.local/lib/python3.10/site-packages/fire/core.py"", line 477, in _Fire
+ component, remaining_args = _CallAndUpdateTrace(
+ File ""/home/guilherme/.local/lib/python3.10/site-packages/fire/core.py"", line 693, in _CallAndUpdateTrace
+ component = fn(*varargs, **kwargs)
+ File ""/tmp/a/llama/conda/envs/llamastack-8b-instruct/lib/python3.10/site-packages/llama_toolchain/core/server.py"", line 320, in main
+ impls = resolve_impls(provider_specs, config)
+ File ""/tmp/a/llama/conda/envs/llamastack-8b-instruct/lib/python3.10/site-packages/llama_toolchain/core/server.py"", line 293, in resolve_impls
+ impl = instantiate_provider(provider_spec, provider_config, deps)
+ File ""/tmp/a/llama/conda/envs/llamastack-8b-instruct/lib/python3.10/site-packages/llama_toolchain/core/dynamic.py"", line 39, in instantiate_provider
+ impl = asyncio.run(fn(config, deps))
+ File ""/tmp/a/llama/conda/envs/llamastack-8b-instruct/lib/python3.10/asyncio/runners.py"", line 44, in run
+ return loop.run_until_complete(main)
+ File ""/tmp/a/llama/conda/envs/llamastack-8b-instruct/lib/python3.10/asyncio/base_events.py"", line 649, in run_until_complete
+ return future.result()
+ File ""/tmp/a/llama/conda/envs/llamastack-8b-instruct/lib/python3.10/site-packages/llama_toolchain/memory/meta_reference/faiss/init.py"", line 11, in get_provider_impl
+ from .faiss import FaissMemoryImpl
+ File ""/tmp/a/llama/conda/envs/llamastack-8b-instruct/lib/python3.10/site-packages/llama_toolchain/memory/meta_reference/faiss/faiss.py"", line 19, in 
+ from llama_toolchain.memory.common.vector_store import (
+ ModuleNotFoundError: No module named 'llama_toolchain.memory.common'
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/meta-llama/llama-stack-apps/issues/72","llama stack run: error: File local-ollama does not exist. Did you run llama stack build?","2024-09-14T01:11:18Z","Open issue","No label","llama stack build
+ Enter value for name (required): ollama
+ Enter value for distribution (default: local) (required): local-ollama
+ Enter value for api_providers (optional):
+ Enter value for image_type (default: conda) (required):
+ Build ollama exists; will reconfigure
+ Conda environment 'llamastack-ollama' exists. Checking Python version...
+ Environment 'llamastack-ollama' already has Python 3.10. No action needed.
+ Requirement already satisfied: llama-toolchain in /tmp/a/llama/conda/envs/llamastack-ollama/lib/python3.10/site-packages (0.0.15)
+ Requirement already satisfied: blobfile in /home/guilherme/.local/lib/python3.10/site-packages (from llama-toolchain) (3.0.0)
+ Requirement already satisfied: fire in /home/guilherme/.local/lib/python3.10/site-packages (from llama-toolchain) (0.6.0)
+ Requirement already satisfied: httpx in /home/guilherme/.local/lib/python3.10/site-packages (from llama-toolchain) (0.27.2)
+ Requirement already satisfied: huggingface-hub in /home/guilherme/.local/lib/python3.10/site-packages (from llama-toolchain) (0.24.7)
+ Requirement already satisfied: llama-models>=0.0.15 in /tmp/a/llama/conda/envs/llamastack-ollama/lib/python3.10/site-packages (from llama-toolchain) (0.0.15)
+ Requirement already satisfied: pydantic in /home/guilherme/.local/lib/python3.10/site-packages (from llama-toolchain) (2.8.2)
+ Requirement already satisfied: requests in /home/guilherme/.local/lib/python3.10/site-packages (from llama-toolchain) (2.32.3)
+ Requirement already satisfied: termcolor in /home/guilherme/.local/lib/python3.10/site-packages (from llama-toolchain) (2.3.0)
+ Requirement already satisfied: PyYAML in /home/guilherme/.local/lib/python3.10/site-packages (from llama-models>=0.0.15->llama-toolchain) (6.0.1)
+ Requirement already satisfied: jinja2 in /home/guilherme/.local/lib/python3.10/site-packages (from llama-models>=0.0.15->llama-toolchain) (3.1.2)
+ Requirement already satisfied: tiktoken in /home/guilherme/.local/lib/python3.10/site-packages (from llama-models>=0.0.15->llama-toolchain) (0.6.0)
+ Requirement already satisfied: pycryptodomex>=3.8 in /tmp/a/llama/conda/envs/llamastack-ollama/lib/python3.10/site-packages (from blobfile->llama-toolchain) (3.20.0)
+ Requirement already satisfied: urllib3<3,>=1.25.3 in /home/guilherme/.local/lib/python3.10/site-packages (from blobfile->llama-toolchain) (2.2.1)
+ Requirement already satisfied: lxml>=4.9 in /home/guilherme/.local/lib/python3.10/site-packages (from blobfile->llama-toolchain) (5.3.0)
+ Requirement already satisfied: filelock>=3.0 in /home/guilherme/.local/lib/python3.10/site-packages (from blobfile->llama-toolchain) (3.13.1)
+ Requirement already satisfied: six in /tmp/a/llama/conda/envs/llamastack-ollama/lib/python3.10/site-packages (from fire->llama-toolchain) (1.16.0)
+ Requirement already satisfied: anyio in /home/guilherme/.local/lib/python3.10/site-packages (from httpx->llama-toolchain) (3.7.1)
+ Requirement already satisfied: certifi in /tmp/a/llama/conda/envs/llamastack-ollama/lib/python3.10/site-packages (from httpx->llama-toolchain) (2024.8.30)
+ Requirement already satisfied: httpcore==1.* in /home/guilherme/.local/lib/python3.10/site-packages (from httpx->llama-toolchain) (1.0.2)
+ Requirement already satisfied: idna in /tmp/a/llama/conda/envs/llamastack-ollama/lib/python3.10/site-packages (from httpx->llama-toolchain) (3.8)
+ Requirement already satisfied: sniffio in /home/guilherme/.local/lib/python3.10/site-packages (from httpx->llama-toolchain) (1.3.0)
+ Requirement already satisfied: h11<0.15,>=0.13 in /home/guilherme/.local/lib/python3.10/site-packages (from httpcore==1.->httpx->llama-toolchain) (0.14.0)
+ Requirement already satisfied: fsspec>=2023.5.0 in /home/guilherme/.local/lib/python3.10/site-packages (from huggingface-hub->llama-toolchain) (2023.10.0)
+ Requirement already satisfied: packaging>=20.9 in /home/guilherme/.local/lib/python3.10/site-packages (from huggingface-hub->llama-toolchain) (23.2)
+ Requirement already satisfied: tqdm>=4.42.1 in /home/guilherme/.local/lib/python3.10/site-packages (from huggingface-hub->llama-toolchain) (4.66.2)
+ Requirement already satisfied: typing-extensions>=3.7.4.3 in /home/guilherme/.local/lib/python3.10/site-packages (from huggingface-hub->llama-toolchain) (4.12.2)
+ Requirement already satisfied: annotated-types>=0.4.0 in /home/guilherme/.local/lib/python3.10/site-packages (from pydantic->llama-toolchain) (0.7.0)
+ Requirement already satisfied: pydantic-core==2.20.1 in /home/guilherme/.local/lib/python3.10/site-packages (from pydantic->llama-toolchain) (2.20.1)
+ Requirement already satisfied: charset-normalizer<4,>=2 in /home/guilherme/.local/lib/python3.10/site-packages (from requests->llama-toolchain) (3.3.2)
+ Requirement already satisfied: exceptiongroup in /home/guilherme/.local/lib/python3.10/site-packages (from anyio->httpx->llama-toolchain) (1.2.2)
+ Requirement already satisfied: MarkupSafe>=2.0 in /home/guilherme/.local/lib/python3.10/site-packages (from jinja2->llama-models>=0.0.15->llama-toolchain) (2.1.3)
+ Requirement already satisfied: regex>=2022.1.18 in /home/guilherme/.local/lib/python3.10/site-packages (from tiktoken->llama-models>=0.0.15->llama-toolchain) (2023.10.3)
+ Installing pip dependencies: fastapi uvicorn ollama accelerate codeshield torch transformers codeshield matplotlib pillow pandas scikit-learn torch transformers blobfile chardet pypdf sentence-transformers faiss-cpu
+ Requirement already satisfied: fastapi in /home/guilherme/.local/lib/python3.10/site-packages (0.114.2)
+ Requirement already satisfied: uvicorn in /home/guilherme/.local/lib/python3.10/site-packages (0.30.6)
+ Requirement already satisfied: ollama in /tmp/a/llama/conda/envs/llamastack-ollama/lib/python3.10/site-packages (0.3.3)
+ Requirement already satisfied: accelerate in /home/guilherme/.local/lib/python3.10/site-packages (0.21.0)
+ Requirement already satisfied: codeshield in /tmp/a/llama/conda/envs/llamastack-ollama/lib/python3.10/site-packages (1.0.1)
+ Requirement already satisfied: torch in /tmp/a/llama/conda/envs/llamastack-ollama/lib/python3.10/site-packages (2.4.1)
+ Requirement already satisfied: transformers in /tmp/a/llama/conda/envs/llamastack-ollama/lib/python3.10/site-packages (4.44.2)
+ Requirement already satisfied: matplotlib in /tmp/a/llama/conda/envs/llamastack-ollama/lib/python3.10/site-packages (3.9.2)
+ Requirement already satisfied: pillow in /home/guilherme/.local/lib/python3.10/site-packages (10.2.0)
+ Requirement already satisfied: pandas in /home/guilherme/.local/lib/python3.10/site-packages (2.1.3)
+ Requirement already satisfied: scikit-learn in /home/guilherme/.local/lib/python3.10/site-packages (1.2.2)
+ Requirement already satisfied: blobfile in /home/guilherme/.local/lib/python3.10/site-packages (3.0.0)
+ Requirement already satisfied: chardet in /tmp/a/llama/conda/envs/llamastack-ollama/lib/python3.10/site-packages (5.2.0)
+ Requirement already satisfied: pypdf in /home/guilherme/.local/lib/python3.10/site-packages (4.1.0)
+ Requirement already satisfied: sentence-transformers in /tmp/a/llama/conda/envs/llamastack-ollama/lib/python3.10/site-packages (3.1.0)
+ Requirement already satisfied: faiss-cpu in /tmp/a/llama/conda/envs/llamastack-ollama/lib/python3.10/site-packages (1.8.0.post1)
+ Requirement already satisfied: starlette<0.39.0,>=0.37.2 in /home/guilherme/.local/lib/python3.10/site-packages (from fastapi) (0.38.5)
+ Requirement already satisfied: pydantic!=1.8,!=1.8.1,!=2.0.0,!=2.0.1,!=2.1.0,<3.0.0,>=1.7.4 in /home/guilherme/.local/lib/python3.10/site-packages (from fastapi) (2.8.2)
+ Requirement already satisfied: typing-extensions>=4.8.0 in /home/guilherme/.local/lib/python3.10/site-packages (from fastapi) (4.12.2)
+ Requirement already satisfied: click>=7.0 in /home/guilherme/.local/lib/python3.10/site-packages (from uvicorn) (8.1.7)
+ Requirement already satisfied: h11>=0.8 in /home/guilherme/.local/lib/python3.10/site-packages (from uvicorn) (0.14.0)
+ Requirement already satisfied: httpx<0.28.0,>=0.27.0 in /home/guilherme/.local/lib/python3.10/site-packages (from ollama) (0.27.2)
+ Requirement already satisfied: numpy>=1.17 in /home/guilherme/.local/lib/python3.10/site-packages (from accelerate) (1.26.2)
+ Requirement already satisfied: packaging>=20.0 in /home/guilherme/.local/lib/python3.10/site-packages (from accelerate) (23.2)
+ Requirement already satisfied: psutil in /home/guilherme/.local/lib/python3.10/site-packages (from accelerate) (5.9.6)
+ Requirement already satisfied: pyyaml in /home/guilherme/.local/lib/python3.10/site-packages (from accelerate) (6.0.1)
+ Requirement already satisfied: semgrep>1.68 in /tmp/a/llama/conda/envs/llamastack-ollama/lib/python3.10/site-packages (from codeshield) (1.87.0)
+ Requirement already satisfied: filelock in /home/guilherme/.local/lib/python3.10/site-packages (from torch) (3.13.1)
+ Requirement already satisfied: sympy in /home/guilherme/.local/lib/python3.10/site-packages (from torch) (1.12)
+ Requirement already satisfied: networkx in /home/guilherme/.local/lib/python3.10/site-packages (from torch) (3.2.1)
+ Requirement already satisfied: jinja2 in /home/guilherme/.local/lib/python3.10/site-packages (from torch) (3.1.2)
+ Requirement already satisfied: fsspec in /home/guilherme/.local/lib/python3.10/site-packages (from torch) (2023.10.0)
+ Requirement already satisfied: nvidia-cuda-nvrtc-cu12==12.1.105 in /home/guilherme/.local/lib/python3.10/site-packages (from torch) (12.1.105)
+ Requirement already satisfied: nvidia-cuda-runtime-cu12==12.1.105 in /home/guilherme/.local/lib/python3.10/site-packages (from torch) (12.1.105)
+ Requirement already satisfied: nvidia-cuda-cupti-cu12==12.1.105 in /home/guilherme/.local/lib/python3.10/site-packages (from torch) (12.1.105)
+ Requirement already satisfied: nvidia-cudnn-cu12==9.1.0.70 in /home/guilherme/.local/lib/python3.10/site-packages (from torch) (9.1.0.70)
+ Requirement already satisfied: nvidia-cublas-cu12==12.1.3.1 in /home/guilherme/.local/lib/python3.10/site-packages (from torch) (12.1.3.1)
+ Requirement already satisfied: nvidia-cufft-cu12==11.0.2.54 in /home/guilherme/.local/lib/python3.10/site-packages (from torch) (11.0.2.54)
+ Requirement already satisfied: nvidia-curand-cu12==10.3.2.106 in /home/guilherme/.local/lib/python3.10/site-packages (from torch) (10.3.2.106)
+ Requirement already satisfied: nvidia-cusolver-cu12==11.4.5.107 in /home/guilherme/.local/lib/python3.10/site-packages (from torch) (11.4.5.107)
+ Requirement already satisfied: nvidia-cusparse-cu12==12.1.0.106 in /home/guilherme/.local/lib/python3.10/site-packages (from torch) (12.1.0.106)
+ Requirement already satisfied: nvidia-nccl-cu12==2.20.5 in /home/guilherme/.local/lib/python3.10/site-packages (from torch) (2.20.5)
+ Requirement already satisfied: nvidia-nvtx-cu12==12.1.105 in /home/guilherme/.local/lib/python3.10/site-packages (from torch) (12.1.105)
+ Requirement already satisfied: triton==3.0.0 in /home/guilherme/.local/lib/python3.10/site-packages (from torch) (3.0.0)
+ Requirement already satisfied: nvidia-nvjitlink-cu12 in /home/guilherme/.local/lib/python3.10/site-packages (from nvidia-cusolver-cu12==11.4.5.107->torch) (12.3.101)
+ Requirement already satisfied: huggingface-hub<1.0,>=0.23.2 in /home/guilherme/.local/lib/python3.10/site-packages (from transformers) (0.24.7)
+ Requirement already satisfied: regex!=2019.12.17 in /home/guilherme/.local/lib/python3.10/site-packages (from transformers) (2023.10.3)
+ Requirement already satisfied: requests in /home/guilherme/.local/lib/python3.10/site-packages (from transformers) (2.32.3)
+ Requirement already satisfied: safetensors>=0.4.1 in /home/guilherme/.local/lib/python3.10/site-packages (from transformers) (0.4.2)
+ Requirement already satisfied: tokenizers<0.20,>=0.19 in /tmp/a/llama/conda/envs/llamastack-ollama/lib/python3.10/site-packages (from transformers) (0.19.1)
+ Requirement already satisfied: tqdm>=4.27 in /home/guilherme/.local/lib/python3.10/site-packages (from transformers) (4.66.2)
+ Requirement already satisfied: contourpy>=1.0.1 in /tmp/a/llama/conda/envs/llamastack-ollama/lib/python3.10/site-packages (from matplotlib) (1.3.0)
+ Requirement already satisfied: cycler>=0.10 in /tmp/a/llama/conda/envs/llamastack-ollama/lib/python3.10/site-packages (from matplotlib) (0.12.1)
+ Requirement already satisfied: fonttools>=4.22.0 in /tmp/a/llama/conda/envs/llamastack-ollama/lib/python3.10/site-packages (from matplotlib) (4.53.1)
+ Requirement already satisfied: kiwisolver>=1.3.1 in /tmp/a/llama/conda/envs/llamastack-ollama/lib/python3.10/site-packages (from matplotlib) (1.4.7)
+ Requirement already satisfied: pyparsing>=2.3.1 in /tmp/a/llama/conda/envs/llamastack-ollama/lib/python3.10/site-packages (from matplotlib) (3.1.4)
+ Requirement already satisfied: python-dateutil>=2.7 in /home/guilherme/.local/lib/python3.10/site-packages (from matplotlib) (2.8.2)
+ Requirement already satisfied: pytz>=2020.1 in /home/guilherme/.local/lib/python3.10/site-packages (from pandas) (2024.1)
+ Requirement already satisfied: tzdata>=2022.1 in /home/guilherme/.local/lib/python3.10/site-packages (from pandas) (2023.3)
+ Requirement already satisfied: scipy>=1.3.2 in /tmp/a/llama/conda/envs/llamastack-ollama/lib/python3.10/site-packages (from scikit-learn) (1.14.1)
+ Requirement already satisfied: joblib>=1.1.1 in /home/guilherme/.local/lib/python3.10/site-packages (from scikit-learn) (1.3.2)
+ Requirement already satisfied: threadpoolctl>=2.0.0 in /home/guilherme/.local/lib/python3.10/site-packages (from scikit-learn) (3.2.0)
+ Requirement already satisfied: pycryptodomex>=3.8 in /tmp/a/llama/conda/envs/llamastack-ollama/lib/python3.10/site-packages (from blobfile) (3.20.0)
+ Requirement already satisfied: urllib3<3,>=1.25.3 in /home/guilherme/.local/lib/python3.10/site-packages (from blobfile) (2.2.1)
+ Requirement already satisfied: lxml>=4.9 in /home/guilherme/.local/lib/python3.10/site-packages (from blobfile) (5.3.0)
+ Requirement already satisfied: anyio in /home/guilherme/.local/lib/python3.10/site-packages (from httpx<0.28.0,>=0.27.0->ollama) (3.7.1)
+ Requirement already satisfied: certifi in /tmp/a/llama/conda/envs/llamastack-ollama/lib/python3.10/site-packages (from httpx<0.28.0,>=0.27.0->ollama) (2024.8.30)
+ Requirement already satisfied: httpcore==1. in /home/guilherme/.local/lib/python3.10/site-packages (from httpx<0.28.0,>=0.27.0->ollama) (1.0.2)
+ Requirement already satisfied: idna in /tmp/a/llama/conda/envs/llamastack-ollama/lib/python3.10/site-packages (from httpx<0.28.0,>=0.27.0->ollama) (3.8)
+ Requirement already satisfied: sniffio in /home/guilherme/.local/lib/python3.10/site-packages (from httpx<0.28.0,>=0.27.0->ollama) (1.3.0)
+ Requirement already satisfied: annotated-types>=0.4.0 in /home/guilherme/.local/lib/python3.10/site-packages (from pydantic!=1.8,!=1.8.1,!=2.0.0,!=2.0.1,!=2.1.0,<3.0.0,>=1.7.4->fastapi) (0.7.0)
+ Requirement already satisfied: pydantic-core==2.20.1 in /home/guilherme/.local/lib/python3.10/site-packages (from pydantic!=1.8,!=1.8.1,!=2.0.0,!=2.0.1,!=2.1.0,<3.0.0,>=1.7.4->fastapi) (2.20.1)
+ Requirement already satisfied: six>=1.5 in /tmp/a/llama/conda/envs/llamastack-ollama/lib/python3.10/site-packages (from python-dateutil>=2.7->matplotlib) (1.16.0)
+ Requirement already satisfied: attrs>=21.3 in /home/guilherme/.local/lib/python3.10/site-packages (from semgrep>1.68->codeshield) (23.1.0)
+ Requirement already satisfied: boltons~=21.0 in /tmp/a/llama/conda/envs/llamastack-ollama/lib/python3.10/site-packages (from semgrep>1.68->codeshield) (21.0.0)
+ Requirement already satisfied: click-option-group~=0.5 in /tmp/a/llama/conda/envs/llamastack-ollama/lib/python3.10/site-packages (from semgrep>1.68->codeshield) (0.5.6)
+ Requirement already satisfied: colorama~=0.4.0 in /tmp/a/llama/conda/envs/llamastack-ollama/lib/python3.10/site-packages (from semgrep>1.68->codeshield) (0.4.6)
+ Requirement already satisfied: defusedxml~=0.7.1 in /home/guilherme/.local/lib/python3.10/site-packages (from semgrep>1.68->codeshield) (0.7.1)
+ Requirement already satisfied: exceptiongroup~=1.2.0 in /home/guilherme/.local/lib/python3.10/site-packages (from semgrep>1.68->codeshield) (1.2.2)
+ Requirement already satisfied: glom~=22.1 in /tmp/a/llama/conda/envs/llamastack-ollama/lib/python3.10/site-packages (from semgrep>1.68->codeshield) (22.1.0)
+ Requirement already satisfied: jsonschema~=4.6 in /home/guilherme/.local/lib/python3.10/site-packages (from semgrep>1.68->codeshield) (4.20.0)
+ Requirement already satisfied: opentelemetry-api~=1.25.0 in /tmp/a/llama/conda/envs/llamastack-ollama/lib/python3.10/site-packages (from semgrep>1.68->codeshield) (1.25.0)
+ Requirement already satisfied: opentelemetry-sdk~=1.25.0 in /tmp/a/llama/conda/envs/llamastack-ollama/lib/python3.10/site-packages (from semgrep>1.68->codeshield) (1.25.0)
+ Requirement already satisfied: opentelemetry-exporter-otlp-proto-http~=1.25.0 in /tmp/a/llama/conda/envs/llamastack-ollama/lib/python3.10/site-packages (from semgrep>1.68->codeshield) (1.25.0)
+ Requirement already satisfied: opentelemetry-instrumentation-requests~=0.46b0 in /tmp/a/llama/conda/envs/llamastack-ollama/lib/python3.10/site-packages (from semgrep>1.68->codeshield) (0.46b0)
+ Requirement already satisfied: peewee~=3.14 in /home/guilherme/.local/lib/python3.10/site-packages (from semgrep>1.68->codeshield) (3.17.6)
+ Requirement already satisfied: rich~=13.5.2 in /tmp/a/llama/conda/envs/llamastack-ollama/lib/python3.10/site-packages (from semgrep>1.68->codeshield) (13.5.3)
+ Requirement already satisfied: ruamel.yaml<0.18,>=0.16.0 in /tmp/a/llama/conda/envs/llamastack-ollama/lib/python3.10/site-packages (from semgrep>1.68->codeshield) (0.17.40)
+ Requirement already satisfied: tomli~=2.0.1 in /home/guilherme/.local/lib/python3.10/site-packages (from semgrep>1.68->codeshield) (2.0.1)
+ Requirement already satisfied: wcmatch~=8.3 in /tmp/a/llama/conda/envs/llamastack-ollama/lib/python3.10/site-packages (from semgrep>1.68->codeshield) (8.5.2)
+ Requirement already satisfied: charset-normalizer<4,>=2 in /home/guilherme/.local/lib/python3.10/site-packages (from requests->transformers) (3.3.2)
+ Requirement already satisfied: MarkupSafe>=2.0 in /home/guilherme/.local/lib/python3.10/site-packages (from jinja2->torch) (2.1.3)
+ Requirement already satisfied: mpmath>=0.19 in /home/guilherme/.local/lib/python3.10/site-packages (from sympy->torch) (1.3.0)
+ Requirement already satisfied: face>=20.1.0 in /tmp/a/llama/conda/envs/llamastack-ollama/lib/python3.10/site-packages (from glom~=22.1->semgrep>1.68->codeshield) (22.0.0)
+ Requirement already satisfied: jsonschema-specifications>=2023.03.6 in /home/guilherme/.local/lib/python3.10/site-packages (from jsonschema~=4.6->semgrep>1.68->codeshield) (2023.11.1)
+ Requirement already satisfied: referencing>=0.28.4 in /home/guilherme/.local/lib/python3.10/site-packages (from jsonschema~=4.6->semgrep>1.68->codeshield) (0.31.0)
+ Requirement already satisfied: rpds-py>=0.7.1 in /home/guilherme/.local/lib/python3.10/site-packages (from jsonschema~=4.6->semgrep>1.68->codeshield) (0.13.0)
+ Requirement already satisfied: deprecated>=1.2.6 in /tmp/a/llama/conda/envs/llamastack-ollama/lib/python3.10/site-packages (from opentelemetry-api~=1.25.0->semgrep>1.68->codeshield) (1.2.14)
+ Requirement already satisfied: importlib-metadata<=7.1,>=6.0 in /tmp/a/llama/conda/envs/llamastack-ollama/lib/python3.10/site-packages (from opentelemetry-api~=1.25.0->semgrep>1.68->codeshield) (7.1.0)
+ Requirement already satisfied: googleapis-common-protos~=1.52 in /home/guilherme/.local/lib/python3.10/site-packages (from opentelemetry-exporter-otlp-proto-http~=1.25.0->semgrep>1.68->codeshield) (1.62.0)
+ Requirement already satisfied: opentelemetry-exporter-otlp-proto-common==1.25.0 in /tmp/a/llama/conda/envs/llamastack-ollama/lib/python3.10/site-packages (from opentelemetry-exporter-otlp-proto-http~=1.25.0->semgrep>1.68->codeshield) (1.25.0)
+ Requirement already satisfied: opentelemetry-proto==1.25.0 in /tmp/a/llama/conda/envs/llamastack-ollama/lib/python3.10/site-packages (from opentelemetry-exporter-otlp-proto-http~=1.25.0->semgrep>1.68->codeshield) (1.25.0)
+ Requirement already satisfied: protobuf<5.0,>=3.19 in /home/guilherme/.local/lib/python3.10/site-packages (from opentelemetry-proto==1.25.0->opentelemetry-exporter-otlp-proto-http~=1.25.0->semgrep>1.68->codeshield) (4.23.4)
+ Requirement already satisfied: opentelemetry-instrumentation==0.46b0 in /tmp/a/llama/conda/envs/llamastack-ollama/lib/python3.10/site-packages (from opentelemetry-instrumentation-requests~=0.46b0->semgrep>1.68->codeshield) (0.46b0)
+ Requirement already satisfied: opentelemetry-semantic-conventions==0.46b0 in /tmp/a/llama/conda/envs/llamastack-ollama/lib/python3.10/site-packages (from opentelemetry-instrumentation-requests~=0.46b0->semgrep>1.68->codeshield) (0.46b0)
+ Requirement already satisfied: opentelemetry-util-http==0.46b0 in /tmp/a/llama/conda/envs/llamastack-ollama/lib/python3.10/site-packages (from opentelemetry-instrumentation-requests~=0.46b0->semgrep>1.68->codeshield) (0.46b0)
+ Requirement already satisfied: setuptools>=16.0 in /tmp/a/llama/conda/envs/llamastack-ollama/lib/python3.10/site-packages (from opentelemetry-instrumentation==0.46b0->opentelemetry-instrumentation-requests~=0.46b0->semgrep>1.68->codeshield) (72.1.0)
+ Requirement already satisfied: wrapt<2.0.0,>=1.0.0 in /tmp/a/llama/conda/envs/llamastack-ollama/lib/python3.10/site-packages (from opentelemetry-instrumentation==0.46b0->opentelemetry-instrumentation-requests~=0.46b0->semgrep>1.68->codeshield) (1.16.0)
+ Requirement already satisfied: markdown-it-py>=2.2.0 in /home/guilherme/.local/lib/python3.10/site-packages (from rich~=13.5.2->semgrep>1.68->codeshield) (3.0.0)
+ Requirement already satisfied: pygments<3.0.0,>=2.13.0 in /home/guilherme/.local/lib/python3.10/site-packages (from rich~=13.5.2->semgrep>1.68->codeshield) (2.17.1)
+ Requirement already satisfied: ruamel.yaml.clib>=0.2.7 in /tmp/a/llama/conda/envs/llamastack-ollama/lib/python3.10/site-packages (from ruamel.yaml<0.18,>=0.16.0->semgrep>1.68->codeshield) (0.2.8)
+ Requirement already satisfied: bracex>=2.1.1 in /tmp/a/llama/conda/envs/llamastack-ollama/lib/python3.10/site-packages (from wcmatch~=8.3->semgrep>1.68->codeshield) (2.5)
+ Requirement already satisfied: zipp>=0.5 in /tmp/a/llama/conda/envs/llamastack-ollama/lib/python3.10/site-packages (from importlib-metadata<=7.1,>=6.0->opentelemetry-api~=1.25.0->semgrep>1.68->codeshield) (3.20.2)
+ Requirement already satisfied: mdurl~=0.1 in /home/guilherme/.local/lib/python3.10/site-packages (from markdown-it-py>=2.2.0->rich~=13.5.2->semgrep>1.68->codeshield) (0.1.2)
+ Successfully setup conda environment. Configuring build...
+ Configuration already exists for local-ollama. Will overwrite...
+ Configuring API: inference (remote::ollama)
+ Enter value for url (existing: http://localhost:11434) (required):
+Configuring API: safety (meta-reference)
+ Do you want to configure llama_guard_shield? (y/n): y
+ Entering sub-configuration for llama_guard_shield:
+ Enter value for model (default: Llama-Guard-3-8B) (required):
+ Enter value for excluded_categories (default: []) (required):
+ Enter value for disable_input_check (default: False) (required):
+ Enter value for disable_output_check (default: False) (required):
+ Do you want to configure prompt_guard_shield? (y/n): y
+ Entering sub-configuration for prompt_guard_shield:
+ Enter value for model (default: Prompt-Guard-86M) (required):
+Configuring API: agentic_system (meta-reference)
+ Enter value for brave_search_api_key (optional):
+ Enter value for bing_search_api_key (optional):
+ Enter value for wolfram_api_key (optional):
+Configuring API: memory (meta-reference-faiss)
+Configuring API: telemetry (console)
+YAML configuration has been written to /home/guilherme/.llama/builds/local-ollama/conda/ollama.yaml
+ Target ollama built with configuration at /home/guilherme/.llama/builds/local-ollama/conda/ollama.yaml
+ Build spec configuration saved at /home/guilherme/.llama/distributions/local-ollama/conda/ollama-build.yaml
+ (app_env2) guilherme@desktop:/tmp/a/llama/llama3.1$ llama stack run local-ollama --port 5000 --disable-ipv6
+ Valor de args.config: local-ollama
+ usage: llama stack run [-h] [--port PORT] [--disable-ipv6] config
+ llama stack run: error: File local-ollama does not exist. Did you run llama stack build?
+Please, llama distribution remove llama_toolchain?
+llama distribution install --spec local-ollama --name ollama
+Thanks
+ Guilherme
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/meta-llama/llama-stack-apps/issues/71","Error ""Input should be a valid string"" when running the inflation.py","2024-09-26T21:45:49Z","Closed issue","No label","Running examples/scripts/inflation.py caused the server the error below:
+Downloading https://raw.githubusercontent.com/meta-llama/llama-agentic-system/main/examples/resources/inflation.csv -> /tmp/tmph0zd9sgq/cBgnRF4Jinflation.csv
+role='ipython' call_id='' tool_name=<BuiltinTool.code_interpreter: 'code_interpreter'> content=['# There is a file accessible to you at ""/tmp/tmph0zd9sgq/cBgnRF4Jinflation.csv""\n']
+Traceback (most recent call last):
+  File ""/opt/conda/envs/llamastack-8b-instruct/lib/python3.10/site-packages/llama_toolchain/core/server.py"", line 175, in sse_generator
+    async for item in event_gen:
+  File ""/opt/conda/envs/llamastack-8b-instruct/lib/python3.10/site-packages/llama_toolchain/agentic_system/meta_reference/agentic_system.py"", line 124, in create_agentic_system_turn
+    async for event in agent.create_and_execute_turn(request):
+  File ""/opt/conda/envs/llamastack-8b-instruct/lib/python3.10/site-packages/llama_toolchain/agentic_system/meta_reference/agent_instance.py"", line 153, in create_and_execute_turn
+    async for chunk in self.run(
+  File ""/opt/conda/envs/llamastack-8b-instruct/lib/python3.10/site-packages/llama_toolchain/agentic_system/meta_reference/agent_instance.py"", line 226, in run
+    async for res in self._run(
+  File ""/opt/conda/envs/llamastack-8b-instruct/lib/python3.10/site-packages/llama_toolchain/agentic_system/meta_reference/agent_instance.py"", line 402, in _run
+    async for chunk in self.inference_api.chat_completion(req):
+  File ""/opt/conda/envs/llamastack-8b-instruct/lib/python3.10/site-packages/llama_toolchain/inference/adapters/together/together.py"", line 122, in chat_completion
+    for chunk in self.client.chat.completions.create(
+  File ""/opt/conda/envs/llamastack-8b-instruct/lib/python3.10/site-packages/together/resources/chat/completions.py"", line 116, in create
+    parameter_payload = ChatCompletionRequest(
+  File ""/opt/conda/envs/llamastack-8b-instruct/lib/python3.10/site-packages/pydantic/main.py"", line 193, in __init__
+    self.__pydantic_validator__.validate_python(data, self_instance=self)
+pydantic_core._pydantic_core.ValidationError: 1 validation error for ChatCompletionRequest
+messages.3.content
+  Input should be a valid string [type=string_type, input_value=['# There is a file acces...gnRF4Jinflation.csv""\n'], input_type=list]
+    For further information visit https://errors.pydantic.dev/2.8/v/string_type
+
+@ashwinb@dltn
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/meta-llama/llama-stack-apps/issues/70","Several Arguments Seems Missing in llama-toolchain, according to your document","2024-09-26T20:54:32Z","Closed issue","No label","When building up the project according to your ''Installing and Configuring Distributions'' section, the following error occurs:
+llama stack build local --name 8b-instruct
+usage: llama [-h] {download,model,stack} ...
+llama: error: unrecognized arguments: local --name 8b-instruct
+
+llama stack build local-ollama --name 8b-instruct
+usage: llama [-h] {download,model,stack} ...
+llama: error: unrecognized arguments: local-ollama --name 8b-instruct
+
+Also, I noticed that the ''api'' subcommand is missing. Is it because some components of the llama-stack repository are still incomplete?
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/meta-llama/llama-stack-apps/issues/65","Various Questions about LLAMA3.1 and llama-stack-apps","2024-09-08T00:32:55Z","Open issue","No label","I apologize if this is not the appropriate place for questions, concerns, or suggestions regarding the project.
+One of the major challenges with AI is how quickly things progress, and understanding whether the content we're reading is still up-to-date or has already become obsolete due to the rapid pace of development.
+What excited me about LLAMA3.1 is the 128K context length. I thought it would be easy to find examples where LLAMA3.1 could take a long text, interpret it, and answer questions based on it.
+However, the examples provided simply don’t work or seem to be designed for an AI that doesn’t support a 128K token context.
+I think the first tool we need is one that tells us how many tokens a given document contains.
+Another question I have is: how exactly do these 128K context tokens work? Can I include a question along with a document containing 128K tokens? If LLAMA3.1 supports 128K tokens, why use RAG or memory_client.create_memory_bank with a chunk size of 512 and token overlap? If it allows 128K tokens of context, why is RAG with dragon-roberta-query-2 used in the provided example?
+Is there any documentation for these functions? Where can I find documentation about execute_turns?
+How can we configure the maximum history LLAMA can store in a question-and-answer chat? In a simple test with short questions using ollama run llama3.1, after five or six questions, it couldn’t correctly recall the first question.
+When using ollama, how can we understand the maximum token window size for the context?
+I believe we should create simpler examples. In a simple test with the rag_as_attachments.py script, I pointed it to a text containing a few paragraphs about the definition of God according to Allan Kardec in The Spirits' Book. Using the script, only changing the attached text and asking simple questions, it seems LLAMA3.1 simply ignores the provided text, mixes concepts, etc.
+I would like to know if there is any real utility here. This is the second weekend I’ve spent trying to make it work, and the examples just don’t function as expected. There are about five or six scripts that seem to come from the LLAMA2 world. Take the inflation.py script, for instance—when exactly is the TickerDataTool called? If we use TickerDataTool, how do we set the ticker_symbol?
+Another issue: what exactly are the purposes of BuiltinTool.brave_search and BuiltinTool.wolfram_alpha? What exactly do these APIs do?
+As great as this all sounds, there’s a lot of explanation for installing the tool, but the six examples provided either don’t make sense, don’t work properly, or raise more questions than they answer.
+If anyone can help me with real, functional examples of asking questions using more than 4096 tokens, I’d greatly appreciate it. What I really want to do is ask the AI questions about reports generated in my system. These are private data, so I can’t use ChatGPT or Gemini because the PDF data isn’t public. To this day, I’ve never seen RAG techniques genuinely help.
+Thank you very much!
+ Guilherme
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/meta-llama/llama-stack-apps/issues/64","CLIENT is not initialized. Please initialize it first","2024-09-13T17:11:40Z","Closed issue","No label","start llama:
+llama stack run local-ollama --name llama3.1 --port 5000 --disable-ipv6
+ [2024-09-07 17:01:02,612] [INFO] [real_accelerator.py:203:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+ Loading checkpoint shards: 100% 2/2 [00:05<00:00, 2.71s/it]
+ Serving POST /inference/chat_completion
+ Serving POST /inference/completion
+ Serving POST /inference/embeddings
+ Serving POST /safety/run_shields
+ Serving POST /agentic_system/create
+ Serving POST /agentic_system/session/create
+ Serving POST /agentic_system/turn/create
+ Serving POST /agentic_system/delete
+ Serving POST /agentic_system/session/delete
+ Serving POST /agentic_system/session/get
+ Serving POST /agentic_system/step/get
+ Serving POST /agentic_system/turn/get
+ Serving POST /memory_banks/create
+ Serving DELETE /memory_bank/documents/delete
+ Serving DELETE /memory_banks/drop
+ Serving GET /memory_bank/documents/get
+ Serving GET /memory_banks/get
+ Serving POST /memory_bank/insert
+ Serving GET /memory_banks/list
+ Serving POST /memory_bank/query
+ Serving POST /memory_bank/update
+ Listening on 0.0.0.0:5000
+ INFO: Started server process [42387]
+ INFO: Waiting for application startup.
+ INFO: Application startup complete.
+ INFO: Uvicorn running on http://0.0.0.0:5000 (Press CTRL+C to quit)
+ INFO: 127.0.0.1:47874 - ""POST /agentic_system/create HTTP/1.1"" 200 OK
+ INFO: 127.0.0.1:47884 - ""POST /agentic_system/session/create HTTP/1.1"" 200 OK
+ INFO: 127.0.0.1:56432 - ""POST /agentic_system/create HTTP/1.1"" 200 OK
+ INFO: 127.0.0.1:56436 - ""POST /agentic_system/session/create HTTP/1.1"" 200 OK
+ INFO: 127.0.0.1:46240 - ""POST /agentic_system/create HTTP/1.1"" 200 OK
+ INFO: 127.0.0.1:46244 - ""POST /agentic_system/session/create HTTP/1.1"" 200 OK
+ INFO: 127.0.0.1:38088 - ""POST /agentic_system/create HTTP/1.1"" 200 OK
+ INFO: 127.0.0.1:38092 - ""POST /agentic_system/session/create HTTP/1.1"" 200 OK
+ INFO: 127.0.0.1:38018 - ""POST /agentic_system/create HTTP/1.1"" 200 OK
+ INFO: 127.0.0.1:38022 - ""POST /agentic_system/session/create HTTP/1.1"" 200 OK
+ INFO: 127.0.0.1:47572 - ""POST /agentic_system/create HTTP/1.1"" 200 OK
+ INFO: 127.0.0.1:47586 - ""POST /agentic_system/session/create HTTP/1.1"" 200 OK
+I run:
+ mesop app/main.py
+ I0907 17:09:07.496003 136949917905984 _client.py:1786] HTTP Request: POST http://localhost:5000/agentic_system/create ""HTTP/1.1 200 OK""
+ I0907 17:09:07.505093 136949917905984 _client.py:1786] HTTP Request: POST http://localhost:5000/agentic_system/session/create ""HTTP/1.1 200 OK""
+ Running with hot reload:
+Running server on: http://localhost:32123
+Serving Flask app 'mesop.server.server'
+Debug mode: off
+In chrome
+/python3.10/site-packages/mesop/server/server.py:195 | generate_data
+ for _ in result:
+ /python3.10/site-packages/mesop/runtime/context.py:276 | run_event_handler
+ yield from result
+ /tmp/a/llama/llama3.1/llama-stack-apps-main/app/utils/chat.py:229 | on_click_submit
+ def on_click_submit(e: me.ClickEvent):
+ yield from submit()
+ def on_input_enter(e: me.InputEnterEvent):
+ state = me.state(State)
+ state.input = e.value
+ /tmp/a/llama/llama3.1/llama-stack-apps-main/app/utils/chat.py:276 | submit
+ cur_uuids = set(state.output)
+ for op_uuid, op in transform(content):
+ KEY_TO_OUTPUTS[op_uuid] = op
+ if op_uuid not in cur_uuids:
+ output.append(op_uuid)
+ cur_uuids.add(op_uuid)
+ /tmp/a/llama/llama3.1/llama-stack-apps-main/app/utils/transform.py:33 | transform
+ client_manager = ClientManager()
+ client = client_manager.get_client()
+ generator = sync_generator(
+ EVENT_LOOP, client.execute_turn(messages=[input_message])
+ )
+ /tmp/a/llama/llama3.1/llama-stack-apps-main/app/utils/client.py:60 | get_client
+ raise Exception(""CLIENT is not initialized. Please initialize it first."")
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/meta-llama/llama-stack-apps/issues/63","NameError: name 'InterleavedTextAttachment' is not defined","2024-09-07T18:39:36Z","Closed issue","No label","Please, I need help.
+ mesop app/main.py
+ Traceback (most recent call last):
+ File ""/tmp/a/llama/conda/envs/app_env/bin/mesop"", line 8, in 
+ sys.exit(run_main())
+ File ""/tmp/a/llama/conda/envs/app_env/lib/python3.10/site-packages/mesop/bin/bin.py"", line 285, in run_main
+ app.run(main)
+ File ""/home/xxxx/.local/lib/python3.10/site-packages/absl/app.py"", line 308, in run
+ _run_main(main, args)
+ File ""/home/xxxx/.local/lib/python3.10/site-packages/absl/app.py"", line 254, in _run_main
+ sys.exit(main(argv))
+ File ""/tmp/a/llama/conda/envs/app_env/lib/python3.10/site-packages/mesop/bin/bin.py"", line 99, in main
+ app = create_app(
+ File ""/tmp/a/llama/conda/envs/app_env/lib/python3.10/site-packages/mesop/server/wsgi_app.py"", line 39, in create_app
+ run_block()
+ File ""/tmp/a/llama/conda/envs/app_env/lib/python3.10/site-packages/mesop/bin/bin.py"", line 101, in 
+ run_block=lambda: execute_main_module(absolute_path=absolute_path),
+ File ""/tmp/a/llama/conda/envs/app_env/lib/python3.10/site-packages/mesop/bin/bin.py"", line 272, in execute_main_module
+ raise e
+ File ""/tmp/a/llama/conda/envs/app_env/lib/python3.10/site-packages/mesop/bin/bin.py"", line 262, in execute_main_module
+ execute_module(
+ File ""/tmp/a/llama/conda/envs/app_env/lib/python3.10/site-packages/mesop/cli/execute_module.py"", line 12, in execute_module
+ spec.loader.exec_module(module)
+ File """", line 883, in exec_module
+ File """", line 241, in _call_with_frames_removed
+ File ""/tmp/a/llama/llama3.1/llama-stack-apps-main/app/main.py"", line 9, in 
+ from utils.chat import chat, State
+ File ""/tmp/a/llama/llama3.1/llama-stack-apps-main/app/utils/chat.py"", line 93, in 
+ class StepStatus:
+ File ""/tmp/a/llama/llama3.1/llama-stack-apps-main/app/utils/chat.py"", line 95, in StepStatus
+ content: Union[InterleavedTextAttachment, ShieldResponse]
+ NameError: name 'InterleavedTextAttachment' is not defined
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/meta-llama/llama-stack-apps/issues/62","StepType","2024-09-07T18:24:00Z","Closed issue","No label","Please, I need help.
+mesop ./app/main.py
+ Traceback (most recent call last):
+ File ""/tmp/a/llama/conda/envs/app_env/bin/mesop"", line 8, in 
+ sys.exit(run_main())
+ File ""/tmp/a/llama/conda/envs/app_env/lib/python3.10/site-packages/mesop/bin/bin.py"", line 285, in run_main
+ app.run(main)
+ File ""/home/xxxxx/.local/lib/python3.10/site-packages/absl/app.py"", line 308, in run
+ _run_main(main, args)
+ File ""/home/xxxxx/.local/lib/python3.10/site-packages/absl/app.py"", line 254, in _run_main
+ sys.exit(main(argv))
+ File ""/tmp/a/llama/conda/envs/app_env/lib/python3.10/site-packages/mesop/bin/bin.py"", line 99, in main
+ app = create_app(
+ File ""/tmp/a/llama/conda/envs/app_env/lib/python3.10/site-packages/mesop/server/wsgi_app.py"", line 39, in create_app
+ run_block()
+ File ""/tmp/a/llama/conda/envs/app_env/lib/python3.10/site-packages/mesop/bin/bin.py"", line 101, in 
+ run_block=lambda: execute_main_module(absolute_path=absolute_path),
+ File ""/tmp/a/llama/conda/envs/app_env/lib/python3.10/site-packages/mesop/bin/bin.py"", line 272, in execute_main_module
+ raise e
+ File ""/tmp/a/llama/conda/envs/app_env/lib/python3.10/site-packages/mesop/bin/bin.py"", line 262, in execute_main_module
+ execute_module(
+ File ""/tmp/a/llama/conda/envs/app_env/lib/python3.10/site-packages/mesop/cli/execute_module.py"", line 12, in execute_module
+ spec.loader.exec_module(module)
+ File """", line 883, in exec_module
+ File """", line 241, in _call_with_frames_removed
+ File ""/tmp/a/llama/llama3.1/llama-stack-apps-main/./app/main.py"", line 9, in 
+ from utils.chat import chat, State
+ File ""/tmp/a/llama/llama3.1/llama-stack-apps-main/./app/utils/chat.py"", line 19, in 
+ from llama_toolchain.agentic_system.api.datatypes import StepType
+ ModuleNotFoundError: No module named 'llama_toolchain.agentic_system.api.datatypes'
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/meta-llama/llama-stack-apps/issues/59","404 NOT Found!","2024-09-04T01:32:13Z","Open issue","No label","after ""llama distribution start --name ollama --port 5000 --disabled ipv6""
+ then I get
+ Serving POST /inference/batch_chat_completion
+ Serving POST /inference/batch_completion
+ Serving POST /inference/chat_completion
+ Serving POST /inference/completion
+ Serving POST /safety/run_shields
+ Serving POST /agentic_system/memory_bank/attach
+ Serving POST /agentic_system/create
+ Serving POST /agentic_system/session/create
+ Serving POST /agentic_system/turn/create
+ Serving POST /agentic_system/delete
+ Serving POST /agentic_system/session/delete
+ Serving POST /agentic_system/memory_bank/detach
+ Serving POST /agentic_system/session/get
+ Serving POST /agentic_system/step/get
+ Serving POST /agentic_system/turn/get
+ Listening on 0.0.0.0:5000
+ INFO: Started server process [293531]
+ INFO: Waiting for application startup.
+ INFO: Application startup complete.
+ INFO: Uvicorn running on http://0.0.0.0:5000 (Press CTRL+C to quit)
+ INFO: 127.0.0.1:47696 - ""GET /?vscodeBrowserReqId=1725413273912 HTTP/1.1"" 404 Not Found
+without ""--disabled ipv6"" is the same output
+ Has anyone encountered this situation？
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/meta-llama/llama-stack-apps/issues/56","Generator cancelled - httpx.ReadTimeout","2024-08-29T00:17:27Z","Open issue","No label","Hi! After I ran python3 /Users/friedahuang/Documents/eon/llama-agentic-system/examples/scripts/hello.py localhost 5001 --disable_safety, I encountered the following error. Any ideas?
+For context, I'm using Apple M2 Pro
+User> Hello
+StepType.inference> Traceback (most recent call last):
+  File ""/Users/friedahuang/Documents/eon/.venv/lib/python3.12/site-packages/httpx/_transports/default.py"", line 66, in map_httpcore_exceptions
+    yield
+  File ""/Users/friedahuang/Documents/eon/.venv/lib/python3.12/site-packages/httpx/_transports/default.py"", line 249, in __aiter__
+    async for part in self._httpcore_stream:
+  File ""/Users/friedahuang/Documents/eon/.venv/lib/python3.12/site-packages/httpcore/_async/connection_pool.py"", line 367, in __aiter__
+    raise exc from None
+  File ""/Users/friedahuang/Documents/eon/.venv/lib/python3.12/site-packages/httpcore/_async/connection_pool.py"", line 363, in __aiter__
+    async for part in self._stream:
+  File ""/Users/friedahuang/Documents/eon/.venv/lib/python3.12/site-packages/httpcore/_async/http11.py"", line 349, in __aiter__
+    raise exc
+  File ""/Users/friedahuang/Documents/eon/.venv/lib/python3.12/site-packages/httpcore/_async/http11.py"", line 341, in __aiter__
+    async for chunk in self._connection._receive_response_body(**kwargs):
+  File ""/Users/friedahuang/Documents/eon/.venv/lib/python3.12/site-packages/httpcore/_async/http11.py"", line 210, in _receive_response_body
+    event = await self._receive_event(timeout=timeout)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File ""/Users/friedahuang/Documents/eon/.venv/lib/python3.12/site-packages/httpcore/_async/http11.py"", line 224, in _receive_event
+    data = await self._network_stream.read(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File ""/Users/friedahuang/Documents/eon/.venv/lib/python3.12/site-packages/httpcore/_backends/anyio.py"", line 32, in read
+    with map_exceptions(exc_map):
+  File ""/opt/homebrew/Cellar/python@3.12/3.12.4/Frameworks/Python.framework/Versions/3.12/lib/python3.12/contextlib.py"", line 158, in __exit__
+    self.gen.throw(value)
+  File ""/Users/friedahuang/Documents/eon/.venv/lib/python3.12/site-packages/httpcore/_exceptions.py"", line 14, in map_exceptions
+    raise to_exc(exc) from exc
+httpcore.ReadTimeout
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File ""/Users/friedahuang/Documents/eon/llama-agentic-system/examples/scripts/hello.py"", line 34, in <module>
+    fire.Fire(main)
+  File ""/Users/friedahuang/Documents/eon/.venv/lib/python3.12/site-packages/fire/core.py"", line 143, in Fire
+    component_trace = _Fire(component, args, parsed_flag_args, context, name)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File ""/Users/friedahuang/Documents/eon/.venv/lib/python3.12/site-packages/fire/core.py"", line 477, in _Fire
+    component, remaining_args = _CallAndUpdateTrace(
+                                ^^^^^^^^^^^^^^^^^^^^
+  File ""/Users/friedahuang/Documents/eon/.venv/lib/python3.12/site-packages/fire/core.py"", line 693, in _CallAndUpdateTrace
+    component = fn(*varargs, **kwargs)
+                ^^^^^^^^^^^^^^^^^^^^^^
+  File ""/Users/friedahuang/Documents/eon/llama-agentic-system/examples/scripts/hello.py"", line 18, in main
+    asyncio.run(
+  File ""/opt/homebrew/Cellar/python@3.12/3.12.4/Frameworks/Python.framework/Versions/3.12/lib/python3.12/asyncio/runners.py"", line 194, in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+  File ""/opt/homebrew/Cellar/python@3.12/3.12.4/Frameworks/Python.framework/Versions/3.12/lib/python3.12/asyncio/runners.py"", line 118, in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File ""/opt/homebrew/Cellar/python@3.12/3.12.4/Frameworks/Python.framework/Versions/3.12/lib/python3.12/asyncio/base_events.py"", line 687, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File ""/Users/friedahuang/Documents/eon/llama-agentic-system/examples/scripts/multi_turn.py"", line 58, in run_main
+    async for event, log in EventLogger().log(iterator):
+  File ""/Users/friedahuang/Documents/eon/.venv/lib/python3.12/site-packages/llama_toolchain/agentic_system/event_logger.py"", line 51, in log
+    async for chunk in event_generator:
+  File ""/Users/friedahuang/Documents/eon/.venv/lib/python3.12/site-packages/llama_toolchain/agentic_system/tools/custom/execute.py"", line 45, in execute_with_custom_tools
+    async for chunk in system.create_agentic_system_turn(request):
+  File ""/Users/friedahuang/Documents/eon/.venv/lib/python3.12/site-packages/llama_toolchain/agentic_system/client.py"", line 84, in create_agentic_system_turn
+    async for line in response.aiter_lines():
+  File ""/Users/friedahuang/Documents/eon/.venv/lib/python3.12/site-packages/httpx/_models.py"", line 966, in aiter_lines
+    async for text in self.aiter_text():
+  File ""/Users/friedahuang/Documents/eon/.venv/lib/python3.12/site-packages/httpx/_models.py"", line 953, in aiter_text
+    async for byte_content in self.aiter_bytes():
+  File ""/Users/friedahuang/Documents/eon/.venv/lib/python3.12/site-packages/httpx/_models.py"", line 932, in aiter_bytes
+    async for raw_bytes in self.aiter_raw():
+  File ""/Users/friedahuang/Documents/eon/.venv/lib/python3.12/site-packages/httpx/_models.py"", line 990, in aiter_raw
+    async for raw_stream_bytes in self.stream:
+  File ""/Users/friedahuang/Documents/eon/.venv/lib/python3.12/site-packages/httpx/_client.py"", line 146, in __aiter__
+    async for chunk in self._stream:
+  File ""/Users/friedahuang/Documents/eon/.venv/lib/python3.12/site-packages/httpx/_transports/default.py"", line 248, in __aiter__
+    with map_httpcore_exceptions():
+  File ""/opt/homebrew/Cellar/python@3.12/3.12.4/Frameworks/Python.framework/Versions/3.12/lib/python3.12/contextlib.py"", line 158, in __exit__
+    self.gen.throw(value)
+  File ""/Users/friedahuang/Documents/eon/.venv/lib/python3.12/site-packages/httpx/_transports/default.py"", line 83, in map_httpcore_exceptions
+    raise mapped_exc(message) from exc
+httpx.ReadTimeout
+
+Environment: ipython
+Tools: brave_search, wolfram_alpha, photogen
+Cutting Knowledge Date: December 2023
+Today Date: 28 August 2024
+
+INFO:     ::1:55142 - ""POST /agentic_system/create HTTP/1.1"" 200 OK
+INFO:     ::1:55143 - ""POST /agentic_system/session/create HTTP/1.1"" 200 OK
+INFO:     ::1:55144 - ""POST /agentic_system/turn/create HTTP/1.1"" 200 OK
+role='user' content='Hello'
+Pulling model: llama3.1:8b-instruct-fp16
+Generator cancelled
+
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/meta-llama/llama-stack-apps/issues/55","Mesop App Requires pillow Package to Run GUI","2024-08-28T06:07:32Z","Open issue","No label","Running the chatbot GUI with command mesop app/main.py , it reports ""No module of 'PIL'"" error because the pillow package is missing. pip install pillow resolved the issue. Suggest to add the package into the requirements.txt file so when mesop is installed, its dependent package gets installed as well.
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/meta-llama/llama-stack-apps/issues/54","Custom Tool Call Not Working For Inflation Example","2024-08-26T21:25:02Z","Open issue","No label","Running the inflation.py example from the rep. I am expecting it calls the custom tool for get_ticker_data function, which is defined at the folder custom_tools by ticker_data.py. However, based on the log, it didn't find the tool:
+[stderr]
+Traceback (most recent call last):
+  line 145, in <module>
+ModuleNotFoundError: No module named 'get_ticker_data'
+[/stderr]
+StepType.shield_call> No Violation
+StepType.inference> The error message indicates that the `get_ticker_data` module is not found. This is because the `get_ticker_data` function is not a built-in Python function, and it's not available in the current environment.
+
+To fix this issue, you can use the `yfinance` library to get the ticker data for Meta. Here's an updated code snippet that uses `yfinance` to get the ticker data:
+
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/meta-llama/llama-stack-apps/issues/53","Getting the proper template for function calling","2024-08-26T02:46:21Z","Open issue","No label","What is the definitive answer for how to format my prompts properly for function calling with llama3.1?
+Seeing a lot of conflicting information across Twitter, the official Meta docs, Huggingface docs, and the docs from numerous inference providers.
+I'm using a vLLM server and I want to create a lightweight prompt library from scratch to make sure there are no errors. Thank you!
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/meta-llama/llama-stack-apps/issues/52","I have some trouble on llama distribution install --spec local --name local-llama-8b","2024-08-22T13:51:29Z","Open issue","No label","When I implement llama distribution install --spec local --name local-llama-8b, I encounter the following error:
+/home/miyai/.pyenv/versions/miniconda3-latest/envs/agentic_env/lib/python3.10/site-packages/llama_toolchain/distribution/install_distribution.sh: line 111: PS1: unbound variable
+ Failed to install distribution local
+Do you know any solution?
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/meta-llama/llama-stack-apps/issues/51","File Upload not working","2024-08-21T17:40:28Z","Open issue","No label","When trying to work with a file upload, the file is basically ignored:
+I have used the standard setup from the README, i.e.:
+created and activated a conda environment with Python 3.10
+started a distribution via llama distribution start --name local-llama-8b --port 5000 --disable-ipv6
+installed requirements via pip install -r requirements.txt and started the app via mesop app/main.py (after disabling safety features)
+Am I missing something? There are no errors being shown in either the distribution console or the mesop console.
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/meta-llama/llama-stack-apps/issues/50","Tool Calling Not Working","2024-08-21T00:10:13Z","Open issue","No label","I am trying the tool calling function with Brave Search engine by following the simple instructions at https://github.com/meta-llama/llama-agentic-system#add-api-keys-for-tools.
+Basically, I saved the api key inside an .env file by BRAVE_SEARCH_API_KEY=xxxxx run that at the CLI terminal. However, with the command mesop app/main.py, the search engine did not seem to work, giving the message like the knowledge is up to Dec. 2023.
+Also tried PYTHONPATH=. mesop app/chat_with_custom_tools.py, didn't work either, it gave the following info:
+INFO:     127.0.0.1:57624 - ""POST /agentic_system/create HTTP/1.1"" 200 OK
+INFO:     127.0.0.1:57626 - ""POST /agentic_system/session/create HTTP/1.1"" 200 OK
+INFO:     127.0.0.1:42830 - ""POST /agentic_system/turn/create HTTP/1.1"" 200 OK
+role='user' content='Which team won NBA championship in 2024?'
+role='assistant' content='' stop_reason=<StopReason.end_of_turn: 'end_of_turn'> tool_calls=[ToolCall(call_id='6ea013e3-8fa3-4758-aea8-d344d6051d5d', tool_name=<BuiltinTool.brave_search: 'brave_search'>, arguments={'query': 'NBA championship 2024 winner'})]
+role='ipython' call_id='6ea013e3-8fa3-4758-aea8-d344d6051d5d' tool_name=<BuiltinTool.brave_search: 'brave_search'> content='{""query"": null, ""top_k"": []}'
+Assistant: The search results do not provide the answer to the question. I will try to search again with a different query.
+INFO:     127.0.0.1:50940 - ""POST /agentic_system/turn/create HTTP/1.1"" 200 OK
+role='user' content='What are the big news in 2024'
+role='assistant' content='' stop_reason=<StopReason.end_of_turn: 'end_of_turn'> tool_calls=[ToolCall(call_id='8c19d850-fb20-4d17-b9be-ddeec447cc3f', tool_name=<BuiltinTool.brave_search: 'brave_search'>, arguments={'query': 'big news 2024'})]
+role='ipython' call_id='8c19d850-fb20-4d17-b9be-ddeec447cc3f' tool_name=<BuiltinTool.brave_search: 'brave_search'> content='{""query"": null, ""top_k"": []}'
+Assistant: The search results do not provide the answer to the question. I will try to search again with a different query.
+INFO:     127.0.0.1:54344 - ""POST /agentic_system/turn/create HTTP/1.1"" 200 OK
+role='user' content='What are the big news in 2024'
+role='assistant' content='' stop_reason=<StopReason.end_of_turn: 'end_of_turn'> tool_calls=[ToolCall(call_id='815ac2e6-f9aa-4fde-b1f7-16d08e140f36', tool_name=<BuiltinTool.brave_search: 'brave_search'>, arguments={'query': '2024 news'})]
+role='ipython' call_id='815ac2e6-f9aa-4fde-b1f7-16d08e140f36' tool_name=<BuiltinTool.brave_search: 'brave_search'> content='{""query"": null, ""top_k"": []}'
+Assistant: The search results do not provide the answer to the question. I will try to search again with a different query.
+
+Unfortunately, I am unable to provide any information on the news in 2024 as the search results do not provide any relevant information.
+
+Do we have more docs on how to enable this?
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/meta-llama/llama-stack-apps/issues/49","Mesop APP Crash with Error","2024-08-21T20:39:24Z","Closed issue","No label","I tried to mimic the webpage chat with mesop app by following the https://github.com/meta-llama/llama-agentic-system#start-an-app-and-interact-with-the-server
+However, I got the following error message when I entered the prompt and tried to execute:
+ At the mesop app/main.py window, it shows the following:
+(agentic_env) tao@r7625h100:~/local/llama-agentic-system$ mesop app/main.py I0819 21:45:41.300593 139796354811712 _client.py:1773] HTTP Request: POST http://localhost:5000/agentic_system/create ""HTTP/1.1 200 OK"" I0819 21:45:41.308223 139796354811712 _client.py:1773] HTTP Request: POST http://localhost:5000/agentic_system/session/create ""HTTP/1.1 200 OK"" Running with hot reload: Running server on: http://localhost:32123 * Serving Flask app 'mesop.server.server' * Debug mode: off I0819 21:46:07.316347 139793450128960 _client.py:1773] HTTP Request: POST http://localhost:5000/agentic_system/turn/create ""HTTP/1.1 200 OK"" {""error"": {""message"": ""500: Internal server error""}} Error with parsing or validation: 1 validation error for AgenticSystemTurnResponseStreamChunk event Field required [type=missing, input_value={'error': {'message': '50...Internal server error'}}, input_type=dict] For further information visit https://errors.pydantic.dev/2.8/v/missing 
+At the host window, it shows the following:
+(agentic_env) tao@r7625h100:~/local/llama-agentic-system$ mesop app/main.py                                                                                 I0819 21:45:41.300593 139796354811712 _client.py:1773] HTTP Request: POST http://localhost:5000/agentic_system/create ""HTTP/1.1 200 OK""                     I0819 21:45:41.308223 139796354811712 _client.py:1773] HTTP Request: POST http://localhost:5000/agentic_system/session/create ""HTTP/1.1 200 OK""             Running with hot reload:                                                                                                                                                                                                                                                                                                Running server on: http://localhost:32123                                                                                                                    * Serving Flask app 'mesop.server.server'                                                                                                                   * Debug mode: off                                                                                                                                          I0819 21:46:07.316347 139793450128960 _client.py:1773] HTTP Request: POST http://localhost:5000/agentic_system/turn/create ""HTTP/1.1 200 OK""                {""error"": {""message"": ""500: Internal server error""}}                                                                                                        Error with parsing or validation: 1 validation error for AgenticSystemTurnResponseStreamChunk                                                               event                                                                                                                                                         Field required [type=missing, input_value={'error': {'message': '50...Internal server error'}}, input_type=dict]                                              For further information visit https://errors.pydantic.dev/2.8/v/missing 
+    async for item in event_gen:                                                                                                                    [8/1082]  File ""/home/tao/miniforge3/envs/local-llama-8b/lib/python3.10/site-packages/llama_toolchain/agentic_system/meta_reference/agentic_system.py"", line 141, in create_agentic_system_turn                                                                                                                                     async for event in agent.create_and_execute_turn(request):
+  File ""/home/tao/miniforge3/envs/local-llama-8b/lib/python3.10/site-packages/llama_toolchain/agentic_system/meta_reference/agent_instance.py"", line 174, in create_and_execute_turn                                                                                                                                        async for chunk in self.run(
+  File ""/home/tao/miniforge3/envs/local-llama-8b/lib/python3.10/site-packages/llama_toolchain/agentic_system/meta_reference/agent_instance.py"", line 301, in run                                                                                                                                                            async for res in self.run_shields_wrapper(
+  File ""/home/tao/miniforge3/envs/local-llama-8b/lib/python3.10/site-packages/llama_toolchain/agentic_system/meta_reference/agent_instance.py"", line 246, in run_shields_wrapper                                                                                                                                            await self.run_shields(messages, shields)
+  File ""/home/tao/miniforge3/envs/local-llama-8b/lib/python3.10/site-packages/llama_toolchain/agentic_system/meta_reference/safety.py"", line 47, in run_shields                                                                                                                                                             res = await self.safety_api.run_shields(                                                                                                                  File ""/home/tao/miniforge3/envs/local-llama-8b/lib/python3.10/site-packages/llama_toolchain/safety/meta_reference/safety.py"", line 68, in run_shields
+    shields = [shield_config_to_shield(c, self.config) for c in request.shields]                                                                              File ""/home/tao/miniforge3/envs/local-llama-8b/lib/python3.10/site-packages/llama_toolchain/safety/meta_reference/safety.py"", line 68, in <listcomp>          shields = [shield_config_to_shield(c, self.config) for c in request.shields]
+  File ""/home/tao/miniforge3/envs/local-llama-8b/lib/python3.10/site-packages/llama_toolchain/safety/meta_reference/safety.py"", line 103, in shield_config_to_shield                                                                                                                                                        raise ValueError(f""Unknown shield type: {sc.shield_type}"")                                                                                              ValueError: Unknown shield type: llama_guard 
+
+
+Here are the configurations in the yaml file:
+name: local-llama-8b
+spec: local
+conda_env: local-llama-8b
+providers:
+  inference:
+    provider_id: meta-reference
+    model: Meta-Llama3.1-8B-Instruct
+    quantization: null
+    torch_seed: null
+    max_seq_len: 1024
+    max_batch_size: 1
+  safety:
+    provider_id: meta-reference
+    llama_guard_shield:
+      model: Llama-Guard-3-8B
+      excluded_categories: []
+      disable_input_check: true
+      disable_output_check: true
+    prompt_guard_shield:
+      model: Prompt-Guard-86M
+  agentic_system:
+    provider_id: meta-reference
+
+
+Any suggestions on what could be the issue and how to fix it?
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/meta-llama/llama-stack-apps/issues/48","Fuck","2024-08-19T21:13:31Z","Closed issue","No label","Fuck you motherfuckers
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/meta-llama/llama-stack-apps/issues/46","Lamar","2024-08-20T22:28:38Z","Closed issue","No label","No description provided.
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/meta-llama/llama-stack-apps/issues/44","Unable to Install and Configure Distributions on Lightning.ai","2024-08-14T10:11:01Z","Open issue","No label","I am getting the following error:
+llama distribution install --spec local --name local-llama-8b
+Using local-llama-8b as the Conda environment for this distribution
+Conda environment 'local-llama-8b' does not exist. Creating with Python 3.10...
+Error: Conda create is not allowed. A Studio has a default conda environment (max 1 environment). Start a new Studio to create a new environment.
+
+Is there a way to install distribution without a conda env?
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/meta-llama/llama-stack-apps/issues/43","New","2024-08-12T18:34:44Z","Open issue","No label","https://llama3-1.llamameta.net/*?Policy=eyJTdGF0ZW1lbnQiOlt7InVuaXF1ZV9oYXNoIjoiNDZndjc0cTZseHhyOGliaG5tZnhncDZtIiwiUmVzb3VyY2UiOiJodHRwczpcL1wvbGxhbWEzLTEubGxhbWFtZXRhLm5ldFwvKiIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiQVdTOkVwb2NoVGltZSI6MTcyMzU3MzkyNn19fV19&Signature=g7qBua-OvjKfW3LNtsNhHQ%7E9klCYmV5-N-K6jgqtgcVD6UJwCSXl1c%7E3i35VasnDq7MVAsNyV4ffPLRUEa2RNIse4e%7EcWcQEn3lXih8Ptd4eNMXOYfWeWmQ-S2%7EJMPoxkSU8VD-g6PKEygg8mP%7ELR0au2C4h4OiH7SKooP1YU2JTURvdPuBA6CEhirqmlPeoJTDeJoLfI97bMwocHLrGopr0Cf7PHxzJBWdFwBLhEBfw4Ib-wlX-MXVnPhNQXfmNEsljbTXE8%7EFpB2e4qwqSh3MRFuJ7xt561qZCMaTMpzAfr4lrKyO3d%7Efr1Z6Ciacnh4TEWHRfdEz29YXYEdA24w__&Key-Pair-Id=K15QRJLYKIFSLZ&Download-Request-ID=1372257917298608
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/meta-llama/llama-stack-apps/issues/42","Issue while installing with python venv instead of conda","2024-08-12T20:25:11Z","Closed issue","No label","While running this comamnd (part of the steps included in readme file):
+ llama distribution install --spec local-ollama --name ollama
+I get the following error:
+ Using ollama as the Conda environment for this distribution
+ Error: conda command not found. Is Conda installed and in your PATH?
+ Failed to install distribution local-ollama
+ Traceback (most recent call last):
+ File ""/home/ec2-user/genai/myenv/bin/llama"", line 8, in 
+ sys.exit(main())
+ File ""/home/ec2-user/genai/myenv/lib/python3.10/site-packages/llama_toolchain/cli/llama.py"", line 54, in main
+ parser.run(args)
+ File ""/home/ec2-user/genai/myenv/lib/python3.10/site-packages/llama_toolchain/cli/llama.py"", line 48, in run
+ args.func(args)
+ File ""/home/ec2-user/genai/myenv/lib/python3.10/site-packages/llama_toolchain/cli/distribution/install.py"", line 105, in _run_distribution_install_cmd
+ assert return_code == 0, cprint(
+ AssertionError: None
+So it seems even though the readme file says it's ok to follow the steps in either conda or pytohn venv, but actually it expects it to be conda
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/meta-llama/llama-stack-apps/issues/40","Step by step instructions to install and run the Llama Stack on Linux and Mac","2024-08-09T18:25:34Z","Open issue","No label","I managed to make the Llama Stack server and client work with Ollama on both EC2 (with 24GB GPU) and Mac (tested on 2021 M1 and 2019 2.4GHz i9 MBP, both with 32GB memory). Steps are below:
+Open one Terminal, go to your work directory, then:
+git clone  https://github.com/meta-llama/llama-agentic-system
+cd llama-agentic-system
+conda create -n llama-stack python=3.10
+conda activate llama-stack
+pip install -r requirements.txt
+
+If you're on Linux, run:
+curl -fsSL https://ollama.com/install.sh | sh
+
+Otherwise, download the Ollama zip for Mac here, unzip it and double click the Ollama.app to move it to the Applications folder.
+On the same Terminal, run:
+ollama pull llama3.1:8b-instruct-fp16
+
+to download the Llama 3.1 8B model and then run:
+ollama run llama3.1:8b-instruct-fp16
+
+to confirm it works by entering some question and expecting Llama's answer.
+Now run the command below to install Llama Stack's Ollama distribution:
+llama distribution install --spec local-ollama --name ollama
+
+You should see (and hit enter to accept default settings for Configuring..., except n & n for the two questions related to llama_guard_shield & prompt_guard_shield):
+Successfully setup distribution environment. Configuring...
+ Configuring API surface: inference
+ Enter value for url (default: http://localhost:11434):
+Configuring API surface: safety
+ Do you want to configure llama_guard_shield? (y/n): n
+ Do you want to configure prompt_guard_shield? (y/n): n
+Configuring API surface: agentic_system
+YAML configuration has been written to /Users/<your_name>/.llama/distributions/ollama/config.yaml
+ Distribution ollama (with spec local-ollama) has been installed successfully!
+Launch the ollama distribution by running:
+llama distribution start --name ollama --port 5000
+
+Finally on another Terminal, go to the llama-agentic-system folder, then:
+conda activate ollama
+
+and either (on Mac)
+python examples/scripts/vacation.py localhost 5000 --disable_safety
+
+or (on Linux)
+python examples/scripts/vacation.py [::] 5000 --disable_safety
+
+You should see output starting with (Note: If you start the script right after Step 5, especially on a slower machine such as 2019 Mac with 2.4GHz i9, you may see ""httpcore.ReadTimeout"" because the Llama model is still being loaded; wait a moment and retry (a few times) should work):
+User> I am planning a trip to Switzerland, what are the top 3 places to visit?
+ StepType.inference> Switzerland is a beautiful country with a rich history, stunning landscapes, and vibrant culture. Here are three top places to visit in Switzerland:
+Jungfraujoch: Also known as the ""Top of Europe,"" Jungfraujoch is the highest train station in Europe, located at an altitude of 3,454 meters (11,332 feet) above sea level. It offers breathtaking views of the surrounding mountains and glaciers, including the iconic Eiger, Mönch, and Jungfrau peaks.
+and on the first Terminal that runs llama distribution start --name ollama --port 5000, you should see:
+INFO: Uvicorn running on http://[::]:5000 (Press CTRL+C to quit)
+ Environment: ipython
+ Tools: brave_search, wolfram_alpha, photogen
+Cutting Knowledge Date: December 2023
+ Today Date: 09 August 2024
+INFO: ::1:50987 - ""POST /agentic_system/create HTTP/1.1"" 200 OK
+ INFO: ::1:50988 - ""POST /agentic_system/session/create HTTP/1.1"" 200 OK
+ INFO: ::1:50989 - ""POST /agentic_system/turn/create HTTP/1.1"" 200 OK
+ role='user' content='I am planning a trip to Switzerland, what are the top 3 places to visit?'
+ Pulling model: llama3.1:8b-instruct-fp16
+ Assistant: Switzerland is a beautiful country with a rich history, stunning landscapes, and vibrant culture. Here are three top places to visit in Switzerland:
+Jungfraujoch: Also known as the ""Top of Europe,"" Jungfraujoch is a mountain peak located in the Bernese Alps. It's the highest train station in Europe, offering breathtaking views of the surrounding mountains, glaciers, and valleys. You can take a ride on the Jungfrau Railway, which takes you to the summit, where you can enjoy stunning vistas, visit the Ice Palace, and even ski or snowboard in the winter.
+Bonus: To see the tool calling (see here and here for more info) in action, try the hello.py example, which asks Llama ""Which players played in the winning team of the NBA western conference semifinals of 2024, please use tools"" whose answer needs a web search tool, followed by a prompt ""Hello"". On Mac, run (replace localhost with [::] on Linux):
+python examples/scripts/hello.py localhost 5000 --disable_safety         
+
+And you should see the output returning ""BuiltinTool.brave_search"" below (if you see ""httpcore.ReadTimeout"", retry should work):
+User> Hello
+ StepType.inference> Hello! How can I assist you today?
+ User> Which players played in the winning team of the NBA western conference semifinals of 2024, please use tools
+ StepType.inference> brave_search.call(query=""NBA Western Conference Semifinals 2024 winning team players"")
+ StepType.tool_execution> Tool:BuiltinTool.brave_search Args:{'query': 'NBA Western Conference Semifinals 2024 winning team players'}
+ StepType.tool_execution> Tool:BuiltinTool.brave_search Response:{""query"": null, ""top_k"": []}
+ StepType.shield_call> No Violation
+ StepType.inference> I need to search for information about the 2024 NBA Western Conference Semifinals.
+If you delete ""please use tools"" in the prompt of hello.py, not wanting to beg, you'll likely see the output:
+I'm not able to provide real-time information. However, I can suggest some possible sources where you may be able to find the information you are looking for.
+By setting an appropriate system prompt, or switching to a bigger sized Llama 3.1 model - details coming soon - you'd see you don't have to be too polite to make Llama comfortable but yourself not.
+ The text was updated successfully, but these errors were encountered: 
+❤️1
+subramen reacted with heart emoji
+All reactions
+❤️1 reaction"
+"https://github.com/meta-llama/llama-stack-apps/issues/38","llama download command from readme fails","2024-08-08T22:43:43Z","Closed issue","No label","$ llama download meta-llama/Prompt-Guard-86M --ignore-patterns original
+usage: llama download [-h] --source {meta,huggingface} --model-id
+                      {llama3_1_8b,llama3_1_70b,llama3_1_405b_bf16_mp8,llama3_1_405b_fp8_mp8,llama3_1_405b_bf16_mp16,llama3_1_8b_instruct,llama3_1_70b_instruct,llama3_1_405b_instruct_bf16_mp8,llama3_1_405b_instruct_fp8_mp8,llama3_1_405b_instruct_bf16_mp16}
+                      [--hf-token HF_TOKEN] [--meta-url META_URL] [--ignore-patterns IGNORE_PATTERNS]
+llama download: error: the following arguments are required: --source, --model-id
+
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/meta-llama/llama-stack-apps/issues/36","Clarification on the system prompt for custom tool use","2024-08-02T11:12:23Z","Open issue","No label","Awesome work! Just a quick question about the correct system prompt:
+in the docs https://llama.meta.com/docs/model-cards-and-prompt-formats/llama3_1#user-defined-custom-tool-calling this is used:
+If a you choose to call a function ONLY reply in the following format:
+<{start_tag}={function_name}>{parameters}{end_tag}
+where
+
+start_tag => `<function`
+parameters => a JSON dict with the function argument name as key and function argument value as value.
+end_tag => `</function>`
+
+Here is an example,
+<function=example_function_name>{""example_name"": ""example_value""}</function>
+
+Reminder:
+- Function calls MUST follow the specified format
+- Required parameters MUST be specified
+- Only call one function at a time
+- Put the entire function call reply on one line""
+- Always add your sources when using search results to answer the user query
+
+You are a helpful Assistant.
+
+While in the repo this is used:
+Think very carefully before calling functions.
+If you choose to call a function ONLY reply in the following format with no prefix or suffix:
+
+<function=example_function_name>{{""example_name"": ""example_value""}}</function>
+
+Reminder:
+- If looking for real time information use relevant functions before falling back to brave_search
+- Function calls MUST follow the specified format, start with <function= and end with </function>
+- Required parameters MUST be specified
+- Only call one function at a time
+- Put the entire function call reply on one line
+
+Furthermore, could you clarify if the ""Only call one function at a time"" implies parallel tool use is not intended to be used for these instruction tuned models (Llama 3.1 family)?
+e.g. ""Please get the weather for San Francisco and Tokyo"" can't generate:
+<|start_header_id|>assistant<|end_header_id|>
+
+<function=get_weather>{""location"": ""San Francisco""}</function>
+<function=get_weather>{""location"": ""Tokyo""}</function><|eot_id|>
+
+Thanks for clarifying!
+Rick Lamers
+ AI Researcher at Groq
+ The text was updated successfully, but these errors were encountered: 
+👍5
+gautierdag, mocushile-gif, albertodepaola, init27, and hozen-groq reacted with thumbs up emoji
+All reactions
+👍5 reactions"
+"https://github.com/meta-llama/llama-stack-apps/issues/35","safetensors_rust.SafetensorError: Error while deserializing header: MetadataIncompleteBuffer","2024-08-12T15:39:15Z","Closed issue","No label","Full issue stack here:
+/usr/local/lib/python3.10/dist-packages/llama_toolchain/utils.py:43: UserWarning: 
+The version_base parameter is not specified.
+Please specify a compatability version level, or None.
+Will assume defaults for version 1.1
+  initialize(config_path=relative_path)
+Loading config from : /root/.llama/configs/agentic_system/inline.yaml
+Yaml config:
+------------------------
+agentic_system_config:
+  impl_config:
+    impl_type: inline
+    inference_config:
+      impl_config:
+        impl_type: remote
+        url: http://localhost:5000/
+  safety_config:
+    llama_guard_shield:
+      model_dir: /root/.llama/checkpoints/llama3_1_8b_instruct
+      excluded_categories: []
+      disable_input_check: false
+      disable_output_check: false
+    prompt_guard_shield:
+      model_dir: /root/.llama/checkpoints/llama3_1_8b_instruct
+sampling_params:
+  temperature: 0.0
+  strategy: top_p
+  top_p: 0.95
+  top_k: 0
+------------------------
+Initializing client for http://localhost:5000/
+Loading checkpoint shards:  50% 2/4 [00:46<00:46, 23.26s/it]
+Traceback (most recent call last):
+  File ""/content/llama-agentic-system/examples/scripts/vacation.py"", line 36, in <module>
+    fire.Fire(main)
+  File ""/usr/local/lib/python3.10/dist-packages/fire/core.py"", line 143, in Fire
+    component_trace = _Fire(component, args, parsed_flag_args, context, name)
+  File ""/usr/local/lib/python3.10/dist-packages/fire/core.py"", line 477, in _Fire
+    component, remaining_args = _CallAndUpdateTrace(
+  File ""/usr/local/lib/python3.10/dist-packages/fire/core.py"", line 693, in _CallAndUpdateTrace
+    component = fn(*varargs, **kwargs)
+  File ""/content/llama-agentic-system/examples/scripts/vacation.py"", line 18, in main
+    asyncio.run(
+  File ""/usr/lib/python3.10/asyncio/runners.py"", line 44, in run
+    return loop.run_until_complete(main)
+  File ""/usr/lib/python3.10/asyncio/base_events.py"", line 649, in run_until_complete
+    return future.result()
+  File ""/content/llama-agentic-system/examples/scripts/multi_turn.py"", line 39, in run_main
+    client = await get_agent_system_instance(
+  File ""/usr/local/lib/python3.10/dist-packages/llama_agentic_system/utils.py"", line 172, in get_agent_system_instance
+    create_response = await api.create_agentic_system(create_request)
+  File ""/usr/local/lib/python3.10/dist-packages/llama_agentic_system/agentic_system.py"", line 704, in create_agentic_system
+    input_shields = [
+  File ""/usr/local/lib/python3.10/dist-packages/llama_agentic_system/agentic_system.py"", line 705, in <listcomp>
+    shield_config_to_shield(c, self.safety_config)
+  File ""/usr/local/lib/python3.10/dist-packages/llama_agentic_system/agentic_system.py"", line 141, in shield_config_to_shield
+    return LlamaGuardShield.instance(
+  File ""/usr/local/lib/python3.10/dist-packages/llama_toolchain/safety/shields/llama_guard.py"", line 114, in instance
+    _INSTANCE = LlamaGuardShield(
+  File ""/usr/local/lib/python3.10/dist-packages/llama_toolchain/safety/shields/llama_guard.py"", line 152, in __init__
+    self.model = AutoModelForCausalLM.from_pretrained(
+  File ""/usr/local/lib/python3.10/dist-packages/transformers/models/auto/auto_factory.py"", line 564, in from_pretrained
+    return model_class.from_pretrained(
+  File ""/usr/local/lib/python3.10/dist-packages/transformers/modeling_utils.py"", line 3916, in from_pretrained
+    ) = cls._load_pretrained_model(
+  File ""/usr/local/lib/python3.10/dist-packages/transformers/modeling_utils.py"", line 4370, in _load_pretrained_model
+    state_dict = load_state_dict(shard_file, is_quantized=is_quantized)
+  File ""/usr/local/lib/python3.10/dist-packages/transformers/modeling_utils.py"", line 549, in load_state_dict
+    with safe_open(checkpoint_file, framework=""pt"") as f:
+safetensors_rust.SafetensorError: Error while deserializing header: MetadataIncompleteBuffer
+
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/meta-llama/llama-stack-apps/issues/34","Manual is incorrect for ""Download Checkpoints""","2024-08-12T12:30:32Z","Closed issue","No label","The llama program that has slightly different arguments than the documentaiton when installed witjh pip install -e .
+I.e., when trying to download the 8B model:
+llama download meta-llama/Meta-Llama-3.1-8B-Instruct fails with
+➤ llama download meta-llama/Meta-Llama-3.1-8B-Instruct --hf-token REDACTED
+usage: llama download [-h] --source {meta,huggingface} --model-id
+                      {llama3_1_8b,llama3_1_70b,llama3_1_405b_bf16_mp8,llama3_1_405b_fp8_mp8,llama3_1_405b_bf16_mp16,llama3_1_8b_instruct,llama3_1_70b_instruct,llama3_1_405b_instruct_bf16_mp8,llama3_1_405b_instruct_fp8_mp8,llama3_1_405b_instruct_bf16_mp16}
+                      [--hf-token HF_TOKEN] [--meta-url META_URL] [--ignore-patterns IGNORE_PATTERNS]
+llama download: error: the following arguments are required: --source, --model-id
+
+It's possible to download the instruction model by varying the paramters to llama download --source huggingface --hf-token REDACTED --model-id llama3_1_8b_instruct.
+However, the two guard models are not listed in the model-ids and I haven't quite found the way to trigger the download for them
+ The text was updated successfully, but these errors were encountered: 
+👍2
+Chrecci and gengyuchao reacted with thumbs up emoji
+All reactions
+👍2 reactions"
+"https://github.com/meta-llama/llama-stack-apps/issues/33","when Interact with the Server, All connection attempts failed","2024-08-01T03:38:49Z","Open issue","No label","I start an App and Interact with the Server, when I print ""hello"", it reported the error shown in the picture below:
+Then I start a script that can create an agent and interact with the inference server, it has the same problem httpx.ConnectError: All connection attempts failed.
+What is the cause of this error? Could it have something to do with my server address? My server address is 10.0.1.227.
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/meta-llama/llama-stack-apps/issues/32","Cannot use multiple GPU cards, single 4090 cannot run","2024-08-20T22:29:43Z","Closed issue","No label","The startup command is as follows
+llama inference start
+The error of using multiple GPU cards is as follows
+AssertionError: Loading a checkpoint for MP=1 but world size is 2
+Single card 4090 error is as follows
+torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 224.00 MiB
+/root/.llama/configs/inference.yaml
+inference_config:
+  impl_config:
+    impl_type: inline
+    checkpoint_config:
+      checkpoint:
+        checkpoint_type: pytorch
+        checkpoint_dir: /mnt/hfd/Meta-Llama-3.1-8B-Instruct/original/
+        tokenizer_path: /mnt/hfd/Meta-Llama-3.1-8B-Instruct/original/tokenizer.model
+        model_parallel_size: 1
+        quantization_format: bf16
+    quantization: null
+    torch_seed: null
+    max_seq_len: 1024
+    max_batch_size: 1
+
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/meta-llama/llama-stack-apps/issues/31","Configure Agentic System have problems","2024-08-01T02:06:24Z","Closed issue","No label","When configuring Agentic System, I set the following parameters:
+
+ I have a few questions and hope to get your answers:
+What do llama_guard_shield and prompt_guard_shield represent? Is their model_dir the same?
+Why load the model when we have started the inference server in the background in the first step?
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/meta-llama/llama-stack-apps/issues/30","Error: Failed to initialize the TMA descriptor 801","2024-07-31T06:32:29Z","Open issue","No label","Good day everyone, I am trying to run llama agentic system on RTX4090 with FP8 Quantization for the inference model and meta-llama/Llama-Guard-3-8B-INT8 for the Guard. WIth sufficiently small max_seq_len everything fits into 24GB VRAM and I can start inference server, and chat app. However as soon I send message in the chat I get the following error: ""Error: Failed to initialize the TMA descriptor 801"".
+(venv) trainer@pc-aiml:~/.llama$ llama inference start --disable-ipv6
+/home/trainer/.llama/venv/lib/python3.10/site-packages/llama_toolchain/utils.py:43: UserWarning: 
+The version_base parameter is not specified.
+Please specify a compatability version level, or None.
+Will assume defaults for version 1.1
+  initialize(config_path=relative_path)
+Loading config from : /home/trainer/.llama/configs/inference.yaml
+Yaml config:
+------------------------
+inference_config:
+  impl_config:
+    impl_type: inline
+    checkpoint_config:
+      checkpoint:
+        checkpoint_type: pytorch
+        checkpoint_dir: /home/trainer/.llama/checkpoints/Meta-Llama-3.1-8B-Instruct/original
+        tokenizer_path: /home/trainer/.llama/checkpoints/Meta-Llama-3.1-8B-Instruct/original/tokenizer.model
+        model_parallel_size: 1
+        quantization_format: bf16
+    quantization:
+      type: fp8
+    torch_seed: null
+    max_seq_len: 2048
+    max_batch_size: 1
+
+------------------------
+Listening on 0.0.0.0:5000
+INFO:     Started server process [20033]
+INFO:     Waiting for application startup.
+> initializing model parallel with size 1
+> initializing ddp with size 1
+> initializing pipeline with size 1
+/home/trainer/.llama/venv/lib/python3.10/site-packages/torch/__init__.py:955: UserWarning: torch.set_default_tensor_type() is deprecated as of PyTorch 2.1, please use torch.set_default_dtype() and torch.set_default_device() as alternatives. (Triggered internally at ../torch/csrc/tensor/python_tensor.cpp:432.)
+  _C._set_default_tensor_type(t)
+Using efficient FP8 operators in FBGEMM.
+Quantizing fp8 weights from bf16...
+Loaded in 7.05 seconds
+Finished model load YES READY
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:5000 (Press CTRL+C to quit)
+INFO:     127.0.0.1:55838 - ""POST /inference/chat_completion HTTP/1.1"" 200 OK
+TMA Desc Addr:   0x7ffdd6221440
+format         0
+dim            3
+gmem_address   0x7eb74f4bde00
+globalDim      (4096,53,1,1,1)
+globalStrides  (1,4096,0,0,0)
+boxDim         (128,64,1,1,1)
+elementStrides (1,1,1,1,1)
+interleave     0
+swizzle        3
+l2Promotion    2
+oobFill        0
+Error: Failed to initialize the TMA descriptor 801
+TMA Desc Addr:   0x7ffdd6221440
+format         0
+dim            3
+gmem_address   0x7eb3ea000000
+globalDim      (4096,14336,1,1,1)
+globalStrides  (1,4096,0,0,0)
+boxDim         (128,64,1,1,1)
+elementStrides (1,1,1,1,1)
+interleave     0
+swizzle        3
+l2Promotion    2
+oobFill        0
+Error: Failed to initialize the TMA descriptor 801
+TMA Desc Addr:   0x7ffdd6221440
+format         9
+dim            3
+gmem_address   0x7eb3e9c00000
+globalDim      (14336,53,1,1,1)
+globalStrides  (2,28672,0,0,0)
+boxDim         (32,64,1,1,1)
+elementStrides (1,1,1,1,1)
+interleave     0
+swizzle        2
+l2Promotion    2
+oobFill        0
+Error: Failed to initialize the TMA descriptor 801
+TMA Desc Addr:   0x7ffdd6221440
+format         9
+dim            3
+gmem_address   0x7eb3e9c00000
+globalDim      (14336,53,1,1,1)
+globalStrides  (2,28672,0,0,0)
+boxDim         (32,64,1,1,1)
+elementStrides (1,1,1,1,1)
+interleave     0
+swizzle        2
+l2Promotion    2
+oobFill        0
+Error: Failed to initialize the TMA descriptor 801
+[debug] got exception cutlass cannot initialize
+Traceback (most recent call last):
+  File ""/home/trainer/.llama/venv/lib/python3.10/site-packages/llama_toolchain/inference/parallel_utils.py"", line 80, in retrieve_requests
+    for obj in out:
+  File ""/home/trainer/.llama/venv/lib/python3.10/site-packages/llama_toolchain/inference/generation.py"", line 287, in chat_completion
+    yield from self.generate(
+  File ""/home/trainer/.llama/venv/lib/python3.10/site-packages/torch/utils/_contextlib.py"", line 36, in generator_context
+    response = gen.send(None)
+  File ""/home/trainer/.llama/venv/lib/python3.10/site-packages/llama_toolchain/inference/generation.py"", line 205, in generate
+    logits = self.model.forward(tokens[:, prev_pos:cur_pos], prev_pos)
+  File ""/home/trainer/.llama/venv/lib/python3.10/site-packages/torch/utils/_contextlib.py"", line 116, in decorate_context
+    return func(*args, **kwargs)
+  File ""/home/trainer/.llama/venv/lib/python3.10/site-packages/llama_models/llama3_1/api/model.py"", line 321, in forward
+    h = layer(h, start_pos, freqs_cis, mask)
+  File ""/home/trainer/.llama/venv/lib/python3.10/site-packages/torch/nn/modules/module.py"", line 1553, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File ""/home/trainer/.llama/venv/lib/python3.10/site-packages/torch/nn/modules/module.py"", line 1562, in _call_impl
+    return forward_call(*args, **kwargs)
+  File ""/home/trainer/.llama/venv/lib/python3.10/site-packages/llama_models/llama3_1/api/model.py"", line 268, in forward
+    out = h + self.feed_forward(self.ffn_norm(h))
+  File ""/home/trainer/.llama/venv/lib/python3.10/site-packages/torch/nn/modules/module.py"", line 1553, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File ""/home/trainer/.llama/venv/lib/python3.10/site-packages/torch/nn/modules/module.py"", line 1562, in _call_impl
+    return forward_call(*args, **kwargs)
+  File ""/home/trainer/.llama/venv/lib/python3.10/site-packages/llama_toolchain/inference/quantization/loader.py"", line 43, in swiglu_wrapper
+    out = ffn_swiglu(x, self.w1.weight, self.w3.weight, self.w2.weight)
+  File ""/home/trainer/.llama/venv/lib/python3.10/site-packages/llama_toolchain/inference/quantization/fp8_impls.py"", line 62, in ffn_swiglu
+    return ffn_swiglu_fp8_dynamic(
+  File ""/home/trainer/.llama/venv/lib/python3.10/site-packages/llama_toolchain/inference/quantization/fp8_impls.py"", line 165, in ffn_swiglu_fp8_dynamic
+    x1 = fc_fp8_dynamic(
+  File ""/home/trainer/.llama/venv/lib/python3.10/site-packages/llama_toolchain/inference/quantization/fp8_impls.py"", line 146, in fc_fp8_dynamic
+    y = torch.ops.fbgemm.f8f8bf16_rowwise(
+  File ""/home/trainer/.llama/venv/lib/python3.10/site-packages/torch/_ops.py"", line 1061, in __call__
+    return self_._op(*args, **(kwargs or {}))
+RuntimeError: cutlass cannot initialize
+[debug] got exception cutlass cannot initialize
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File ""/home/trainer/.llama/venv/lib/python3.10/site-packages/starlette/responses.py"", line 265, in __call__
+    await wrap(partial(self.listen_for_disconnect, receive))
+  File ""/home/trainer/.llama/venv/lib/python3.10/site-packages/starlette/responses.py"", line 261, in wrap
+    await func()
+  File ""/home/trainer/.llama/venv/lib/python3.10/site-packages/starlette/responses.py"", line 238, in listen_for_disconnect
+    message = await receive()
+  File ""/home/trainer/.llama/venv/lib/python3.10/site-packages/uvicorn/protocols/http/httptools_impl.py"", line 553, in receive
+    await self.message_event.wait()
+  File ""/usr/lib/python3.10/asyncio/locks.py"", line 214, in wait
+    await fut
+asyncio.exceptions.CancelledError: Cancelled by cancel scope 7ebc8462f0d0
+
+During handling of the above exception, another exception occurred:
+
+  + Exception Group Traceback (most recent call last):
+  |   File ""/home/trainer/.llama/venv/lib/python3.10/site-packages/uvicorn/protocols/http/httptools_impl.py"", line 399, in run_asgi
+  |     result = await app(  # type: ignore[func-returns-value]
+  |   File ""/home/trainer/.llama/venv/lib/python3.10/site-packages/uvicorn/middleware/proxy_headers.py"", line 70, in __call__
+  |     return await self.app(scope, receive, send)
+  |   File ""/home/trainer/.llama/venv/lib/python3.10/site-packages/fastapi/applications.py"", line 1054, in __call__
+  |     await super().__call__(scope, receive, send)
+  |   File ""/home/trainer/.llama/venv/lib/python3.10/site-packages/starlette/applications.py"", line 123, in __call__
+  |     await self.middleware_stack(scope, receive, send)
+  |   File ""/home/trainer/.llama/venv/lib/python3.10/site-packages/starlette/middleware/errors.py"", line 186, in __call__
+  |     raise exc
+  |   File ""/home/trainer/.llama/venv/lib/python3.10/site-packages/starlette/middleware/errors.py"", line 164, in __call__
+  |     await self.app(scope, receive, _send)
+  |   File ""/home/trainer/.llama/venv/lib/python3.10/site-packages/starlette/middleware/exceptions.py"", line 65, in __call__
+  |     await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  |   File ""/home/trainer/.llama/venv/lib/python3.10/site-packages/starlette/_exception_handler.py"", line 64, in wrapped_app
+  |     raise exc
+  |   File ""/home/trainer/.llama/venv/lib/python3.10/site-packages/starlette/_exception_handler.py"", line 53, in wrapped_app
+  |     await app(scope, receive, sender)
+  |   File ""/home/trainer/.llama/venv/lib/python3.10/site-packages/starlette/routing.py"", line 756, in __call__
+  |     await self.middleware_stack(scope, receive, send)
+  |   File ""/home/trainer/.llama/venv/lib/python3.10/site-packages/starlette/routing.py"", line 776, in app
+  |     await route.handle(scope, receive, send)
+  |   File ""/home/trainer/.llama/venv/lib/python3.10/site-packages/starlette/routing.py"", line 297, in handle
+  |     await self.app(scope, receive, send)
+  |   File ""/home/trainer/.llama/venv/lib/python3.10/site-packages/starlette/routing.py"", line 77, in app
+  |     await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  |   File ""/home/trainer/.llama/venv/lib/python3.10/site-packages/starlette/_exception_handler.py"", line 64, in wrapped_app
+  |     raise exc
+  |   File ""/home/trainer/.llama/venv/lib/python3.10/site-packages/starlette/_exception_handler.py"", line 53, in wrapped_app
+  |     await app(scope, receive, sender)
+  |   File ""/home/trainer/.llama/venv/lib/python3.10/site-packages/starlette/routing.py"", line 75, in app
+  |     await response(scope, receive, send)
+  |   File ""/home/trainer/.llama/venv/lib/python3.10/site-packages/starlette/responses.py"", line 258, in __call__
+  |     async with anyio.create_task_group() as task_group:
+  |   File ""/home/trainer/.llama/venv/lib/python3.10/site-packages/anyio/_backends/_asyncio.py"", line 680, in __aexit__
+  |     raise BaseExceptionGroup(
+  | exceptiongroup.ExceptionGroup: unhandled errors in a TaskGroup (1 sub-exception)
+  +-+---------------- 1 ----------------
+    | Traceback (most recent call last):
+    |   File ""/home/trainer/.llama/venv/lib/python3.10/site-packages/starlette/responses.py"", line 261, in wrap
+    |     await func()
+    |   File ""/home/trainer/.llama/venv/lib/python3.10/site-packages/starlette/responses.py"", line 250, in stream_response
+    |     async for chunk in self.body_iterator:
+    |   File ""/home/trainer/.llama/venv/lib/python3.10/site-packages/llama_toolchain/inference/server.py"", line 84, in sse_generator
+    |     async for event in event_gen:
+    |   File ""/home/trainer/.llama/venv/lib/python3.10/site-packages/llama_toolchain/inference/server.py"", line 94, in event_gen
+    |     async for event in InferenceApiInstance.chat_completion(exec_request):
+    |   File ""/home/trainer/.llama/venv/lib/python3.10/site-packages/llama_toolchain/inference/inference.py"", line 58, in chat_completion
+    |     for token_result in self.generator.chat_completion(
+    |   File ""/home/trainer/.llama/venv/lib/python3.10/site-packages/llama_toolchain/inference/model_parallel.py"", line 104, in chat_completion
+    |     yield from gen
+    |   File ""/home/trainer/.llama/venv/lib/python3.10/site-packages/llama_toolchain/inference/parallel_utils.py"", line 255, in run_inference
+    |     raise obj
+    | RuntimeError: cutlass cannot initialize
+    +------------------------------------
+^CW0729 16:50:42.785000 139352429928448 torch/distributed/elastic/agent/server/api.py:688] Received Signals.SIGINT death signal, shutting down workers
+W0729 16:50:42.785000 139352429928448 torch/distributed/elastic/multiprocessing/api.py:734] Closing process 20066 via signal SIGINT
+Exception ignored in: <function Context.__del__ at 0x7ebc85d2e950>
+Traceback (most recent call last):
+  File ""/home/trainer/.llama/venv/lib/python3.10/site-packages/zmq/sugar/context.py"", line 142, in __del__
+    self.destroy()
+  File ""/home/trainer/.llama/venv/lib/python3.10/site-packages/zmq/sugar/context.py"", line 324, in destroy
+    self.term()
+  File ""/home/trainer/.llama/venv/lib/python3.10/site-packages/zmq/sugar/context.py"", line 266, in term
+    super().term()
+  File ""_zmq.py"", line 545, in zmq.backend.cython._zmq.Context.term
+  File ""_zmq.py"", line 141, in zmq.backend.cython._zmq._check_rc
+  File ""/home/trainer/.llama/venv/lib/python3.10/site-packages/torch/distributed/elastic/multiprocessing/api.py"", line 79, in _terminate_process_handler
+    raise SignalException(f""Process {os.getpid()} got signal: {sigval}"", sigval=sigval)
+torch.distributed.elastic.multiprocessing.api.SignalException: Process 20066 got signal: 2
+INFO:     Shutting down
+Process ForkProcess-1:
+Traceback (most recent call last):
+  File ""/usr/lib/python3.10/multiprocessing/process.py"", line 314, in _bootstrap
+    self.run()
+  File ""/usr/lib/python3.10/multiprocessing/process.py"", line 108, in run
+    self._target(*self._args, **self._kwargs)
+  File ""/home/trainer/.llama/venv/lib/python3.10/site-packages/llama_toolchain/inference/parallel_utils.py"", line 175, in launch_dist_group
+    elastic_launch(launch_config, entrypoint=worker_process_entrypoint)(
+  File ""/home/trainer/.llama/venv/lib/python3.10/site-packages/torch/distributed/launcher/api.py"", line 133, in __call__
+    return launch_agent(self._config, self._entrypoint, list(args))
+  File ""/home/trainer/.llama/venv/lib/python3.10/site-packages/torch/distributed/launcher/api.py"", line 255, in launch_agent
+    result = agent.run()
+  File ""/home/trainer/.llama/venv/lib/python3.10/site-packages/torch/distributed/elastic/metrics/api.py"", line 124, in wrapper
+    result = f(*args, **kwargs)
+  File ""/home/trainer/.llama/venv/lib/python3.10/site-packages/torch/distributed/elastic/agent/server/api.py"", line 680, in run
+    result = self._invoke_run(role)
+  File ""/home/trainer/.llama/venv/lib/python3.10/site-packages/torch/distributed/elastic/agent/server/api.py"", line 835, in _invoke_run
+    time.sleep(monitor_interval)
+  File ""/home/trainer/.llama/venv/lib/python3.10/site-packages/torch/distributed/elastic/multiprocessing/api.py"", line 79, in _terminate_process_handler
+    raise SignalException(f""Process {os.getpid()} got signal: {sigval}"", sigval=sigval)
+torch.distributed.elastic.multiprocessing.api.SignalException: Process 20064 got signal: 2
+INFO:     Waiting for application shutdown.
+shutting down
+INFO:     Application shutdown complete.
+INFO:     Finished server process [20033]
+SIGINT or CTRL-C detected. Exiting gracefully (2, <frame at 0x7ebc8644bc40, file '/home/trainer/.llama/venv/lib/python3.10/site-packages/uvicorn/server.py', line 328, code capture_signals>)
+Traceback (most recent call last):
+  File ""/usr/lib/python3.10/asyncio/runners.py"", line 44, in run
+    return loop.run_until_complete(main)
+  File ""uvloop/loop.pyx"", line 1517, in uvloop.loop.Loop.run_until_complete
+asyncio.exceptions.CancelledError
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File ""/home/trainer/.llama/venv/bin/llama"", line 8, in <module>
+    sys.exit(main())
+  File ""/home/trainer/.llama/venv/lib/python3.10/site-packages/llama_toolchain/cli/llama.py"", line 54, in main
+    parser.run(args)
+  File ""/home/trainer/.llama/venv/lib/python3.10/site-packages/llama_toolchain/cli/llama.py"", line 48, in run
+    args.func(args)
+  File ""/home/trainer/.llama/venv/lib/python3.10/site-packages/llama_toolchain/cli/inference/start.py"", line 53, in _run_inference_start_cmd
+    inference_server_init(
+  File ""/home/trainer/.llama/venv/lib/python3.10/site-packages/llama_toolchain/inference/server.py"", line 115, in main
+    uvicorn.run(app, host=listen_host, port=port)
+  File ""/home/trainer/.llama/venv/lib/python3.10/site-packages/uvicorn/main.py"", line 577, in run
+    server.run()
+  File ""/home/trainer/.llama/venv/lib/python3.10/site-packages/uvicorn/server.py"", line 65, in run
+    return asyncio.run(self.serve(sockets=sockets))
+  File ""/usr/lib/python3.10/asyncio/runners.py"", line 48, in run
+    loop.run_until_complete(loop.shutdown_asyncgens())
+  File ""uvloop/loop.pyx"", line 1515, in uvloop.loop.Loop.run_until_complete
+RuntimeError: Event loop stopped before Future completed.
+
+I will appreciate any help and sugggestion. Thank you in advance.
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/meta-llama/llama-stack-apps/issues/28","Jonas","2024-07-30T17:25:06Z","Closed issue","No label","Eu sou Jonas, cristão e democrata
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/meta-llama/llama-stack-apps/issues/27","Bug?: Embedded and Malicious Probabilities (index 2 is out of bounds for dimension 1 with size 2)","2024-07-30T09:46:38Z","Open issue","No label","Hello, I get this error when running the model locally, as described by the repo. however, I get this error:
+index 2 is out of bounds for dimension 1 with size 2
+with this traceback:
+/python3.10/site-packages/mesop/server/server.py:153 | generate_data
+ for _ in result: 
+/python3.10/site-packages/mesop/runtime/context.py:161 | run_event_handler
+ yield from result 
+./llama-agentic-system/app/utils/chat.py:228 | on_input_enter
+         state = me.state(State) 
+         state.input = e.value 
+         yield from submit() 
+     def submit(): 
+         state = me.state(State) 
+         if state.in_progress or not state.input: 
+./llama-agentic-system/app/utils/chat.py:270 | submit
+         cur_uuids = set(state.output) 
+         for op_uuid, op in transform(content): 
+             KEY_TO_OUTPUTS[op_uuid] = op 
+             if op_uuid not in cur_uuids: 
+                 output.append(op_uuid) 
+                 cur_uuids.add(op_uuid) 
+./llama-agentic-system/app/utils/transform.py:39 | transform
+     generator = sync_generator(EVENT_LOOP, client.run([input_message])) 
+     for chunk in generator: 
+         if not hasattr(chunk, ""event""): 
+             # Need to check for custom tool first 
+             # since it does not produce event but instead 
+             # a Message 
+./llama-agentic-system/app/utils/common.py:36 | generator
+         while True: 
+             try: 
+                 yield loop.run_until_complete(async_generator.__anext__()) 
+             except StopAsyncIteration: 
+                 break 
+     return generator() 
+/python3.10/asyncio/base_events.py:649 | run_until_complete
+ return future.result() 
+./llama-agentic-system/llama_agentic_system/utils.py:73 | run
+ async for chunk in execute_with_custom_tools( 
+./llama-agentic-system/llama_agentic_system/client.py:122 | execute_with_custom_tools
+ async for chunk in system.create_agentic_system_turn(request): 
+./llama-agentic-system/llama_agentic_system/agentic_system.py:763 | create_agentic_system_turn
+ async for event in agent.create_and_execute_turn(request): 
+./llama-agentic-system/llama_agentic_system/agentic_system.py:270 | create_and_execute_turn
+ async for chunk in self.run( 
+./llama-agentic-system/llama_agentic_system/agentic_system.py:396 | run
+ async for res in self.run_shields_wrapper( 
+./llama-agentic-system/llama_agentic_system/agentic_system.py:341 | run_shields_wrapper
+ await self.run_shields(messages, shields) 
+/python3.10/site-packages/llama_toolchain/safety/shields/shield_runner.py:41 | run_shields
+ results = await asyncio.gather(*[s.run(messages) for s in shields]) 
+/python3.10/site-packages/llama_toolchain/safety/shields/base.py:55 | run
+ return await self.run_impl(text) 
+/python3.10/site-packages/llama_toolchain/safety/shields/prompt_guard.py:96 | run_impl
+ score_malicious = probabilities[0, 2].item() 
+
+to fix it I changed :
+         score_embedded = probabilities[0, 1].item()
+         score_malicious = probabilities[0, 2].item()
+
+to
+        score_embedded = probabilities[0, 0].item()
+        score_malicious = probabilities[0, 1].item()
+
+in llama_toolchain/safety/shields/prompt_guard.py PromptGuardShield run_impl (Line 95/96)
+Not sure if that is correct, but for me the model works now.
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/meta-llama/llama-stack-apps/issues/26","ValueError: path is on mount 'C:', start on mount 'D:'","2024-08-20T22:28:54Z","Closed issue","No label","No description provided.
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/meta-llama/llama-stack-apps/issues/22","FP8 quantizatin examples","2024-07-27T03:26:59Z","Open issue","No label","When will FP8 quantizatin examples be released? Thanks!
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/meta-llama/llama-stack-apps/issues/17","RuntimeError: Distributed package doesn't have NCCL built in (on mac pro M1)","2024-07-26T20:52:33Z","Closed issue","No label","The version_base parameter is not specified.
+ Please specify a compatability version level, or None.
+ Will assume defaults for version 1.1
+ initialize(config_path=relative_path)
+ Loading config from : /x/x/.llama/configs/inference.yaml
+ Yaml config:
+inference_config:
+ impl_config:
+ impl_type: inline
+ checkpoint_config:
+ checkpoint:
+ checkpoint_type: pytorch
+ checkpoint_dir: /.llama/checkpoints/Meta-Llama-3.1-8B-Instruct/
+ tokenizer_path: /.llama/checkpoints/Meta-Llama-3.1-8B-Instruct/tokenizer.model
+ model_parallel_size: 1
+ quantization_format: bf16
+ quantization: null
+ torch_seed: null
+ max_seq_len: 16384
+ max_batch_size: 1
+Listening on :::5000
+ INFO: Started server process [74351]
+ INFO: Waiting for application startup.
+ W0725 17:29:07.226000 7904910400 torch/distributed/elastic/multiprocessing/redirects.py:28] NOTE: Redirects are currently not supported in Windows or MacOs.
+ ...
+ File ""/llama-agentic-system/venv_3_10/lib/python3.10/site-packages/torch/distributed/launcher/api.py"", line 264, in launch_agent
+ raise ChildFailedError(
+ torch.distributed.elastic.multiprocessing.errors.ChildFailedError:
+worker_process_entrypoint FAILED
+Failures:
+ <NO_OTHER_FAILURES>
+Root Cause (first observed failure):
+ [0]:
+ time : 2024-07-25_17:29:07
+ host : -mbp.attlocal.net
+ rank : 0 (local_rank: 0)
+ exitcode : 1 (pid: 74376)
+ ...
+ File ""/llama-agentic-system/venv_3_10/lib/python3.10/site-packages/torch/distributed/distributed_c10d.py"", line 1573, in _new_process_group_helper
+ raise RuntimeError(""Distributed package doesn't have NCCL built in"")
+ RuntimeError: Distributed package doesn't have NCCL built in
+ The text was updated successfully, but these errors were encountered: 
+❤️1
+uhcode reacted with heart emoji
+All reactions
+❤️1 reaction"
+"https://github.com/meta-llama/llama-stack-apps/issues/15","worker_process_entrypoint FAILED","2024-07-25T16:10:48Z","Open issue","No label","llama inference start
+ /opt/LLama_Agentic_System/llama3_1venv/lib/python3.11/site-packages/llama_toolchain/utils.py:43: UserWarning:
+ The version_base parameter is not specified.
+ Please specify a compatability version level, or None.
+ Will assume defaults for version 1.1
+ initialize(config_path=relative_path)
+ Loading config from : /root/.llama/configs/inference.yaml
+ Yaml config:
+inference_config:
+ impl_config:
+ impl_type: inline
+ checkpoint_config:
+ checkpoint:
+ checkpoint_type: pytorch
+ checkpoint_dir: /root/.llama/checkpoints/Meta-Llama-3.1-8B-Instruct/original/
+ tokenizer_path: /root/.llama/checkpoints/Meta-Llama-3.1-8B-Instruct/original/tokenizer.model
+ model_parallel_size: 1
+ quantization_format: bf16
+ quantization: null
+ torch_seed: null
+ max_seq_len: 16384
+ max_batch_size: 1
+Listening on :::5000
+ INFO: Started server process [6765]
+ INFO: Waiting for application startup.
+initializing model parallel with size 1
+ initializing ddp with size 1
+ initializing pipeline with size 1
+ E0725 12:48:53.920000 127614093211456 torch/distributed/elastic/multiprocessing/api.py:702] failed (exitcode: -9) local_rank: 0 (pid: 6774) of fn: worker_process_entrypoint (start_method: fork)
+ E0725 12:48:53.920000 127614093211456 torch/distributed/elastic/multiprocessing/api.py:702] Traceback (most recent call last):
+ E0725 12:48:53.920000 127614093211456 torch/distributed/elastic/multiprocessing/api.py:702] File ""/opt/LLama_Agentic_System/llama3_1venv/lib/python3.11/site-packages/torch/distributed/elastic/multiprocessing/api.py"", line 659, in _poll
+ E0725 12:48:53.920000 127614093211456 torch/distributed/elastic/multiprocessing/api.py:702] self._pc.join(-1)
+ E0725 12:48:53.920000 127614093211456 torch/distributed/elastic/multiprocessing/api.py:702] File ""/opt/LLama_Agentic_System/llama3_1venv/lib/python3.11/site-packages/torch/multiprocessing/spawn.py"", line 170, in join
+ E0725 12:48:53.920000 127614093211456 torch/distributed/elastic/multiprocessing/api.py:702] raise ProcessExitedException(
+ E0725 12:48:53.920000 127614093211456 torch/distributed/elastic/multiprocessing/api.py:702] torch.multiprocessing.spawn.ProcessExitedException: process 0 terminated with signal SIGKILL
+ Process ForkProcess-1:
+ Traceback (most recent call last):
+ File ""/root/anaconda3/lib/python3.11/multiprocessing/process.py"", line 314, in _bootstrap
+ self.run()
+ File ""/root/anaconda3/lib/python3.11/multiprocessing/process.py"", line 108, in run
+ self._target(*self._args, **self._kwargs)
+ File ""/opt/LLama_Agentic_System/llama3_1venv/lib/python3.11/site-packages/llama_toolchain/inference/parallel_utils.py"", line 175, in launch_dist_group
+ elastic_launch(launch_config, entrypoint=worker_process_entrypoint)(
+ File ""/opt/LLama_Agentic_System/llama3_1venv/lib/python3.11/site-packages/torch/distributed/launcher/api.py"", line 133, in call
+ return launch_agent(self._config, self._entrypoint, list(args))
+ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ File ""/opt/LLama_Agentic_System/llama3_1venv/lib/python3.11/site-packages/torch/distributed/launcher/api.py"", line 264, in launch_agent
+ raise ChildFailedError(
+ torch.distributed.elastic.multiprocessing.errors.ChildFailedError:
+ =====================================================
+ worker_process_entrypoint FAILED
+Failures:
+ <NO_OTHER_FAILURES>
+Root Cause (first observed failure):
+ [0]:
+ time : 2024-07-25_12:48:53
+ host : ip-119-181-1-31.ec2.internal
+ rank : 0 (local_rank: 0)
+ exitcode : -9 (pid: 6774)
+ error_file: <N/A>
+ traceback : Signal 9 (SIGKILL) received by PID 6774
+ The text was updated successfully, but these errors were encountered: 
+👍3
+CarloC-AB, JinsuaFeito-dev, and sumshrestha reacted with thumbs up emoji
+All reactions
+👍3 reactions"
+"https://github.com/meta-llama/llama-stack-apps/issues/14","llama inference start is failing looking for .pth checkpoint file","2024-08-12T15:37:04Z","Closed issue","No label","I have downloaded the model using
+llama download --hf-token hf_xxxxx meta-llama/Meta-Llama-3.1-8B-Instruct
+Here is my config file
+inference_config:
+  impl_config:
+    impl_type: ""inline""
+    checkpoint_config:
+      checkpoint:
+        checkpoint_type: ""pytorch""
+        checkpoint_dir: ~/.llama/checkpoints/Meta-Llama-3.1-8B-Instruct/
+        tokenizer_path: ~/.llama/checkpoints/Meta-Llama-3.1-8B-Instruct/original/tokenizer.model
+        model_parallel_size: 1
+        quantization_format: bf16
+    quantization: null
+    torch_seed: null
+    max_seq_len: 16384
+    max_batch_size: 1
+
+The server start is failing by looking for the checkpoint file
+llama inference start
+error_file: /tmp/torchelastic_hk5hsswh/204380df-bca3-4cc3-b370-a151f14f6868_0c5a2uu5/attempt_0/0/error.json
+traceback : Traceback (most recent call last):
+  File ""xx/xx/.venv/lib64/python3.11/site-packages/torch/distributed/elastic/multiprocessing/errors/__init__.py"", line 348, in wrapper
+    return f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File ""xx/xx/.venv/lib64/python3.11/site-packages/llama_toolchain/inference/parallel_utils.py"", line 131, in worker_process_entrypoint
+    model = init_model_cb()
+            ^^^^^^^^^^^^^^^
+  File ""xx/xx/.venv/lib64/python3.11/site-packages/llama_toolchain/inference/model_parallel.py"", line 46, in init_model_cb
+    llama = Llama.build(config)
+            ^^^^^^^^^^^^^^^^^^^
+  File ""xx/xx/.venv/lib64/python3.11/site-packages/llama_toolchain/inference/generation.py"", line 86, in build
+    assert len(checkpoints) > 0, f""no checkpoint files found in {ckpt_dir}""
+           ^^^^^^^^^^^^^^^^^^^^
+AssertionError: no checkpoint files found in ~/.llama/checkpoints/Meta-Llama-3.1-8B-Instruct/
+
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/meta-llama/llama-stack-apps/issues/10","worker_process_entrypoint FAILED","2024-07-24T16:37:27Z","Open issue","No label","I have tried with my ubuntu 22.04 OS but it gives following error.
+E0724 19:33:34.565000 128818126430656 torch/distributed/elastic/multiprocessing/api.py:702] failed (exitcode: -9) local_rank: 0 (pid: 30194) of fn: worker_process_entrypoint (start_method: fork)
+ E0724 19:33:34.565000 128818126430656 torch/distributed/elastic/multiprocessing/api.py:702] Traceback (most recent call last):
+ E0724 19:33:34.565000 128818126430656 torch/distributed/elastic/multiprocessing/api.py:702] File ""/home/aleya/Work/Habibi/llama/venv/lib/python3.10/site-packages/torch/distributed/elastic/multiprocessing/api.py"", line 659, in _poll
+ E0724 19:33:34.565000 128818126430656 torch/distributed/elastic/multiprocessing/api.py:702] self._pc.join(-1)
+ E0724 19:33:34.565000 128818126430656 torch/distributed/elastic/multiprocessing/api.py:702] File ""/home/aleya/Work/Habibi/llama/venv/lib/python3.10/site-packages/torch/multiprocessing/spawn.py"", line 170, in join
+ E0724 19:33:34.565000 128818126430656 torch/distributed/elastic/multiprocessing/api.py:702] raise ProcessExitedException(
+ E0724 19:33:34.565000 128818126430656 torch/distributed/elastic/multiprocessing/api.py:702] torch.multiprocessing.spawn.ProcessExitedException: process 0 terminated with signal SIGKILL
+ Process ForkProcess-1:
+ Traceback (most recent call last):
+ File ""/usr/lib/python3.10/multiprocessing/process.py"", line 314, in _bootstrap
+ self.run()
+ File ""/usr/lib/python3.10/multiprocessing/process.py"", line 108, in run
+ self._target(*self._args, **self._kwargs)
+ File ""/home/Habib/llama/venv/lib/python3.10/site-packages/llama_toolchain/inference/parallel_utils.py"", line 175, in launch_dist_group
+ elastic_launch(launch_config, entrypoint=worker_process_entrypoint)(
+ File ""/home/Habib/llama/venv/lib/python3.10/site-packages/torch/distributed/launcher/api.py"", line 133, in call
+ return launch_agent(self._config, self._entrypoint, list(args))
+ File ""/home/Habib/llama/venv/lib/python3.10/site-packages/torch/distributed/launcher/api.py"", line 264, in launch_agent
+ raise ChildFailedError(
+ torch.distributed.elastic.multiprocessing.errors.ChildFailedError:
+======================================================
+ worker_process_entrypoint FAILED
+Failures:
+ <NO_OTHER_FAILURES>
+Root Cause (first observed failure):
+ [0]:
+ time : 2024-07-24_19:33:34
+ host : Habib-Stealth-15M-A11SDK
+ rank : 0 (local_rank: 0)
+ exitcode : -9 (pid: 30194)
+ error_file: <N/A>
+ traceback : Signal 9 (SIGKILL) received by PID 30194
+ The text was updated successfully, but these errors were encountered: 
+👍4
+AleyaSiddika, JinsuaFeito-dev, Chrecci, and user2862486 reacted with thumbs up emoji
+All reactions
+👍4 reactions"
+"https://github.com/meta-llama/llama-stack-apps/issues/9","ValueError: cannot find context for 'fork' ERROR: Application startup failed. Exiting","2024-08-15T01:40:16Z","Closed issue","No label","Application startup failed. Exiting... when trying to run in Windows 11. showing the following error in the terminal.
+ Yaml config:
+inference_config:
+ impl_config:
+ impl_type: inline
+ checkpoint_config:
+ checkpoint:
+ checkpoint_type: pytorch
+ checkpoint_dir: C:\Users\ahsan.llama\checkpoints\Meta-Llama-3.1-8B-Instruct/
+ tokenizer_path: C:\Users\ahsan.llama\checkpoints\Meta-Llama-3.1-8B-Instruct\original/tokenizer.model
+ model_parallel_size: 1
+ quantization_format: bf16
+ quantization: null
+ torch_seed: null
+ max_seq_len: 16384
+ max_batch_size: 1
+Listening on 0.0.0.0:5000
+ INFO: Started server process [16364]
+ INFO: Waiting for application startup.
+ W0724 19:09:23.290000 15256 torch\distributed\elastic\multiprocessing\redirects.py:27] NOTE: Redirects are currently not supported in Windows or MacOs.
+ ERROR: Traceback (most recent call last):
+ File ""C:\Users\ahsan\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\routing.py"", line 732, in lifespan
+ async with self.lifespan_context(app) as maybe_state:
+ File ""C:\Users\ahsan\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\routing.py"", line 608, in aenter
+ await self._router.startup()
+ File ""C:\Users\ahsan\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\routing.py"", line 709, in startup
+ await handler()
+ File ""C:\Users\ahsan\AppData\Local\Programs\Python\Python312\Lib\site-packages\llama_toolchain\inference\server.py"", line 56, in startup
+ await InferenceApiInstance.initialize()
+ File ""C:\Users\ahsan\AppData\Local\Programs\Python\Python312\Lib\site-packages\llama_toolchain\inference\inference.py"", line 34, in initialize
+ self.generator.start()
+ File ""C:\Users\ahsan\AppData\Local\Programs\Python\Python312\Lib\site-packages\llama_toolchain\inference\model_parallel.py"", line 70, in start
+ self.enter()
+ File ""C:\Users\ahsan\AppData\Local\Programs\Python\Python312\Lib\site-packages\llama_toolchain\inference\model_parallel.py"", line 81, in enter
+ self.group.start()
+ File ""C:\Users\ahsan\AppData\Local\Programs\Python\Python312\Lib\site-packages\llama_toolchain\inference\parallel_utils.py"", line 229, in start
+ self.request_socket, self.process = start_model_parallel_process(
+ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ File ""C:\Users\ahsan\AppData\Local\Programs\Python\Python312\Lib\site-packages\llama_toolchain\inference\parallel_utils.py"", line 194, in start_model_parallel_process
+ ctx = multiprocessing.get_context(""fork"")
+ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ File ""C:\Users\ahsan\AppData\Local\Programs\Python\Python312\Lib\multiprocessing\context.py"", line 243, in get_context
+ return super().get_context(method)
+ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ File ""C:\Users\ahsan\AppData\Local\Programs\Python\Python312\Lib\multiprocessing\context.py"", line 193, in get_context
+ raise ValueError('cannot find context for %r' % method) from None
+ ValueError: cannot find context for 'fork'
+ERROR: Application startup failed. Exiting.
+ The text was updated successfully, but these errors were encountered: 
+👍4
+AleyaSiddika, Andiami-Sumit, bose-sayan, and meetrais reacted with thumbs up emoji
+All reactions
+👍4 reactions"
+"https://github.com/meta-llama/llama-stack-apps/issues/7","Application startup failed: Redirects are currently not supported in Windows or MacOs.","2024-07-26T21:08:29Z","Closed issue","No label","Yaml config:
+inference_config:
+ impl_config:
+ impl_type: inline
+ checkpoint_config:
+ checkpoint:
+ checkpoint_type: pytorch
+ checkpoint_dir: /
+ tokenizer_path: /tokenizer.model
+ model_parallel_size: 1
+ quantization_format: bf16
+ quantization: null
+ torch_seed: null
+ max_seq_len: 16384
+ max_batch_size: 1
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/meta-llama/llama-stack-apps/issues/3","my clipboard and screenshots are the closest thing I have to a BCI","2024-07-26T21:07:55Z","Closed issue","No label","No description provided.
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/meta-llama/llama-stack-apps/issues/2","Example script to use llama-agentic-system","2024-08-12T15:35:08Z","Closed issue","No label","If I run pip install llama-agentic-system in a Colab notebook, and use a cloud hosted Llama 3.1 as the inference server (see a complete script below), is there an example of how to use llama-agentic-system? Can run_main in multi_turn.py be modified to do so? Will the custom_tools be included in the llama-agentic-system package later?
+import requests
+import json
+
+url = ""https://api.fireworks.ai/inference/v1/chat/completions""
+payload = {
+  ""model"": ""accounts/fireworks/models/llama-v3p1-8b-instruct"",
+  ""temperature"": 0,
+  ""messages"": [
+    {
+      ""role"": ""user"",
+      ""content"": ""Best lines in the book godfather""
+    }      
+  ]
+}
+headers = {
+  ""Accept"": ""application/json"",
+  ""Content-Type"": ""application/json"",
+  ""Authorization"": ""Bearer <FIREWORKS_API_KEY>""
+}
+res = json.loads(requests.request(""POST"", url, headers=headers, data=json.dumps(payload)).content)
+
+print(res['choices'][0]['message']['content'])
+
+ The text was updated successfully, but these errors were encountered: 
+All reactions"

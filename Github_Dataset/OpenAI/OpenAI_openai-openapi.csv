@@ -1,0 +1,1306 @@
+﻿"https://github.com/openai/openai-openapi/issues/355","Validation when using spec in Azure API Management","2024-10-17T10:33:25Z","Open issue","No label","Hello.
+ While trying to create a clone of the API in Azure API Management using the version on master, I am getting validation errors of the file.
+https://raw.githubusercontent.com/openai/openai-openapi/refs/heads/master/openapi.yaml
+This doesn't happen when the version used to create the API is the latest release, which of course is very outdated and therefore I would like to use a more recent version instead.
+Thanks a lot for the hard work maintaining this code!
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/openai/openai-openapi/issues/352","prompt_tokens_details not there in latest openai specs","2024-10-15T09:30:47Z","Open issue","No label","Completion Usage is now returning prompt_tokens_details as well which is not available in openapi specs
+""usage"": {
+ ""prompt_tokens"": 38,
+ ""completion_tokens"": 16,
+ ""total_tokens"": 54,
+ ""prompt_tokens_details"": {
+ ""cached_tokens"": 0
+ },
+ ""completion_tokens_details"": {
+ ""reasoning_tokens"": 0
+ }
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/openai/openai-openapi/issues/348","tool_calls in ChatCompletionRequestAssistantMessage cannot be null?","2024-10-10T17:25:37Z","Open issue","No label","According to the Typescript library, tool_calls is defined as tool_calls?: Array<ChatCompletionMessageToolCall> and the Python library allows tool_calls to be null - however, this OpenAPI spec defines tool_calls on ChatCompletionRequestAssistantMessage as a ref to ChatCompletionMessageToolCalls which is defined as an array of items who ref to ChatCompletionMessageToolCall
+This causes tool_calls: null to fail validation.
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/openai/openai-openapi/issues/347","Add AsyncAPI spec for Realtime API","2024-10-07T22:28:59Z","Open issue","No label","Specification: https://www.asyncapi.com/en
+ Example: https://github.com/AssemblyAI/assemblyai-api-spec/blob/main/asyncapi.yml
+ The text was updated successfully, but these errors were encountered: 
+👍1
+davidmigloz reacted with thumbs up emoji
+All reactions
+👍1 reaction"
+"https://github.com/openai/openai-openapi/issues/342","Add 'cached_tokens' to API spec","2024-10-03T19:00:53Z","Open issue","No label","With the recent release of prompt caching, there are new properties for 'cached_tokens'.
+""usage"": {
+  ""prompt_tokens"": 2006,
+  ""completion_tokens"": 300,
+  ""total_tokens"": 2306,
+  ""prompt_tokens_details"": {
+    ""cached_tokens"": 1920
+  },
+  ""completion_tokens_details"": {
+    ""reasoning_tokens"": 0
+  }
+}
+
+Would be good to get this added to this spec, so clients like the dotnet SDK can expose them.
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/openai/openai-openapi/issues/341","realtime beta api spec","2024-10-17T20:59:29Z","Closed issue","No label","Hi I was wondering when the reatime api spec will be added?
+I see there are docs but wasn't able to find them in the current spec.
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/openai/openai-openapi/issues/332","Code selection background and text color issue in documentation - Language section.","2024-09-26T14:49:52Z","Open issue","No label","Description of the Issue:
+While surfing the OpenAI image model documentation at https://platform.openai.com/docs/guides/images/usage, I noticed that when switching the language to Node.js in the code section, selecting the code input results in the background and text color being white, making the text invisible.
+Expected Behavior:
+ The selected text should have a distinct color from the background, making it easily readable.
+Screenshots (optional but helpful):
+
+ The text was updated successfully, but these errors were encountered: 
+👍1
+dipanshurdev reacted with thumbs up emoji
+All reactions
+👍1 reaction"
+"https://github.com/openai/openai-openapi/issues/330","Apparent problem with Llama3 chat template","2024-09-23T14:53:51Z","Open issue","No label","Hi,
+I am sending requests to a llama-server by using the openai api. I also wrote the code in pytorch without a server to compare the results. I noticed that the in the first case the text generation does not stop after after giving an answer and keeps tellling me about climate change. When running the corresponding pytorch code, the generation is stopped appropriately and the quality of the answer is way better.
+ This is a behaviour I would expect if there is an issue with the chat_template but I am using the exact same format I found in examples. This the code in pytorch:
+def respond() -> str:
+
+    user_prompt = """"
+
+    messages = [{""role"": ""system"", ""content"": ''},
+                     {""role"": ""user"", ""content"":user_prompt}]
+
+    text = tokenizer.apply_chat_template(
+          messages,
+          tokenize=False,
+          add_generation_prompt=True
+          )
+
+    model_inputs = tokenizer([text], return_tensors=""pt"").to(model.device)
+    
+    streamer = TextIteratorStreamer(tokenizer, skip_prompt=True, skip_special_tokens=True)
+
+    generate_kwargs = dict(
+        input_ids= model_inputs.input_ids,
+        streamer=streamer,
+        max_new_tokens=1024,
+        #do_sample=True,
+        temperature=0.01,
+        eos_token_id=terminators,
+        )
+
+    thread = Thread(target=model.generate, kwargs=generate_kwargs)
+    thread.start()
+    
+    generated_text = "" ""
+    for text in streamer:
+        generated_text += text
+        print(text, end='', flush=True)
+    
+    end_time = time.time()
+
+and this is the code using the openai api
+def stream_document():
+    # OpenAI client setup
+    client = openai.OpenAI(
+        base_url="""",  # API-Server URL
+        api_key=""sk-no-key-required""
+    )
+    user_prompt = """"
+    messages = [{""role"": ""system"", ""content"": ''},
+                     {""role"": ""user"", ""content"":user_prompt}]
+    
+    text=messages
+
+    response = client.chat.completions.create(
+        #model=""gpt-3.5-turbo"",
+        model=""Llama3"",
+        messages = text,
+        stream=True, # Enable streaming
+        temperature=0.01,
+        max_completion_tokens=1024
+    )
+    # Process each chunk of data as it comes in
+    for chunk in response:
+        # Accessing the choices in the chunk
+        for choice in chunk.choices:
+            # Accessing the delta content within each choice
+            if choice.delta and choice.delta.content:
+                print(choice.delta.content, end='', flush=True)  # Print content without newline
+    print(""\nStream finished."")
+
+Is there some way to give special tokens or specify the chat template to the client?
+Regards
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/openai/openai-openapi/issues/326","Add missing parameters for some POST endpoints","2024-09-19T13:37:18Z","Open issue","No label","Description
+When trying to generate code with oapi-codegen we meet with errors like the following:
+
+Added the missing parameters on PR #325 to fix this and also keep definitions correct
+ The text was updated successfully, but these errors were encountered: 
+👍1
+j-fau reacted with thumbs up emoji
+All reactions
+👍1 reaction"
+"https://github.com/openai/openai-openapi/issues/324","""gpt-4o-2024-08-06"" were appeared multiple times in some component definition","2024-09-17T05:23:26Z","Open issue","No label","For example: CreateAssistantRequest
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/openai/openai-openapi/issues/319","Token Limit for gpt-4o-mini Model in v1/chat/completions API","2024-09-03T04:04:35Z","Open issue","No label","I have been testing the gpt-4o-mini model using the v1/chat/completions API and have encountered an issue regarding the token limit. According to the official documentation, the context window for the gpt-4o-mini model is specified as 128,000 tokens. However, in my tests, the total token length limit seems to be restricted to approximately 16,000 tokens instead.
+Here are the details of my test:
+Model: gpt-4o-mini
+Test Scenario: I included a history conversation of around 16,000 tokens and set max_tokens to 4,000.
+Issue: The response was truncated, and I only received a few hundred tokens of output. model in response is gpt-4o-mini-2024-07-18. The stop_reason: length in the response indicates that the length limit was exceeded, despite the remaining difference between 16,000 tokens and the documented 128,000 tokens being substantial.
+ I would appreciate it if you could investigate this discrepancy and confirm whether there are any additional limitations or if this might be an issue with the API. Your assistance in clarifying this matter would be greatly valued.
+Thank you.
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/openai/openai-openapi/issues/318","Sync last_error field","2024-08-30T22:13:57Z","Open issue","No label","Please, sync the last_error field everyplace. It is completely different in the API Reference page, in the OpenAPI Specs and even inside the Specs.
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/openai/openai-openapi/issues/307","Docs for finetuning inconsistent with behavior","2024-08-08T16:27:20Z","Open issue","No label","In the finetuning job description https://platform.openai.com/docs/api-reference/fine-tuning/object
+there is a required hyperparameter with n_epochs, but in the example and at runtime the other hyperparameters are also returned.
+This document should match that.
+There is also a case to be made that there should be one object for both the request and the return but that must have been an intentional design choice.
+I created a pr from a forked repo:
+#308
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/openai/openai-openapi/issues/302","BatchRequestOutput object's error discrepancies","2024-08-02T15:55:57Z","Open issue","No label","It appears that the BatchRequestOutput object's error is missing properties and in an error response, that the actual error contents are nested under the body property.
+The spec shows that a BatchRequestOutput object will contain id, custom_id, response, and error, and that the error property will have code and message:
+https://github.com/openai/openai-openapi/blob/cd3c3feb77931b5fd1e8b9c1eb5fb1697821a0d0/openapi.yaml#L13726C17-L13755C73
+However, when I construct a request that's intentionally designed to trigger a non-HTTP error (set max_tokens to 1000000 for a gpt-4o prompt), create/upload a file containing this request via the files endpoint, trigger a batch request with this file, and then retrieve the contents of the resulting Error file to inspect its contents, I see the following discrepancies:
+the error property is nulled, and the response.body contains the actual error contents
+the error object not only has the code and message properties, but also has type and param properties
+request:
+{
+    ""custom_id"": ""request-5"",
+    ""method"": ""POST"",
+    ""url"": ""/v1/chat/completions"",
+    ""body"": {
+        ""model"": ""gpt-4o"",
+        ""messages"": [
+            {
+                ""role"": ""system"",
+                ""content"": ""You are a helpful assistant.""
+            },
+            {
+                ""role"": ""user"",
+                ""content"": ""What is the capital of Texas?""
+            }
+        ],
+        ""max_tokens"": 1000000
+    }
+}
+
+response:
+    ""id"": ""batch_req_YTpodqz4ZJ8arId5Bm73lIEt"",
+    ""custom_id"": ""request-5"",
+    ""response"": {
+        ""status_code"": 400,
+        ""request_id"": ""0538a1cc8f8f8500bbe07250e6aa2b26"",
+        ""body"": {
+            ""error"": {
+                ""message"": ""This model's maximum context length is 128000 tokens. However, you requested 1000024 tokens (24 in the messages, 1000000 in the completion). Please reduce the length of the messages or completion."",
+                ""type"": ""invalid_request_error"",
+                ""param"": ""messages"",
+                ""code"": ""context_length_exceeded""
+            }
+        }
+    },
+    ""error"": null
+}
+
+It appears that the spec should at least add the type and param properties to error, and that error should be 'moved'?
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/openai/openai-openapi/issues/290","Stop definition default value missing double quotes.","2024-07-16T18:05:06Z","Open issue","No label","Line 7226, stop definition, default value missing double quotes, causing issues on generation.
+        stop:
+          description: &completions_stop_description >
+            Up to 4 sequences where the API will stop generating further tokens. The returned text will not contain the stop sequence.
+          default: null
+          nullable: true
+          oneOf:
+            - type: string
+              default: <|endoftext|>
+              example: ""\n""
+              nullable: true
+            - type: array
+              minItems: 1
+              maxItems: 4
+              items:
+                type: string
+                example: '[""\n""]'
+
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/openai/openai-openapi/issues/280","ListThreadsResponse is not referenced anywhere","2024-06-13T15:02:28Z","Open issue","No label","ListThreadsResponse is not referenced anywhere. Also there is no listThreads operation. I wonder why.
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/openai/openai-openapi/issues/277","AssistantToolsCode is missing file_search and function","2024-06-13T15:21:41Z","Closed issue","No label","The AssistantToolsCode enum (line 10233 in the yaml) is missing ""file_search"" and ""function"".
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/openai/openai-openapi/issues/274","gpt-4o model","2024-06-06T07:30:18Z","Open issue","No label","The model I passed in using the open AI API is gpt-4o, but I saw in the bill that my API key has the number of calls to other models. Does the gpt-4o model automatically convert to other models?
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/openai/openai-openapi/issues/267","Please consider bumping the api's minor version when openapi specs is updated","2024-05-27T23:03:15Z","Open issue","No label","Hi, today when I debugged my program call using an unofficial Clojure client, I noticed that the client itself wasn't aware that the openapi specs it use is already outdated. I noticed that despite various functionality improvement in the openapi specs itself the version stays at 2.0.0 for a long time, which causes downstream apps to be oblivious of such being out of sync. Please consider updating the api's version itself when there are functional changes to the api.
+ The text was updated successfully, but these errors were encountered: 
+👍4
+celdiniz, Ovid, sashirestela, and StephenHodgson reacted with thumbs up emoji
+All reactions
+👍4 reactions"
+"https://github.com/openai/openai-openapi/issues/263","quote should be nullable in MessageContentTextAnnotationsFileCitationObject","2024-06-12T17:31:39Z","Closed issue","No label","The quote property is marked as required, but the server doesn't include them in all the cases.
+openai-openapi/openapi.yaml
+ Lines 11362 to 11397 in 893ba52
+	MessageContentTextAnnotationsFileCitationObject: 
+	title: File citation
+	type: object
+	description: A citation within the message that points to a specific quote from a specific File associated with the assistant or the message. Generated when the assistant uses the ""file_search"" tool to search files.
+	properties: 
+	type: 
+	description: Always `file_citation`.
+	type: string
+	enum: [""file_citation""]
+	text: 
+	description: The text in the message content that needs to be replaced.
+	type: string
+	file_citation: 
+	type: object
+	properties: 
+	file_id: 
+	description: The ID of the specific File the citation is from.
+	type: string
+	quote: 
+	description: The specific quote in the file.
+	type: string
+	required: 
+	 - file_id
+	 - quote
+	start_index: 
+	type: integer
+	minimum: 0
+	end_index: 
+	type: integer
+	minimum: 0
+	required: 
+	 - type
+	 - text
+	 - file_citation
+	 - start_index
+	 - end_index
+Example of response that doesn't include it:
+{
+  ""id"": ""msg_Fn6zTxxx"",
+  ""object"": ""thread.message"",
+  ""created_at"": 1715820384,
+  ""assistant_id"": ""asst_K4iArkxxx"",
+  ""thread_id"": ""thread_3N31Erp0eCVhAhKh5BdMk1aQ"",
+  ""run_id"": ""run_icH57L9xxx"",
+  ""status"": ""completed"",
+  ""incomplete_details"": null,
+  ""incomplete_at"": null,
+  ""completed_at"": 1715820391,
+  ""role"": ""assistant"",
+  ""content"": [
+    {
+      ""type"": ""text"",
+      ""text"": {
+        ""value"": ""..."",
+        ""annotations"": [
+          {
+            ""type"": ""file_citation"",
+            ""text"": ""【6:0†source】"",
+            ""start_index"": 1109,
+            ""end_index"": 1121,
+            ""file_citation"": {
+              ""file_id"": ""file-TrXXpxxx""
+            }
+          }
+        ]
+      }
+    }
+  ],
+  ""attachments"": [],
+  ""metadata"": {}
+}
+ The text was updated successfully, but these errors were encountered: 
+👍1
+GKestenberg reacted with thumbs up emoji
+All reactions
+👍1 reaction"
+"https://github.com/openai/openai-openapi/issues/261","application/json content type doesn't make sense when downloadFile is retrieving an image","2024-05-19T19:32:55Z","Open issue","No label","The response content type is specified as application/json, even though this API can also download images.
+openai-openapi/openapi.yaml
+ Line 1695 in 893ba52
+	application/json: 
+ The text was updated successfully, but these errors were encountered: 
+👍1
+StephenHodgson reacted with thumbs up emoji
+All reactions
+👍1 reaction"
+"https://github.com/openai/openai-openapi/issues/260","CreateFileRequest does not include ""vision"" purpose","2024-05-19T19:03:20Z","Open issue","No label","Use ""assistants"" for Assistants and Message files, ""vision"" for Assistants image file inputs,
+The purpose documentation says ""vision"" is a valid purpose, but the spec does not include it:
+
+openai-openapi/openapi.yaml
+ Line 8603 in 893ba52
+	enum: [""assistants"", ""batch"", ""fine-tune""]
+ The text was updated successfully, but these errors were encountered: 
+👍1
+StephenHodgson reacted with thumbs up emoji
+All reactions
+👍1 reaction"
+"https://github.com/openai/openai-openapi/issues/259","ChatCompletionToolChoice and ChatCompletionToolChoiceOption are unnecessarily complex","2024-05-14T08:10:00Z","Open issue","No label","The ChatCompletionToolChoice forces the model to call a specific tool. let's call it X. There are 3 options:
+The tools list doesn't contain a tool called X
+The tools list contains just the tool X
+The tools list contains X and additional tools
+Option 1 is invalid. There is no reason to allow it.
+ Option 2 is valid, but why specify the tool X twice? once in the list of tools and second time in the ChatCompletionToolChoice.
+ Option 3 is valid but wasteful/confusing. If the goal is to call X, why even pass additional tools?
+I suggest to completely get rid of ChatCompletionToolChoice. The same effect can be accomplished by passing a tool list that contains just X and the ChatCompletionToolChoiceOption ""required"".
+Now, let's consider the ChatCompletionToolChoiceOption. ""auto"" and ""required"" are necessary and useful. But, ""none"" doesn't provide any value. If you pass ""none"" it tells the model to avoid calling any tool. If this is the case, then just pass an empty list of tools.
+If following both recommendations the complex specification for tool choice (can be either ChatCompletionToolChoice or ChatCompletionToolChoiceOption) will collapse to super simple single enum ChatCompletionToolChoiceOption with just two values: ""auto"" and ""enum"". That's it.
+This will considerably simply the life of OpenAI API users and OpenAI client libraries (especially if using strongly typed languages).
+Actually, we can take it further. If the Choice is only ""auto"" or ""required"". We don't even need an enum. We can specify everything with a simple boolean ""toolRequired"" field. If it's ""true"" then a tool call is required. If it's not true (missing or ""false"") then it's auto (model decides which tool to call if any).
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/openai/openai-openapi/issues/256","RunStatus incomplete missing","2024-05-10T22:51:58Z","Open issue","No label","The documentation for the status field on a Run says:
+The status of the run, which can be either queued, in_progress, requires_action, cancelling, cancelled, failed, completed, or expired.
+However, there appears to be another possibility, ""incomplete""
+ The text was updated successfully, but these errors were encountered: 
+👀1
+sashirestela reacted with eyes emoji
+All reactions
+👀1 reaction"
+"https://github.com/openai/openai-openapi/issues/255","forgot api","2024-05-10T21:11:56Z","Open issue","No label","can u help me cause my api key has been changed with someone n i need it back :( thankyou
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/openai/openai-openapi/issues/252","CreateChatCompletionFunctionResponse and CreateChatCompletionImageResponse are unused","2024-05-09T11:18:44Z","Open issue","No label","Hi,
+CreateChatCompletionFunctionResponse and CreateChatCompletionImageResponse are present in the spec but aren't referenced by any path or other schemas. Maybe they should be removed.
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/openai/openai-openapi/issues/250","images which are originally transparent is not edited but completely sent as a new","2024-05-06T13:38:08Z","Open issue","No label","i am trying to edit image using amazing dalle-2 model provided by openai and using masking as suggested in this doc.
+however when original image is having transparent pixels itself, dalle-2 sends completely new picture instead of getting properly older one and then try to generate based on image and mask.
+For example I used this image as main image file
+
+and then this image as a mask
+
+and used prompt something as 17 years old child birthday symbol and i expect it would give something like existing letters and produce 7 from that but it did not because 12 years old image has transparency except two letters 1 and 2.
+here is what i eventually ended up getting. To me these letters looks very horrible and if we look closely, it looks like it has the older image letter in the background and somewhat transparency of black which was earlier completely transparent.
+
+Is there anyway we can instruct it not to do anything where original image was already transparent?
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/openai/openai-openapi/issues/245","Unexpected field name timestamp_granularities[]","2024-04-27T02:11:29Z","Open issue","No label","Does this field name really include [], or is it a mistake?
+CreateTranscriptionRequest:
+      type: object
+      additionalProperties: false
+      properties:
+        file:
+          description: |            The audio file object (not file name) to transcribe, in one of these formats: flac, mp3, mp4, mpeg, mpga, m4a, ogg, wav, or webm.          type: string
+          x-oaiTypeLabel: file
+          format: binary
+        model:
+          description: |            ID of the model to use. Only `whisper-1` (which is powered by our open source Whisper V2 model) is currently available.          example: whisper-1
+          anyOf:
+            - type: string
+            - type: string
+              enum: [""whisper-1""]
+          x-oaiTypeLabel: string
+        language:
+          description: |            The language of the input audio. Supplying the input language in [ISO-639-1](https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes) format will improve accuracy and latency.          type: string
+        prompt:
+          description: |            An optional text to guide the model's style or continue a previous audio segment. The [prompt](/docs/guides/speech-to-text/prompting) should match the audio language.          type: string
+        response_format:
+          description: |            The format of the transcript output, in one of these options: `json`, `text`, `srt`, `verbose_json`, or `vtt`.          type: string
+          enum:
+            - json
+            - text
+            - srt
+            - verbose_json
+            - vtt
+          default: json
+        temperature:
+          description: |            The sampling temperature, between 0 and 1. Higher values like 0.8 will make the output more random, while lower values like 0.2 will make it more focused and deterministic. If set to 0, the model will use [log probability](https://en.wikipedia.org/wiki/Log_probability) to automatically increase the temperature until certain thresholds are hit.          type: number
+          default: 0===>timestamp_granularities[]:<=============================
+          description: |            The timestamp granularities to populate for this transcription. `response_format` must be set `verbose_json` to use timestamp granularities. Either or both of these options are supported: `word`, or `segment`. Note: There is no additional latency for segment timestamps, but generating word timestamps incurs additional latency.          type: array
+          items:
+            type: string
+            enum:
+              - word
+              - segment
+          default: [segment]
+      required:
+        - file
+        - model
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/openai/openai-openapi/issues/243","potential loop in ChatGPT chat.openai website when you ask certain question","2024-04-25T18:11:10Z","Open issue","No label","i was coding
+ asked for help rewriting function
+it started replying with my question 3-5 times in row repeat same then stop
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/openai/openai-openapi/issues/241","Issues with the specification?","2024-04-24T16:26:14Z","Open issue","No label","Trying to generate code with the openapi-generator-cli-6.2.0.jar
+/Users/xxxx/Applications/Rider.app/Contents/jbr/Contents/Home/bin/java -jar /Users/xxxx/Library/Caches/JetBrains/Rider2024.1/openapi/codegen/71aab8d6724718f581fedb5bf4fd5866/openapi-generator-cli-6.2.0.jar generate -g csharp -i /Users/xxxx/dev/ConsoleApp4/ConsoleApp4/OpenAi.yaml -o /Users/xxxx/dev/ConsoleApp4/gen --additional-properties=packageName=OpenAi.Client,targetFramework=net8.0,sourceFolder=,modelPropertyNaming=PascalCase,netCoreProjectFile=true
+I am getting these errors:
+Exception in thread ""main"" org.openapitools.codegen.SpecValidationException: There were issues with the specification. The option can be disabled via validateSpec (Maven/Gradle) or --skip-validate-spec (CLI).
+ | Error count: 2, Warning count: 32
+Errors: 
+	-attribute components.schemas.CreateCompletionRequest.default is not of type `object`
+	-attribute components.schemas.CreateChatCompletionRequest.default is not of type `object`
+
+If I disable validation with --skip-validate-spec it generates code but there are a bunch of classes missing.
+Not sure if this is an issue with the specs or the tool?
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/openai/openai-openapi/issues/237","OpenAPI Error - run_temperature_description","2024-04-22T18:27:30Z","Open issue","No label","I tried to parse a YAML file with Microsoft's OpenApiStringReader, but it threw an error. The YAML file was easily parsable last week without any issues.
+{(Lin: 0, Col: 0, Chr: 0) - (Lin: 0, Col: 0, Chr: 0): The anchor 'run_temperature_description' already exists [#line=0]}
+Also, the same issue with the run_top_p_description parameter exists.
+I think one of these PR merges caused the issue.
+#230
+#228
+ The text was updated successfully, but these errors were encountered: 
+👀2
+douglasware and StephenHodgson reacted with eyes emoji
+All reactions
+👀2 reactions"
+"https://github.com/openai/openai-openapi/issues/232","""OpenAI Website UI Experiences Iterative 'Link Copied' Alert Bug"" https://platform.openai.com/docs/introduction","2024-04-18T07:50:20Z","Open issue","No label","the openai website ui is bugged as on click link copied is iteratively coming in ui ```[tasklist] ### Tasks ``` 
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/openai/openai-openapi/issues/222","Assistant is unable to access uploaded files or accesses the incorrect file","2024-04-12T19:27:13Z","Open issue","No label","Hi,
+ Sorry to have to post this is here as I do not know how to get in touch with the OpenAI team! It seems that discussions, bugs, issues in the forum are ever looked at, as I do not see any official responses in there!!
+Anyway, I am having a BIG issue with the assistant API not being able to retrieve uploaded files!! It seems this issue has been happening for quite some time now!! See thread here https://community.openai.com/t/assistant-not-able-to-access-uploaded-file/524495/30
+My team and I would like to use the assistant api features professionally, and we have already built our software to utilize the assistant api's functionality. However, in its current state, not being able to retrieve any uploaded files, is completely unusable!!!
+PLEASE FIX IT ASAP!!!!
+Arthur
+ The text was updated successfully, but these errors were encountered: 
+👍16
+ngranko, rmackay9, Maxence, razine, isaac-smothers, ethanchiasson, ak-notify, Pippenpethalopsocopolis, clodal, cmarin, and 6 more reacted with thumbs up emoji
+All reactions
+👍16 reactions"
+"https://github.com/openai/openai-openapi/issues/217","Requesting a sync for the FineTuning API","2024-04-18T14:44:09Z","Closed issue","No label","Please, could you sync the last Fine Tuning API changes?
+I cannot find the specifications for:
+integrations field in the request for creating a fine-tuning job.
+seed field in the request for creating a fine-tuning job.
+endpoint list checkpoints for a fine-tuning job.
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/openai/openai-openapi/issues/208","Requesting a sync from the internal OpenAPI spec","2024-03-27T18:44:47Z","Closed issue","No label","I know this is relatively fresh, but stream support for runs has been added. It would be great to get this in the public OpenAPI spec.
+ The text was updated successfully, but these errors were encountered: 
+👍7
+raulraja, phact, Mitch528, StephenHodgson, sashirestela, ips-jm, and b0xtch reacted with thumbs up emoji
+All reactions
+👍7 reactions"
+"https://github.com/openai/openai-openapi/issues/205","[Proposal] Introducing an API Endpoint for Token Count and Cost Estimation","2024-03-04T02:02:01Z","Open issue","No label","As the development community continues to leverage OpenAI’s advanced models, the need for more transparent and accessible budgeting tools has become apparent. The introduction of a programmatic way to estimate token usage and associated costs would mark a significant step forward in this regard, particularly with the utilization of cutting-edge models like GPT-4o.
+This proposal outlines the introduction of a dedicated API endpoint for token count and cost estimation and suggests enhancing model objects with pricing information to aid developers in making more informed decisions.
+The Proposal
+API Endpoint for Token Count and Cost Estimation (count_tokens): This endpoint aims to provide developers with an efficient tool for estimating the number of tokens generated by their text inputs, alongside the expected cost, for a specific model, namely GPT-4o.
+Incorporate Pricing Information into Model Endpoints: To further aid decision-making processes, it is proposed that model detail endpoints be updated to include essential pricing information.
+Benefits
+Accurate Cost Management: Enables developers to accurately manage and forecast their expenditures on the OpenAI platform.
+Seamless Developer Workflow: Integrates directly into development workflows, allowing for real-time cost estimations without manual intervention.
+Transparent Pricing: Offers clear visibility into pricing structures, promoting trust and reliability in the OpenAI ecosystem.
+Suggested Implementation
+Here is how the count_tokens endpoint could be implemented, using GPT-4o as an example:
+POST /v1/count_tokensContent-Type: application/json
+
+{
+    ""model"": ""gpt-4o"",
+    ""text"": ""Your sample text goes here.""
+}
+Expected Response:
+{
+    ""tokens"": 150,
+    ""cost"": 0.001
+}
+To include model-specific pricing details transparently:
+GET /v1/models
+Sample Response:
+{
+    ""models"": [
+        {
+            ""id"": ""gpt-4o"",
+            ""object"": ""model"",
+            ""token_cost_per_thousand"": ""0.08""
+        },
+        // More model objects...
+    ]
+}
+The introduction of the count_tokens endpoint, particularly with support for GPT-4o, represents a critical enhancement to the OpenAI API, streamlining development processes and facilitating better budget management. Community feedback on this proposal is invaluable for refining and implementing these suggestions effectively.
+ The text was updated successfully, but these errors were encountered: 
+👍1
+endolith reacted with thumbs up emoji
+All reactions
+👍1 reaction"
+"https://github.com/openai/openai-openapi/issues/197","Add Server-sent events response type to createChatCompletion","2024-02-18T10:35:34Z","Open issue","No label","In the createChatCompletion operation there is only json as response type. However the same endpoint returns event stream when the request is created with stream = true
+Because of this openapi-based code generators do not handle SSE response.
+ Adding text/event-stream to the response types, will help using the schema without additional effort.
+Current file:
+/chat/completions:
+    post:
+      operationId: createChatCompletion
+      tags:
+        - Chat
+      summary: Creates a model response for the given chat conversation.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: ""#/components/schemas/CreateChatCompletionRequest""
+      responses:
+        ""200"":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: ""#/components/schemas/CreateChatCompletionResponse""
+ The text was updated successfully, but these errors were encountered: 
+👍4
+sashirestela, nomisRev, vikyw89, and DawidMarczewski reacted with thumbs up emoji
+All reactions
+👍4 reactions"
+"https://github.com/openai/openai-openapi/issues/194","[Bug] Unexpected unsupported content type errors","2024-02-13T12:40:59Z","Open issue","No label","I got reports that this started happening today:
+{
+  ""error"": {
+    ""message"": ""Unsupported content type: 'application/json; charset=utf-8'. This API method only accepts 'application/json' requests, but you specified the header 'Content-Type: application/json; charset=utf-8'. Please try again with a supported content type."",
+    ""type"": ""invalid_request_error"",
+    ""param"": null,
+    ""code"": ""unsupported_content_type""
+  }
+}
+Adding Charset to the content-type should be acceptable. Didn't see any changes go into the schema so likely an issue internally in the API implementation.
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/openai/openai-openapi/issues/178","Model API knowledge","2024-01-25T17:39:40Z","Open issue","No label","I know this isn't really an API issue... but, if I try to use any of the models to code an app using the API, I have to train it on the current API. Its knowledge is restricted to an old version. This wastes so much context and tokens it's crazy. I don't see a down side for OpenAI to train the models on the current API except that it gives the model self context. However, as a developer trying to use the model to code using the API it's extremely frustrating.
+ The text was updated successfully, but these errors were encountered: 
+👍1
+kxkw reacted with thumbs up emoji
+All reactions
+👍1 reaction"
+"https://github.com/openai/openai-openapi/issues/167","system fingerprint is None for some models, but not others","2024-01-15T20:31:39Z","Open issue","No label","Per the documentation here, the OpenAI API should return a system_fingerprint. However, when calling any model that is not gpt-3.5-turbo-1106 or gpt-4-1106-preview, the system_fingerprint is always None.
+The link above doesn't mention any model requirement.
+Please update the code to return a system fingerprint for earlier models, or else document in the API which models are actually supported.
+To Reproduce
+copy and paste notebook here
+ change this line to an older model:
+ GPT_MODEL = ""gpt-3.5-turbo-1106""
+ For example:
+ GPT_MODEL = ""gpt-3.5-turbo-0613""
+the system_fingerprint returned is None
+OS-Ubuntu
+ Python version- Python v3.10
+ Library version- openai v1.6.1
+ The text was updated successfully, but these errors were encountered: 
+👍1
+jberryman reacted with thumbs up emoji
+All reactions
+👍1 reaction"
+"https://github.com/openai/openai-openapi/issues/154","Extra opening ( in function usage","2024-02-21T20:04:07Z","Closed issue","No label","Hello, just a small typo in the documentation. There is an extra ( in the function usage.
+response = client.images.edit((
+
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/openai/openai-openapi/issues/151","q","2023-12-29T21:43:38Z","Open issue","No label","No description provided.
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/openai/openai-openapi/issues/147","A little confused about files interface","2023-12-19T03:57:16Z","Open issue","No label","Hi all,sorry to bother I'm confused about listFiles function because there is only one purpose search param without limit/order or any other params when i query the interface,I got all files list :(,will pagination be supported later?
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/openai/openai-openapi/issues/145","I love you guys, And this is a misunderstanding","2024-02-21T20:04:37Z","Closed issue","No label","No description provided.
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/openai/openai-openapi/issues/141","createSpeech response content type specs.","2023-12-13T00:18:15Z","Open issue","No label","createSpeech functionality specifies response.content as application/octet-stream but every request returns more specific mime type, such as audio/mpeg or audio/aac.
+ The text was updated successfully, but these errors were encountered: 
+👍1
+StephenHodgson reacted with thumbs up emoji
+All reactions
+👍1 reaction"
+"https://github.com/openai/openai-openapi/issues/138","Adding default assistants=v1 header to beta endpoints","2024-02-06T05:15:21Z","Closed issue","No label","Should the OpenAPI spec add a default parameter header assistants=v1 to beta endpoints, something like this?
+/assistants:
+  get:
+    operationId: listAssistants
+    tags:
+      - Assistants
+    summary: Returns a list of assistants.
+    parameters:
+      - in: header
+        name: assistants
+        required: false
+        schema:
+          type: string
+        default: v1
+      - name: limit
+        in: query
+        description: &pagination_limit_param_description |
+          A limit on the number of objects to be returned. Limit can range between 1 and 100, and the default is 20.
+        required: false
+        schema:
+          type: integer
+          default: 20
+      - name: order
+        in: query
+        description: &pagination_order_param_description |
+          Sort order by the `created_at` timestamp of the objects. `asc` for ascending order and `desc` for descending order.
+        schema:
+          type: string
+          default: desc
+          enum: [""asc"", ""desc""]
+
+ The text was updated successfully, but these errors were encountered: 
+👍1
+anthony-chen-27 reacted with thumbs up emoji
+All reactions
+👍1 reaction"
+"https://github.com/openai/openai-openapi/issues/136","finish_details not described in a chat completion choice when using gpt-4-vision-preview","2023-12-15T19:56:46Z","Closed issue","No label","The spec shows that a choice object will contain finish_reason, index, and message:
+openai-openapi/openapi.yaml
+ Lines 6196 to 6225 in 23a4b18
+	choices: 
+	type: array
+	description: A list of chat completion choices. Can be more than one if `n` is greater than 1.
+	items: 
+	type: object
+	required: 
+	 - finish_reason
+	 - index
+	 - message
+	properties: 
+	finish_reason: 
+	type: string
+	description: &chat_completion_finish_reason_description |
+	The reason the model stopped generating tokens. This will be `stop` if the model hit a natural stop point or a provided stop sequence,
+	`length`if the maximum number of tokens specified in the request was reached,
+	`content_filter`if content was omitted due to a flag from our content filters,
+	`tool_calls`if the model called a tool, or `function_call` (deprecated) if the model called a function.
+	enum: 
+	[
+	""stop"",
+	""length"",
+	""tool_calls"",
+	""content_filter"",
+	""function_call"",
+	]
+	index: 
+	type: integer
+	description: The index of the choice in the list of choices.
+	message: 
+	$ref: ""#/components/schemas/ChatCompletionResponseMessage""
+However, when making a chat completions call with image input and using the gpt-4-vision-preview model, the service returns a response with finish_details instead of finish_reason:
+{
+    ""id"": ""chatcmpl-8Ug09spjvWvOYEi140zw2mp9odnUi"",
+    ""object"": ""chat.completion"",
+    ""created"": 1702321985,
+    ""model"": ""gpt-4-1106-vision-preview"",
+    ""usage"": {
+        ""prompt_tokens"": 1118,
+        ""completion_tokens"": 16,
+        ""total_tokens"": 1134
+    },
+    ""choices"": [
+        {
+            ""message"": {
+                ""role"": ""assistant"",
+                ""content"": ""This image features a wooden boardwalk extending through a lush green wetland or grass""
+            },
+            ""finish_details"": {
+                ""type"": ""max_tokens""
+            },
+            ""index"": 0
+        }
+    ]
+}
+Should finish_details be described in the spec?
+FYI @rattrayalex - the Python stainless library captures this property for vision, but it ends up in model_extra. Thought this would be the better spot to open the issue, though.
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/openai/openai-openapi/issues/134","typo: ""type"": instead of ""type:","2024-01-26T03:45:40Z","Closed issue","No label","openai-openapi/openapi.yaml
+ Line 5850 in 23a4b18
+	 Specifying a particular function via `{""type: ""function"", ""function"": {""name"": ""my_function""}}` forces the model to call that function.
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/openai/openai-openapi/issues/133","Error in generating openapi client with openapi-generator to typescript-fetch","2023-11-29T21:40:07Z","Open issue","No label","openapi-generator-cli generate -i src/openapi.yaml -g typescript-fetch -o src/openai-client
+Exception in thread ""main"" org.openapitools.codegen.SpecValidationException: There were issues with the specification. The option can be disabled via validateSpec (Maven/Gradle) or --skip-validate-spec (CLI).
+ | Error count: 5, Warning count: 0
+ Errors:
+ -attribute components.schemas.CreateFineTuneRequest.default is not of type array
+ -attribute components.schemas.CreateAnswerRequest.default is not of type object
+ -attribute components.schemas.CreateCompletionRequest.default is not of type object
+ -attribute components.schemas.CreateChatCompletionRequest.default is not of type object
+ -attribute components.schemas.CreateClassificationRequest.default is not of type object
+    at org.openapitools.codegen.config.CodegenConfigurator.toContext(CodegenConfigurator.java:684)
+    at org.openapitools.codegen.config.CodegenConfigurator.toClientOptInput(CodegenConfigurator.java:711)
+    at org.openapitools.codegen.cmd.Generate.execute(Generate.java:511)
+    at org.openapitools.codegen.cmd.OpenApiGeneratorCommand.run(OpenApiGeneratorCommand.java:32)
+    at org.openapitools.codegen.OpenAPIGenerator.main(OpenAPIGenerator.java:66)
+
+ The text was updated successfully, but these errors were encountered: 
+👍1
+efredin reacted with thumbs up emoji
+All reactions
+👍1 reaction"
+"https://github.com/openai/openai-openapi/issues/130","XML","2023-11-27T15:50:54Z","Closed issue","No label","1 com.google.chrome.ios a84e7ddf-a709-4a29-84c0-5e978369a55f The enrollment token of cloud policy on desktop Setting the policy means Chromium tries to register itself with Chrome Browser Cloud Management. The value of this policy is an enrollment token you can retrieve from the Google Admin console. 
+See https://support.google.com/chrome/a/answer/9301891?ref_topic=9301744 for details.
+
+
+
+ hu
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/openai/openai-openapi/issues/128","pip install openai","2023-11-27T15:51:31Z","Closed issue","No label","No description provided.
+ The text was updated successfully, but these errors were encountered: 
+👍1
+GCODIN reacted with thumbs up emoji
+All reactions
+👍1 reaction"
+"https://github.com/openai/openai-openapi/issues/127","Blind accessibility: the buttons are not labeled, not usable with screen reader","2023-11-27T15:54:32Z","Closed issue","No label","Blind accessibility: the buttons are not labeled on the chatgpt app it makes it hard to blind person to use screen reader to use it
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/openai/openai-openapi/issues/123","createFile operation has incorrect file body type","2023-11-16T03:38:43Z","Closed issue","No label","The docs say file should be a string.
+The openapi spec say that body.file should be a string encoded as binary (which would be super inefficient, but that's besides the point of this issue).
+But the openai-node client generates an object for file, and that's what the OpenAI API backend expects.
+Here's an example file sent to the POST /files endpoint parsed as multipart/form-data:
+File {
+  size: 7594,
+  type: 'application/octet-stream',
+  name: 'readme.md',
+  lastModified: 1700076420900
+}
+
+You can repro this with:
+import fs from 'node:fs'import OpenAI from 'openai'
+
+  const openai = new OpenAI({
+    baseURL: baseUrl
+  })
+
+  const readmeFileStream = fs.createReadStream('readme.md', 'utf8')
+
+  const readmeFile = await openai.files.create({
+    file: readmeFileStream,
+    purpose: 'assistants'
+  })
+  console.log('created readme file', readmeFile)
+If you use a custom baseUrl and print out the formData sent for this simple example, the file property of the request body will be an object, not a string.
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/openai/openai-openapi/issues/122","ChatCompletionMessageToolCallChunk does not seem to be implemented.","2023-11-16T12:37:56Z","Closed issue","No label","Posting issue here since I couldn't find a public repository for the OpenAI server implementation. Please let me know if there is a more appropriate location to post.
+Parallel function calls with streaming seems to be broken, per this OpenAI Discourse forum conversation and my own experimentation. I can see that there is an OpenAPI spec for streamed tool call completions, but perhaps it has not been implemented in the server?
+ The text was updated successfully, but these errors were encountered: 
+👍1
+XenioxYT reacted with thumbs up emoji
+All reactions
+👍1 reaction"
+"https://github.com/openai/openai-openapi/issues/120","Incorrect pricing information","2023-11-27T15:59:50Z","Closed issue","No label","Says this:-
+Start for free
+Start experimenting with $5 in free credit that can be used during your first 3 months.
+
+but then doesn't let you use GPT-4 because it says it's exclusive.
+Fix your marketing so it tells the truth (suggest you don't mention $ money at all, because you're actually giving away GPT-3 credits and nothing to do with money).
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/openai/openai-openapi/issues/118","Missing name parameter in chat completion message parameters.","2023-11-27T16:00:31Z","Closed issue","No label","According to the documentation we should be able to specify the name for each of the base message types/roles (system, assistant, and user) to provide the model with additional information to differentiate between participants of the same role (useful for few-shot prompting).
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/openai/openai-openapi/issues/115","CreateThreadAndRunRequest is an invalid JSON Schema object","2023-11-15T19:19:27Z","Closed issue","No label","I ran into this while processing the OpenAPI spec for some experiments, and my parser complained about CreateThreadAndRunRequest. As far as I can tell, the complaint is valid.
+Error: Can't have non-specified required properties but forbidden additionalTypes at CreateThreadAndRunRequest
+
+It looks like thread_id is required, but not listed as a property of CreateThreadAndRunRequest, which is invalid if additionalProperties is set to `false.
+ The text was updated successfully, but these errors were encountered: 
+👍1
+davidmigloz reacted with thumbs up emoji
+All reactions
+👍1 reaction"
+"https://github.com/openai/openai-openapi/issues/111","openapi-dotnet","2023-11-27T16:02:43Z","Closed issue","No label","Any plans for a .NET library on the horizon? It would be great to see OpenAI support for .NET enthusiasts.
+ The text was updated successfully, but these errors were encountered: 
+👍2
+RobertWeaver and rattrayalex reacted with thumbs up emoji
+All reactions
+👍2 reactions"
+"https://github.com/openai/openai-openapi/issues/101","OpenAI missuse of '#' in javascript class in webinterface framework","2023-11-27T16:10:20Z","Closed issue","No label","Knowing this is not the right place to report, but after hours of digging in OpenAi pages, there is literally no address or place found to report bugs for the webinterface.
+The webinterface chat.openai.com was working properly until 24th October 2023 ~23:59, ever since after the login or any access to the website is messed up as one can read below, no access possible.
+[Error] Refused to execute a script because its hash, its nonce, or 'unsafe-inline' does not appear in the script-src directive of the Content Security Policy. (login, line 1, x2)
+[Error] SyntaxError: Unexpected private name #n. Cannot parse class method with private name.
+	(anonyme Funktion) (_app-7b25e5d48a5be880.js:11)
+[Error] Refused to execute a script because its hash, its nonce, or 'unsafe-inline' does not appear in the script-src directive of the Content Security Policy. (login, line 0)
+
+this bug says that a class uses ""#n"" as internal class variable but obviously runs into dead end as it can not be accessed from outside the class thus the name scheme with leading '#' forces this behaviour.
+That means that not even the login dialog at https://chat.openai.com/auth/login can appear since two days. Leads to a strange question, does someone test the webinterface before commits are rolled out to all?
+I was able to manage to be logged in but the webinterface still shows the very same bug of course. The framework is messed up since 25th October. Before it just worked, so it is a roll out issue
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/openai/openai-openapi/issues/98","Model schema object is not complete","2023-11-28T10:27:20Z","Closed issue","question","The response from /models returns following (excerpt):
+		{
+			""id"": ""gpt-4-0314"",
+			""object"": ""model"",
+			""created"": 1687882410,
+			""owned_by"": ""openai"",
+			""permission"": [
+				{
+                                    ...
+				}
+			],
+			""root"": ""gpt-4-0314"",
+			""parent"": null
+		},
+
+The schema only contains id, object, created and owned_by. The rest may be intentionally not listed in the schema part of the openapi.yaml document, but I've found ""root"" & ""parent"" to be quite useful for knowing which model a fine-tuned one was created from.
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/openai/openai-openapi/issues/97","average","2023-10-08T23:24:00Z","Closed issue","No label","No description provided.
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/openai/openai-openapi/issues/95","Open air","2023-10-03T19:29:53Z","Closed issue","No label","No description provided.
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/openai/openai-openapi/issues/94","Group names have been removed","2023-10-03T15:29:48Z","Open issue","bug","Why were the x-oaiMeta/group keys removed from the spec?
+ It allowed a nice categorization of endpoints in generated client libraries.
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/openai/openai-openapi/issues/93","inf default value cannot be encoded in many languages","2024-04-01T16:53:36Z","Closed issue","bug","Hi there 👋 and thanks a lot for sharing this spec as it immensely helps!
+I'm working on Kiota and while generating clients for your OpenAPI specification I faced a few issues and reported them, but, in this case, I'm convinced that the specification that can be improved.
+Here you are defining the default value of an integer with the string ""inf"" and here I reported upstream the bug found.
+Still, there is room for improvement:
+inf in languages where the integer type is translated(according to the spec) as a Long/Int64 an infinite value is not easily representable
+using inf as a valid value is only possible in languages that are using Double, BigInt or similar encodings for all of the numeric values
+inf is effectively a string here and its meaning can vary across different target languages (I'm failing to find a spec that defines this specific string as a valid integer value)
+I think that a sensible default would be the value of 32768 since, according to the docs, is currently the maximum number of tokens for the biggest available model.
+ I'm happy to open a PR if this is the desired resolution of the issue 🙂
+ The text was updated successfully, but these errors were encountered: 
+👀1
+bobend reacted with eyes emoji
+All reactions
+👀1 reaction"
+"https://github.com/openai/openai-openapi/issues/74","New Fine-Tuning Job API Endpoints missing","2023-09-01T13:40:00Z","Closed issue","No label","The new Fine-Tuning Job functionality announced overnight is not currently included in the OpenAI OpenAPI specification.
+Can the new /fine_tuning/jobs endpoints and methods please be added to the OpenAPI specification?
+Docs:
+https://platform.openai.com/docs/guides/fine-tuning/use-a-fine-tuned-model
+https://platform.openai.com/docs/api-reference/fine-tuning/create
+The functionality has been added to the Python SDK and also the node SDK but I can't find anywhere where it's been added to the OpenAPI spec.
+Thank you
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/openai/openai-openapi/issues/73","$ pip install openai","2023-09-05T23:38:12Z","Closed issue","No label","No description provided.
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/openai/openai-openapi/issues/71","Error: Response payload is not completed","2023-08-17T07:45:31Z","Closed issue","No label","When using the acreate interface and attempting to utilize streaming output, I encountered the following issue:
+Time: (UTC) 2023-08-17 06:08:24,030 ~ 2023-08-17 06:13:24,180
+Request ID: 9c46544d6517b7b8e9df1e9e61fd7f53
+Stack Trace:
+File ""/app/./gpt_explainer/generator/explain.py"", line 49, in explain_stream
+async for chunk in completion_stream:
+File ""/usr/local/lib/python3.9/site-packages/openai/api_resources/abstract/engine_api_resource.py"", line 230, in <genexpr>
+return (
+File ""/usr/local/lib/python3.9/site-packages/openai/api_requestor.py"", line 319, in wrap_resp
+async for r in resp:
+File ""/usr/local/lib/python3.9/site-packages/openai/api_requestor.py"", line 633, in <genexpr>
+return (
+File ""/usr/local/lib/python3.9/site-packages/openai/api_requestor.py"", line 114, in parse_stream_async
+async for line in rbody:
+File ""/usr/local/lib/python3.9/site-packages/aiohttp/streams.py"", line 35, in __anext__
+rv = await self.read_func()
+File ""/usr/local/lib/python3.9/site-packages/aiohttp/streams.py"", line 311, in readline
+return await self.readuntil()
+File ""/usr/local/lib/python3.9/site-packages/aiohttp/streams.py"", line 343, in readuntil
+await self._wait(""readuntil"")
+File ""/usr/local/lib/python3.9/site-packages/aiohttp/streams.py"", line 304, in _wait
+await waiter
+aiohttp.client_exceptions.ClientPayloadError: Response payload is not completed
+
+The content you are editing has changed. Please copy your edits and refresh the page.
+Tasks
+BetaGive feedback
+No tasks being tracked yet.
+Options
+Convert to issue
+Toggle completion
+Rename
+Remove
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/openai/openai-openapi/issues/61","List Models API lacks Chat vs Completion field","2023-11-27T18:14:54Z","Closed issue","API-feedback","The current list models API doesn't not indicate whether a certain model should be called through Completion or ChatCompletion - making it impossible to route requests correctly in production without explicit hardcoded mapping. This should be added as a field to the https://platform.openai.com/docs/api-reference/models/list API.
+ The text was updated successfully, but these errors were encountered: 
+👍2
+thejamescollins and logankilpatrick reacted with thumbs up emoji
+All reactions
+👍2 reactions"
+"https://github.com/openai/openai-openapi/issues/56","Model properties that are both string and enum breaks csharp client generation","2023-09-01T15:48:25Z","Closed issue","No label","Fx:
+        model:
+          description: ID of the model to use. You can use the `text-davinci-edit-001` or `code-davinci-edit-001` model with this endpoint.
+          type: string
+          example: ""text-davinci-edit-001""
+          anyOf:
+            - type: string
+            - type: string
+              enum: [""text-davinci-edit-001"",""code-davinci-edit-001""]
+This example also have an additional type: string and breaks RicoSuter/NSwag
+Could it be changed to:
+        model:
+          description: ID of the model to use. You can use the `text-davinci-edit-001` or `code-davinci-edit-001` model with this endpoint.
+          example: ""text-davinci-edit-001""
+          type: string
+          enum: [""text-davinci-edit-001"",""code-davinci-edit-001""]
+without breaking compatibles with other language client generators?
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/openai/openai-openapi/issues/42","Image Generations v1 misinterprets POST requests as GET","2023-05-27T07:19:39Z","Closed issue","No label","Greetings.
+In my NextJS project, the code from the tutorials and snippets in the documentation for Image Generations v1 will only respond with the following json data error:
+{
+  ""error"": {
+    ""code"": null,
+    ""message"": ""Not allowed to GET on /v1/images/generations. (HINT: Perhaps you meant to use a different HTTP method?)"",
+    ""param"": null,
+    ""type"": ""invalid_request_error""
+  }
+}
+This comes despite the fact that it was obtained using a POST request and not a GET request like is being suggested. This should be handled by the configured openAiApi object in the documentation's code. I've pasted it below so it can be reproduced:
+const onSubmit = async (e) => {
+   e.preventDefault();
+
+   // instantiate openAI configuration
+   const OPENAI_API_TOKEN = process.env.OPENAI_API_TOKEN;
+   const configuration = new Configuration({
+     apiKey: OPENAI_API_TOKEN,
+   });
+   const openai = new OpenAIApi(configuration);
+
+   const response = await openai.createImage(
+     ""Adorable dog""
+   );}
+But to really be sure before raising an issue on GH, I investigated by writing a plain fetch request and setting the POST http method manually:
+    try {
+      const response = await fetch(
+        ""https://api.openai.com/v1/images/generations"",
+        {
+          method: ""POST"",
+          headers: {
+            ""Content-Type"": ""application/json"",
+            Authorization: `Bearer ${OPENAI_API_TOKEN}`,
+          },
+          body: JSON.stringify({
+            prompt: promptValue,
+            n: 1,
+            size: ""1024x1024"",
+          }),
+        }
+      );
+      console.log(response); 
+    } catch (err) {
+      if (err.response) {
+        console.log(err.response.status);
+        console.log(err.response.data);
+      } else {
+        console.log(err.message);
+      }
+    }
+This manually constructed POST request above fails to produce anything other than the same json error from before, complaining of some imaginary GET. I feel as though I am being gaslit by what is otherwise an awesome API to use. There is no GET request anywhere here, what is going wrong to cause this?
+And yes, I am aware that OpenAI rejects rated-R generated content so rest assured that promptValue is as vanilla as it gets.
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/openai/openai-openapi/issues/40","Where might one provide feedback?","2023-09-01T13:44:42Z","Closed issue","No label","To boot, I realize this is not the best place to submit this type of feedback, I looked through all the typical places, including asking chat.openai.com where might one provide product feedback. But the simplest answer eludes even the AI 😃 .
+AI response
+Chat menu
+Settings wasn't helpful as well.
+Website footer
+Safety webpage
+Help Center
+It was only when I asked the Help Chat Bot, Product Feedback appeared.
+Could a link to feedback be included on all the usual places a user might find such link.
+Wanted to provide feedback that would allow pressing up-arrow on the keyboard while input textbox is in current focus which would duplicate/copy the content from previous interaction, but would block submitting duplicate responses to promote unique interactions.
+An appreciative openai user.
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/openai/openai-openapi/issues/38","Several component schemas are missing the type field","2023-09-06T01:35:21Z","Closed issue","No label","IIUC, all of these should have type: ""object"":
+https://github.com/openai/openai-openapi/tree/6f2c9588fcad5b1aacbbad960027e85b9e1e2c66/openapi.yaml#L3434-L3564
+For lack of the type field, my tooling is identifying theses schemas as unstructured.
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/openai/openai-openapi/issues/36","How to customize the domain name proxy","2023-09-06T01:35:26Z","Closed issue","No label","No description provided.
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/openai/openai-openapi/issues/35","Learn more link on deprecated engines is not found","2023-09-06T01:36:44Z","Closed issue","No label","Defect Title	Learn more link on deprecated engines is dead
+Defect Description/Steps to reproduce	1. Visit API reference paragraph about engine parameter 2. Click on learn more.
+Expected Result	Page containing more information is loaded
+Actual Result	""That page isn’t here anymore"" is displayed
+Severity	Low
+Priority	Low
+Module affected	API documentation
+Environment	Firefox v.111.0 (64-bit)
+Reported by	Camel-light
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/openai/openai-openapi/issues/32","adapter is not a function when calling createChatCompletion","2023-09-06T01:39:22Z","Closed issue","No label","I created the following very simple openai.createChatCompletion in a nextjs edge function as soon as it's invoked it gives the error adapter is not a function
+ const openai = new OpenAIApi(configuration);
+          const completion = await openai.createChatCompletion({
+            model: ""gpt-3.5-turbo"",
+            messages: [{role: ""user"", content: ""Hello world""}],
+          });
+
+ The text was updated successfully, but these errors were encountered: 
+👍3
+ivoneijr, corbanvilla, and pgonzaleznetwork reacted with thumbs up emoji
+All reactions
+👍3 reactions"
+"https://github.com/openai/openai-openapi/issues/30","""Name"" property on ChatCompletionRequestMessage not in API reference","2023-09-06T01:38:23Z","Closed issue","No label","https://platform.openai.com/docs/api-reference/chat/create
+The ""name"" property is not present on the response message type, only the request message type, and it doesn't seem to do anything and isn't documented. Is it still needed or should it be removed to avoid confusion?
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/openai/openai-openapi/issues/29","Mismatching behaviour of fine-tune endpoint compared to its openAPI contract definition","2023-09-06T01:41:19Z","Closed issue","No label","We are working on a openAI connector written in Ballerina language, using its openAPI contract.
+During the effort, we've observed that even though the validation_file, batch_size, learning_rate_multiplier, classification_n_classes, classification_positive_class, classification_betas, and suffix properties of the fine tune create request are labeled as nullable (as per the API documentation (https://platform.openai.com/docs/api-reference/fine-tunes/create) and in the openAPI contract), the openAI backend doesn't accept null values for the same and fails with errors such as None is not of type string.
+What should be the expected behaviour in here? should we remove the nullable: true property for the above fields or, should the backend be fixed to accept null values for the above case?
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/openai/openai-openapi/issues/28","max_tokens in CreateChatCompletionRequest","2023-11-27T16:24:14Z","Closed issue","bug","Even so not stated by the openapi.yaml, but max_tokens of the CreateChatCompletionRequest is actually nullable.
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/openai/openai-openapi/issues/27","OpenAPI document logit_bias default value","2023-09-06T01:43:27Z","Closed issue","No label","There is an issue in the documentation. In the section https://platform.openai.com/docs/api-reference/completions/create
+It is said, that default value for logit_bias should be null but in reality it is empty map
+
+If we are passing null as the argument, we will receive an exception. But passing empty map works just fine.
+Kindly see two screenshots below.
+Empty map as a value
+
+null as a value
+
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/openai/openai-openapi/issues/25","OpenAPI document missing the security scheme definition","2023-09-06T01:57:22Z","Closed issue","No label","According to the Authorization section of the API document, to make an API call it requires one mandatory Authorization header and an optional OpenAI-Organization header.
+As both are missing in the OpenAPI document, they need to be added. Here are examples:
+...
+paths:
+  ...
+  /models:
+    get:
+      operationId: listModels
+      tags:
+        - OpenAI
+      summary: Lists the currently available models, and provides basic information about each one such as the owner and availability.
+      # add optional header parameter like below
+      parameters:
+        - in: header
+          name: OpenAI-Organization
+          required: false
+          schema:
+            type: string
+            example:
+              org-hP479gBqdEuqjgkVyFPZ5g5h
+          description: For users who belong to multiple organizations, you can pass a header to specify which organization is used for an API request. Usage from these API requests will count against the specified organization's subscription quota.
+...
+# global authorizationsecurity:
+  - api_key: []
+
+components:
+  # authorization scheme
+  securitySchemes:
+    api_key:
+      type: 'http'
+      scheme: 'bearer'
+      bearerFormat: 'Bearer'
+...
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/openai/openai-openapi/issues/24","OpenAIFile: status_details is a string","2023-09-06T01:58:24Z","Closed issue","No label","Hi there
+According to the API documentation the status_details of a file must be an object or null. But I never receive an object there but we ran into the issue that it returns a string.
+ This happens if we upload a (very long) jsonl file with a syntax error in it and then hit the FineTunes Create endpoint.
+Here is the response I got:
+{
+  ""object"": ""fine-tune"",
+  ""id"": ""ft-kSsak20Ml0faDIpmvbTvmKEP"",
+  ""hyperparams"": {
+    ""n_epochs"": 4,
+    ""batch_size"": null,
+    ""prompt_loss_weight"": 0.01,
+    ""learning_rate_multiplier"": null
+  },
+  ""organization_id"": ""org-****"",
+  ""model"": ""curie"",
+  ""training_files"": [
+    {
+      ""object"": ""file"",
+      ""id"": ""file-OGHjVIyNB7svNc6vaUXNgR87"",
+      ""purpose"": ""fine-tune"",
+      ""filename"": ""MyFile_corrupt.jsonl"",
+      ""bytes"": 181023,
+      ""created_at"": 1678253244,
+      ""status"": ""error"",
+      ""status_details"": ""Invalid file format. Example 1273 cannot be parsed. Error: line contains invalid json: Expecting ',' delimiter: line 1 column 79 (char 78) (line 1273)""
+    }
+  ],
+  ""validation_files"": [],
+  ""result_files"": [],
+  ""created_at"": 1678254001,
+  ""updated_at"": 1678254001,
+  ""status"": ""pending"",
+  ""fine_tuned_model"": null,
+  ""events"": [
+    {
+      ""object"": ""fine-tune-event"",
+      ""level"": ""info"",
+      ""message"": ""Created fine-tune: ft-kSsak20Ml0faDIpmvbTvmKEP"",
+      ""created_at"": 1678254001
+    }
+  ]
+}
+Can you help us to understand what return types we can expect there?
+Thank you in advance!
+Sandro
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/openai/openai-openapi/issues/22","can we classify all apis into more tags","2023-11-27T18:15:41Z","Closed issue","enhancement","Currently all apis are in the save tag OpenAI.
+Can we classify all apis into more tags? e.g:
+tags:
+  - name: Engines
+  - name: Models
+  - name: Completions
+  - name: Edits
+  - name: Images
+  - name: Files
+  - name: Embeddings
+  - name: Fine-tunes
+  - name: Moderations
+  - name: Others
+Many api tools use tags to render UI with better user experience. Even though they can modify the copied file, but when the yaml file here is updated, the work to merge them is boring.
+If this is ok, I am glad to do it.
+ The text was updated successfully, but these errors were encountered: 
+👍1
+alexkreidler reacted with thumbs up emoji
+All reactions
+👍1 reaction"
+"https://github.com/openai/openai-openapi/issues/21","openai.createChatCompletion is not a function","2023-03-02T07:23:51Z","Closed issue","No label","import { Configuration, OpenAIApi } from ""openai"";
+
+const configuration = new Configuration({
+  apiKey: process.env.OPENAI_API_KEY,
+});
+const openai = new OpenAIApi(configuration);
+
+const completion = await openai.createChatCompletion({
+      model: ""gpt-3.5-turbo"",
+      messages: [{
+        role: ""user"",
+        content: generatePrompt(input) // just text here
+      }]
+    });
+    res.status(200).json({ result: completion.data.choices[0].text });
+
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/openai/openai-openapi/issues/18","Api issue","2023-09-06T02:00:58Z","Closed issue","No label","im having an issue using this api key to create a clone app chat gpt, after deploying it im getting error on the api key or the backend server, here's my app hope i can get some help
+My clone link - https://chat-gpt-beta-vert.vercel.app/
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/openai/openai-openapi/issues/15","Error 400 on Image generation","2023-09-06T02:01:34Z","Closed issue","No label","Hi there, anyone else having troubles to generate images on the openAI.createImage method? I'm getting a 400 Error response from the openAI endpoint.
+Any idea? Thanks in advance.
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/openai/openai-openapi/issues/14","Java code generation fails with org.openapitools.codegen.SpecValidationException","2023-09-06T02:02:55Z","Closed issue","No label","I am trying to build a Java SDK by autogenerating code using open API code generator, but running into problems.
+When I ran the command openapi-generator generate -i openapi.yaml -g java
+I am getting this exception:
+Exception in thread ""main"" org.openapitools.codegen.SpecValidationException: There were issues with the specification. The option can be disabled via validateSpec (Maven/Gradle) or --skip-validate-spec (CLI).
+ | Error count: 4, Warning count: 0
+Errors:
+	-attribute components.schemas.CreateFineTuneRequest.default is not of type `array`
+	-attribute components.schemas.CreateAnswerRequest.default is not of type `object`
+	-attribute components.schemas.CreateCompletionRequest.default is not of type `object`
+	-attribute components.schemas.CreateClassificationRequest.default is not of type `object`
+
+	at org.openapitools.codegen.config.CodegenConfigurator.toContext(CodegenConfigurator.java:604)
+	at org.openapitools.codegen.config.CodegenConfigurator.toClientOptInput(CodegenConfigurator.java:631)
+	at org.openapitools.codegen.cmd.Generate.execute(Generate.java:457)
+	at org.openapitools.codegen.cmd.OpenApiGeneratorCommand.run(OpenApiGeneratorCommand.java:32)
+	at org.openapitools.codegen.OpenAPIGenerator.main(OpenAPIGenerator.java:66)
+
+When Run with --skip-validate-spec flag, the code generation works, but generated code fails to compile. Looks like there are some issues with schema. Can we get this fixed?
+ The text was updated successfully, but these errors were encountered: 
+👍2
+shonfeder and shkleinik reacted with thumbs up emoji
+All reactions
+👍2 reactions"
+"https://github.com/openai/openai-openapi/issues/13","Date gives the past date not the actual one","2023-09-06T02:03:05Z","Closed issue","No label","I was checking it on 24th January 2023. But AI gives the past date. I'm using openai api in my personal project.
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/openai/openai-openapi/issues/11","Add schema for invalid requests","2023-01-06T09:36:20Z","Open issue","enhancement","Example:
+{
+  ""error"": {
+    ""code"": null,
+    ""message"": ""Your request was rejected as a result of our safety system. Your prompt may contain text that is not allowed by our safety system."",
+    ""param"": null,
+    ""type"": ""invalid_request_error""
+  }
+}
+ The text was updated successfully, but these errors were encountered: 
+👍1
+thejamescollins reacted with thumbs up emoji
+All reactions
+👍1 reaction"
+"https://github.com/openai/openai-openapi/issues/9","ChatGPT replies in Russian get truncated","2023-09-06T02:04:30Z","Closed issue","No label","I do not know if this is related to OpenAPI but could not find a place to file a bug report against ChatGPT. The long replies of ChatGPT in Russian laguage in ChatGPT web interface get truncated at about 1/3 or half of the whole answer. Sometimes this can be worked around by asking ChatGPT to re-post the last answer starting from certain words.
+I suspect, this is related to the fact that Cyrillic letters take more bytes in Unicode than Latin letters.
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/openai/openai-openapi/issues/8","Handle Auth Scheme","2023-09-06T02:05:16Z","Closed issue","No label","We should have a default Auth scheme as part of our OpenAI spec: https://swagger.io/docs/specification/authentication/
+ The text was updated successfully, but these errors were encountered: 
+👍4
+shun-shobon, dswiecki, thejamescollins, and goldingdamien reacted with thumbs up emoji
+All reactions
+👍4 reactions"
+"https://github.com/openai/openai-openapi/issues/7","Schema doesnt match response","2023-02-22T17:26:09Z","Closed issue","No label","Take the following edit with the following post values for CreateEditRequest
+ {
+ ""model"": ""text-davinci-edit-001"",
+ ""input"": ""What day of the wek is it?"",
+ ""instruction"": ""Fix the spelling mistakes."",
+ ""n"": 1,
+ ""temperature"": 1,
+ ""top_p"": 1
+ }
+ The response I get for CreateEditResponse is as follows:
+ {
+ ""object"": ""edit"",
+ ""created"": 1671267871,
+ ""choices"": [
+ {
+ ""text"": ""What day of the week is it?\n"",
+ ""index"": 0
+ }
+ ],
+ ""usage"": {
+ ""prompt_tokens"": 26,
+ ""completion_tokens"": 28,
+ ""total_tokens"": 54
+ }
+ }
+The problem is that the response contains no id, yet in the spec for CreateEditResponse, id is defined as a required field.
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/openai/openai-openapi/issues/6","Is this not being maintained?","2022-12-20T16:20:01Z","Closed issue","No label","Looks like this is not being maintained? Don't see embeddings here.
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/openai/openai-openapi/issues/5","usage information missing for Create Completions, Create Edits and Create Embeddings responses","2022-10-20T02:07:37Z","Closed issue","No label","In June, usage info was added to several API responses.
+The API Reference documentation was updated in three places:
+Create Completions
+Create Edits
+Create Embeddings
+However, this data is missing from the OpenAPI specification.
+Can this please be added?
+@schnerd do you know if this is likely to be added soon?
+Thank you
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/openai/openai-openapi/issues/4","OpenAI's OpenAPI spec isn't schema-compliant","2022-10-20T02:07:08Z","Closed issue","No label","It looks like the spec has several properties that are not part of the schema, e.g. oaiMeta.
+ Custom properties must be prefixed with x- to indicate it's an extension.
+This is causing tooling to error out when trying to process the OpenAI spec, e.g. see
+Can't generate from openAI spec
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/openai/openai-openapi/issues/3","Moderations endpoint missing from OpenAPI Specification","2022-10-20T02:13:59Z","Closed issue","No label","Hi there,
+Moderation is mentioned in the docs:
+https://beta.openai.com/docs/guides/moderation/overview
+https://beta.openai.com/docs/api-reference/moderations
+However the post https://api.openai.com/v1/moderations endpoint is not included in https://github.com/openai/openai-openapi/blob/master/openapi.yaml
+It looks like this functionality was added to the openai cli v0.20.0, but done manually. Moderation doesn't seem to be included in in the openai-node as of yet.
+Are there plans to add this new endpoint to the OpenAPI specification?
+Adding it would presumably make it simple to add it to your node package also.
+Thank you!
+ The text was updated successfully, but these errors were encountered: 
+👍5
+ezzcodeezzlife, the-csaba, sho-ai-main, timothypratley, and aliyeysides reacted with thumbs up emoji
+All reactions
+👍5 reactions"
+"https://github.com/openai/openai-openapi/issues/2","Invalid default engine for edit creation endpoint","2023-09-06T02:06:17Z","Closed issue","No label","The ""example request"" section of our edit creation endpoint docs defaults to the engine text-davinci-002, which is incompatible with the edit endpoint
+Quickly looked to see if I could find out how to change this, but was unable to, so creating this issue instead
+ The text was updated successfully, but these errors were encountered: 
+All reactions"

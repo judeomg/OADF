@@ -1,0 +1,827 @@
+﻿"https://github.com/google-gemini/generative-ai-dart/issues/217","Vertex AI SDK: Support for System Instructions","2024-10-14T23:11:17Z","Open issue","component:dart sdk,status:triaged,type:bug","Description of the feature request:
+Error when using system instructions in Firebase Vertex AI on all Gemini Pro/Flash models.
+Receiving the error DartError: Content with system role is not supported.
+What problem are you trying to solve with this feature?
+No response
+Any other information you'd like to share?
+No response
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-dart/issues/216","Add Gemini tuned models in firebase_vertexai package","2024-10-11T17:01:16Z","Open issue","component:dart sdk,status:triaged,type:feature request","Description of the feature request:
+I tried calling a Gemini model i tuned using Google AI studio, but it does not seem to work (i gave it access to my google cloud project too).
+ Please tell me if i need to fix something in the code below or is that a feature not supported yet.
+const String _tunedJsonModelName = 'tunedModels/myTunedModelName';
+
+static Stream<String?> callJsonVertexAIStream({required String summary}) async* {
+    final String query = ""$promptVer9"";
+
+    final model = _vertexAI.generativeModel(model: _tunedJsonModelName);
+    final prompt = [Content.text(query)];
+    try {
+      final response = model.generateContentStream(prompt);
+      await for (final chunk in response) {
+        yield chunk.text;
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+      rethrow;
+    }
+  }
+What problem are you trying to solve with this feature?
+No response
+Any other information you'd like to share?
+No response
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-dart/issues/211","Files API","2024-09-20T23:30:24Z","Closed as not planned issue","component:dart sdk,status:duplicate,type:help","Description of the feature request:
+Perhaps I am missing this, but I haven't found a way to access the Gemini Files API from the Dart SDK. Asking Gemini how to do it produced an answer suggesting using a package named Gemini from pub.dev which has nothing to do with google-gemini.
+What problem are you trying to solve with this feature?
+Upload larger files into the Files API for use with generative AI
+Any other information you'd like to share?
+No response
+ The text was updated successfully, but these errors were encountered: 
+👍1
+MrCsabaToth reacted with thumbs up emoji
+All reactions
+👍1 reaction"
+"https://github.com/google-gemini/generative-ai-dart/issues/209","Support text-multilingual-embedding-002 embedding model","2024-09-03T06:47:07Z","Open issue","component:dart sdk,type:help","Description of the feature request:
+https://cloud.google.com/vertex-ai/generative-ai/docs/model-reference/text-embeddings-api lists text-multilingual-embedding-002, however https://ai.google.dev/gemini-api/docs/models/gemini#text-embedding does not. I can successfully instantiate a GenerativeModel, but when I call embedContent like I do with text-embedding-004 it errors out with:
+models/text-multilingual-embedding-002 is not found for API version v1beta, or is not supported for embedContent. Call ListModels to see the list of available models and their supported methods.
+What problem are you trying to solve with this feature?
+I'd like an application to support multiple languages. I inspected embeddings of equivalent sentences on Vertex AI with the text-multilingual-embedding-002 and they were close. Unfortunately text-embedding-004 doesn't seem to be good with the language I tested.
+Any other information you'd like to share?
+My code:
+    final model = GenerativeModel(
+      model: 'text-multilingual-embedding-002',
+      apiKey: preferences.geminiApiKey,
+    );
+    final content = Content.text(prompt);
+    final embeddingResult = await model.embedContent(content);
+
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-dart/issues/208","Support outputDimensionality reduction parameter for embedding models","2024-08-30T21:14:37Z","Open issue","status:duplicate,type:help","Description of the feature request:
+Since text-embedding-004 the API calls support outputDimensionality parameter. That truncates the vector to the given size. See https://cloud.google.com/vertex-ai/generative-ai/docs/model-reference/text-embeddings-api#advanced-use
+{
+  ""instances"": [
+    { ""content"": ""TEXT"",
+      ""task_type"": ""TASK_TYPE"",
+      ""title"": ""TITLE""
+    },
+  ],
+  ""parameters"": {
+    ""autoTruncate"": AUTO_TRUNCATE,
+    ""outputDimensionality"": OUTPUT_DIMENSIONALITY
+  }
+}
+
+What problem are you trying to solve with this feature?
+Reduce the storage size of the vectors as a trade-off for some accuracy / precision
+Any other information you'd like to share?
+Partial workaround: since it sounds like there's no PCA (Principal Component Analysis) going on for example for 256 dimension, it's a simple truncation, until this is supported on the Dart API someone can perform the truncation themselves. Then the only thing which remain in that case is additional bandwidth prominent with batch inferences.
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-dart/issues/206","Server Error not handle - JSON error unexpected character at (0)","2024-09-04T18:35:48Z","Closed issue","component:dart sdk,type:help","Description of the bug:
+When calling generateContent and the server responses with an error like +500, instead of throwing and giving a clear error, the makeRequest method tries to decode de result and breaks with a ""JSON error unexpected character at (0)"".
+This is very confusing and not clear about the real problem.
+Actual vs expected behavior:
+Actual: Throw a strange error when trying to parse the answer from the server.
+Expected: To report a +500 error to know the problem is on the server and not on the app.
+Any other information you'd like to share?
+Information to replicate:
+ In this case we are going to try and process and image, pdf or other file stored in ""Cloud Storage/Firebase Storage"" through a ""gs://"" url. But the server won't have access to the files and response with a 502 error.
+Other types of generation will work perfectly, thus the confusion when the generating content responses with ""Json parse"" error.
+The replication case is rare, but happened to me when enabling the Vertex AI API in Google Cloud, for some reason it did not setup the permission for the bucket in Firebase right.
+*This considers that you are using Firebase with ""VertexAI"" and have already enable the API in the project and have it working.
+Go to the connected Firebase project in Google Cloud, under the section ""Cloud Storage"".
+Select the bucket ""{ProjectId}.appspot.com
+Go to ""permissions"" tab on the top
+Under ""View By Principals"" delete the ""service agent for Vertext AI"" automatically generated when enabling the API Google Cloud. Normally with a ""principal"" like ""service-34738934@gcp-sa-aiplatform.iam.gserviceaccount.com""
+After this, the API won't have access to the bucket, so when you try to generate content with a file stored in it, the server will response with a 502 error and prompt the error described above.
+** I understand the replication is using the Vertex AI package, that depends on this one. But it is how I came across the problem. If reported the issue here, as the underlying problem belongs to this package.
+Hope it helps :)
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-dart/issues/204","Code Execution","2024-09-05T18:27:48Z","Closed issue","component:dart sdk,status:triaged,type:feature request","Description of the feature request:
+Get the code execution as soon as possible to the release on pub.dev, i have seen changes made for the code execution , but still not being released as v0.4.5 on pub.dev , please release that so that we can use it as soon as possible
+What problem are you trying to solve with this feature?
+The generated code by gemini api will get tested at that time only , which will be a huge step forward since no ai right now have this code execution capacity , which makes this ai very much unique and integrating this with flutter will get this functionality on each and every device app built using gemini api.
+Any other information you'd like to share?
+I am building my app which will have this specific functionality and i have to do it today only, i.e 10 aug 2024 SO PLEASE RELEASE THE LATEST DEPENDENCY AS SOON AS POSSIBLE.
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-dart/issues/200","The model is overloaded. Please try again later.","2024-08-01T09:45:31Z","Open issue","component:dart sdk,status:awaiting user response,type:bug","Description of the bug:
+I've noticed that my app has been receiving the message ""The model is overloaded. Please try again later."" more frequently over the past few days. This issue occurs after making only a few requests to the API, well within the limits described in Gemini pricing. Could this be due to a new limitation imposed on free accounts, or is it just a temporary bug on the server?
+Actual vs expected behavior:
+No response
+Any other information you'd like to share?
+No response
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-dart/issues/197","BUG: role with null value added to the history on content blocked due to Safety reasons","2024-07-26T15:37:04Z","Open issue","No label","Description of the bug:
+When using the chat mode and sending messages instead of streaming (using the method sendMessage instead of sendMessageStream) , the blocked responses from the ai will be added to the _history with a null role. Throwing an exception and breaking the chatSession as the multi-turn mode will force the conversation to alternate between user and model.
+This normally throughs this Exception:
+I/flutter (29978): ----------------FIREBASE CRASHLYTICS----------------
+I/flutter (29978): The following exception was thrown Init App Services Fatal error:
+I/flutter (29978): Please use a valid role: user, model.
+I/flutter (29978): 
+I/flutter (29978): #0      parseGenerateContentResponse (package:google_generative_ai/src/api.dart:583:54)
+I/flutter (29978): <asynchronous suspension>
+I/flutter (29978): #1      ChatSession.sendMessage (package:google_generative_ai/src/chat.dart:67:24)
+I/flutter (29978): <asynchronous suspension>
+I/flutter (29978): #2      ChatSession.sendMessage.<anonymous closure> (package:firebase_vertexai/src/vertex_chat.dart:71:15)
+I/flutter (29978): <asynchronous suspension>
+I/flutter (29978): ---------------------------------------------------- 
+
+Actual vs expected behavior:
+If a responses is flagged and blocked, it should not be added to the history allowing the developer to handle the error and either retry the generation or add a generic response from the ai to continue the conversation naturally.
+Any other information you'd like to share?
+No response
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-dart/issues/196","1.0 Release","2024-07-25T03:40:03Z","Open issue","No label","Description of the bug:
+This is a tracking bug to coordinate the release of the 1.0 version of this library which will happen sometime in the future.
+We would like to do a final review to ensure the client support all required endpoints, have a path to support new API protocol clients, and is consistent with some design considerations and capabilities before we cut a stable version.
+The extended list of requirements will be filed as separate bugs as we identify them. Please feel free to reach out to @rakyll before closing this issue, or anytime if you have questions.
+For now, no action is required. We will follow up with issues and/or PRs for necessary changes.
+Actual vs expected behavior:
+No response
+Any other information you'd like to share?
+No response
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-dart/issues/194","Function calling only considers functions in the first tool?","2024-07-13T01:28:29Z","Open issue","component:dart sdk,status:triaged,type:bug","Description of the bug:
+Using gemini-1.5-flash.
+ Prompt: ""What is the weather today?""
+Tool configuration 1:
+[
+  Tool(
+    functionDeclarations: [
+      FunctionDeclaration(
+        'fetchWeatherForecast',
+        'Returns the weather in a given location.',
+        Schema(
+          SchemaType.object,
+          properties: {
+            'latitude': Schema.number(
+              description: 'Latitude of the weather observation and forecast',
+            ),
+            'longitude': Schema.number(
+              description:
+              'Longitude of the weather observation and forecast',
+            ),
+          },
+          requiredProperties: ['latitude', 'longitude'],
+        ),
+      ),
+    ],
+  ),
+  Tool(
+    functionDeclarations: [
+      FunctionDeclaration(
+        'fetchGpsLocation',
+        'Returns the latitude and longitude of the current GPS location.',
+        Schema(SchemaType.string),
+      ),
+      FunctionDeclaration(
+        'fetchHeartRate',
+        'Returns the current heart rate measurement.',
+        Schema(SchemaType.integer),
+      ),
+    ],
+  ),
+]
+
+Response 1: I need to know your location to get the weather forecast. Can you tell me your latitude and longitude?
+Tool configuration 2 (switching the order of the two tools):
+[
+  Tool(
+    functionDeclarations: [
+      FunctionDeclaration(
+        'fetchGpsLocation',
+        'Returns the latitude and longitude of the current GPS location.',
+        Schema(SchemaType.string),
+      ),
+      FunctionDeclaration(
+        'fetchHeartRate',
+        'Returns the current heart rate measurement.',
+        Schema(SchemaType.integer),
+      ),
+    ],
+  ),
+  Tool(
+    functionDeclarations: [
+      FunctionDeclaration(
+        'fetchWeatherForecast',
+        'Returns the weather in a given location.',
+        Schema(
+          SchemaType.object,
+          properties: {
+            'latitude': Schema.number(
+              description: 'Latitude of the weather observation and forecast',
+            ),
+            'longitude': Schema.number(
+              description:
+              'Longitude of the weather observation and forecast',
+            ),
+          },
+          requiredProperties: ['latitude', 'longitude'],
+        ),
+      ),
+    ],
+  ),
+]
+
+Response 2:
+I am sorry, I cannot fulfill this request. I do not have access to weather information.
+Artificially unifying the two tools into a virtual one, merging all functions under that:
+[
+  Tool(
+    functionDeclarations: [
+      FunctionDeclaration(
+        'fetchWeatherForecast',
+        'Returns the weather in a given location.',
+        Schema(
+          SchemaType.object,
+          properties: {
+            'latitude': Schema.number(
+              description: 'Latitude of the weather observation and forecast',
+            ),
+            'longitude': Schema.number(
+              description:
+              'Longitude of the weather observation and forecast',
+            ),
+          },
+          requiredProperties: ['latitude', 'longitude'],
+        ),
+      ),
+      FunctionDeclaration(
+        'fetchGpsLocation',
+        'Returns the latitude and longitude of the current GPS location.',
+        Schema(SchemaType.string),
+      ),
+      FunctionDeclaration(
+        'fetchHeartRate',
+        'Returns the current heart rate measurement.',
+        Schema(SchemaType.integer),
+      ),
+    ],
+  ),
+]
+
+The model properly asks first for the location tool for the lat / lon coordinates, and then with a second round of call (where I pass the location function call result down) it properly asks to call the weather function with the proper GPS coordinates.
+Respnose: The weather today is clear and the temperature is 25 degrees Celsius. The wind is blowing from the southwest at 2 meters per second.
+Actual vs expected behavior:
+I'd expect to be able to keep the two tools apart for extensible software architecture. So far I'm aiming for 8 tools, many of those have multiple functions.
+Any other information you'd like to share?
+I peeked at the code and it looks to me that ultimately a REST API call is made. The _generateContentRequest seems to serialize the tools OK (by looking at it) if (tools != null) 'tools': tools.map((t) => t.toJson()).toList(),
+generative-ai-dart/pkgs/google_generative_ai/lib/src/model.dart
+ Line 333 in 8a58d77
+	if (tools !=null) 'tools': tools.map((t) => t.toJson()).toList(), 
+ so I don't know yet where's the problem. Maybe in my code?
+ The text was updated successfully, but these errors were encountered: 
+❤️1
+adamglin0 reacted with heart emoji
+All reactions
+❤️1 reaction"
+"https://github.com/google-gemini/generative-ai-dart/issues/187","Context Caching","2024-07-11T08:44:04Z","Open issue","component:dart sdk,status:triaged,type:feature request","Description of the feature request:
+I would like to request a feature for the Dart/Flutter Generative AI SDK to expose and support the new Context Caching functionality.
+What problem are you trying to solve with this feature?
+This feature is really helpful for optimizing the repeated transmission of heavy context in multiple successive request.
+Any other information you'd like to share?
+No response
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-dart/issues/186","Chinese will be garbled in function calling","2024-07-10T08:48:20Z","Open issue","component:dart sdk,status:triaged,type:bug","Description of the bug:
+If the result contains Chinese, Gemini reads it as garbled. (always)
+response = await chat.sendMessage(Content.functionResponse(functionCall.name, result));
+Properties will also be garbled. (sometimes)
+Actual vs expected behavior:
+\350\230\213\346\236\234 should be 蘋果
+\351\200\231\345\200\213\346\274\217\346\264\236\345\245\275\345\232\264\351\207\215 should be 這個漏洞好嚴重
+Any other information you'd like to share?
+Simulates a garbled situation in Python:
+encoded_string = ""\350\230\213\346\236\234""decoded_string = encoded_string.encode('latin1').decode('utf-8')
+print(decoded_string)
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-dart/issues/184","(firebase_vertexai: ^0.2.2) FormatException: Unhandled CitationMetadata format","2024-08-01T17:26:09Z","Closed issue","component:dart sdk,status:triaged,type:bug","Description of the bug:
+I'm using firebase_vertexai: ^0.2.2 to generate text from text and a single image.
+ As long as i pass Gemini a ""jpg"" image everything is fine, but when i try with a ""png"" or even ""jpeg"" (which should be same as jpg if i'm not misunderstood) i get the exception: ""FormatException: Unhandled CitationMetadata format""
+Actual vs expected behavior:
+You can find below the piece of code i wrote for this purpose (basically copied from the official documentation):
+const String _modelName = 'gemini-1.5-flash';
+final _vertexAI = FirebaseVertexAI.instanceFor(location: 'europe-west8');
+
+static Future<String?> callVertexAI({required XFile image}) async {
+    final model = _vertexAI.generativeModel(model: _modelName);
+    const String prompt = ""What's in the picture?"";
+    final Uint8List imageBytes = await File(image.path).readAsBytes();
+    // utilizzo il package mime per identificare il mimetype
+    final lookup = lookupMimeType(image.path);
+    debugPrint('mimetype individuato: $lookup');
+    final content = [
+      Content.multi([
+        TextPart(prompt),
+        DataPart(lookup ?? 'image/jpg', imageBytes),
+      ])
+    ];
+    try {
+      final response = await model.generateContent(content);
+      return response.text;
+    } catch (e) {
+      debugPrint(e.toString());
+      return null;
+    }
+  }
+The issue persists even if i hardcode the correct mimetype in DataPart constructor.
+Any other information you'd like to share?
+No response
+ The text was updated successfully, but these errors were encountered: 
+👍1
+garysm reacted with thumbs up emoji👀3
+Zambrella, markwitt1, and Claudiu-Dinea reacted with eyes emoji
+All reactions
+👍1 reaction
+👀3 reactions"
+"https://github.com/google-gemini/generative-ai-dart/issues/183","import problem","2024-06-27T23:35:45Z","Closed as not planned issue","component:dart sdk,status:triaged,type:help","Description of the bug:
+Target of URI doesn't exist: 'package:google_generative_ai/google_generative_ai.dart'.
+ Try creating the file referenced by the URI, or try using a URI for a file that does exist.darturi_does_not_exist
+ library package:google_generative_ai/google_generative_ai.dart
+ package:google_generative_ai/google_generative_ai.dart
+Actual vs expected behavior:
+No response
+Any other information you'd like to share?
+No response
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-dart/issues/182","Allow setting a base URL","2024-06-17T09:10:41Z","Closed issue","No label","Description of the feature request:
+I request to develop a method, where the client can override the base URL of the API, apart from generativelanguage.googleapis.com. This is especially useful when using API Gateways or extending some functionalities.
+What problem are you trying to solve with this feature?
+This will allow the users to use a custom endpoint, such as an API Gateway or an analytics tool.
+Any other information you'd like to share?
+No response
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-dart/issues/181","Is there a way to run AI locally?","2024-06-13T13:51:25Z","Open issue","component:dart sdk,status:awaiting user response,type:help","Description of the feature request:
+Hey! Could you please tell me if there's a way to run AI processing locally on the device in order to avoid library making API calls to https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent ?
+What problem are you trying to solve with this feature?
+No response
+Any other information you'd like to share?
+No response
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-dart/issues/178","Multi content doesn't work with google generative ai flutter package","2024-07-01T20:53:34Z","Closed as not planned issue","component:dart sdk,status:triaged,type:bug","Description of the bug:
+hello guy pls can some one help me when i use google generative ai package with gemini-1.5-flash model with text only the app work normally but when i try to add an image as an entry i get this error
+ An internal error has occurred. Please retry or report in https://developers.generativeai.google/guide/troubleshooting
+ error
+ sdk/lib/internal/js_dev_runtime/private/ddc_runtime/errors.dart 296:3 throw packages/google_generative_ai/src/api.dart 583:54 parseGenerateContentResponse
+ here is the code :
+List<Part> parts = [TextPart(message)];
+try {
+if (image != null) {
+parts.add(DataPart(image.extension!, image.bytes!));
+}
+} catch (e) {
+log(e.toString());
+}
+var content = Content.multi(parts);
+var response = myChat.sendMessageStream(content);
+
+Actual vs expected behavior:
+it supposed to work on both text only and text with image but currently it work with text only
+Any other information you'd like to share?
+No response
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-dart/issues/171","Server Exception Developer instruction is not enabled for models/gemini-pro","2024-06-12T08:34:20Z","Closed issue","component:dart sdk,status:awaiting user response,type:bug","Description of the bug:
+I get this error when i set system instructions while creating my model.
+ _model = GenerativeModel( model: 'gemini-pro', apiKey: Env.geminiKey, systemInstruction: Content.text('You need to tell user poems'));
+ When i try to sendMessage I got this excpetion.
+Actual vs expected behavior:
+Api should write poem for user.
+Any other information you'd like to share?
+Complete code
+ `import 'dart:developer';
+import 'package:ai_chat_characters/core/services/environment/env.dart';
+ import 'package:auto_route/auto_route.dart';
+ import 'package:flutter/material.dart';
+ import 'package:google_generative_ai/google_generative_ai.dart';
+ import 'package:stream_chat_flutter/stream_chat_flutter.dart';
+@RoutePage()
+ class ChatPage extends StatefulWidget {
+ const ChatPage({super.key});
+@OverRide
+ State createState() => _ChatPageState();
+ }
+class _ChatPageState extends State {
+ late GenerativeModel _model;
+ late ChatSession _chatSession;
+ late Channel channel;
+ List messages = [];
+@OverRide
+ void initState() {
+ super.initState();
+ _model = GenerativeModel(
+ model: 'gemini-pro', apiKey: Env.geminiKey, systemInstruction: Content.text('You need to tell user poems'));
+ channel = StreamChat.of(context).client.channel(
+ 'messaging',
+ id: 'flutter_chat_ai_gen_1',
+ )..watch().then((value) {
+ // value.messages?.forEach((element) {
+ // StreamChat.of(context).client.deleteMessage(element.id);
+ // });
+ messages = value.messages ?? [];
+ _startChat();
+ });
+ }
+@OverRide
+ Widget build(BuildContext context) {
+ return StreamChannel(
+ channel: channel,
+ child: _ChannelPage(
+ onMessageSent: _generate,
+ ),
+ );
+ }
+void _startChat() {
+ _chatSession = _model.startChat(history: messages.map((e) => Content.text(e.text ?? '')).toList());
+ }
+void _generate(Message message) async {
+ var prompt = message.text!;
+ if (prompt.isEmpty) return;
+final content = Content.text(prompt);
+
+var response = await _chatSession.sendMessage(content);
+channel.sendMessage(
+  Message(
+    text: response.text,
+    extraData: const {
+      'isGeminiMessage': true,
+    },
+  ),
+);
+setState(() {});
+
+}
+ }
+/// Displays the list of messages inside the channel
+ class _ChannelPage extends StatelessWidget {
+ final ValueChanged onMessageSent;
+const _ChannelPage({required this.onMessageSent});
+@OverRide
+ Widget build(BuildContext context) {
+ return Column(
+ children: [
+ Expanded(
+ child: StreamMessageListView(
+ messageBuilder: (context, details, list, def) {
+ return def.copyWith(
+ reverse: !(details.message.extraData['isGeminiMessage'] as bool? ?? false),
+ borderRadiusGeometry: const BorderRadius.all(Radius.circular(16)),
+ showUsername: false,
+ showSendingIndicator: false,
+ showTimestamp: false,
+ );
+ },
+ ),
+ ),
+ StreamMessageInputTheme(
+ data: const StreamMessageInputThemeData(inputTextStyle: TextStyle()),
+ child: StreamMessageInput(
+ onMessageSent: onMessageSent,
+ showCommandsButton: false,
+ disableAttachments: true,
+ ),
+ )
+ ],
+ );
+ }
+ }
+ `
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-dart/issues/167","Not allowed to use if user in Hong Kong","2024-05-21T10:05:26Z","Open issue","component:dart sdk,status:awaiting user response,type:bug","Description of the bug:
+the plugin stopped responding, throwing error if user is using in Hong Kong.
+ Can there be workaround like for vertexAI, able to access in restricted region?
+ Quite unfair to ban access for those users.
+Actual vs expected behavior:
+Able to use the plugin.
+Any other information you'd like to share?
+No response
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-dart/issues/166","Error 500 (internal error) while prompting with function call","2024-05-29T14:11:31Z","Closed issue","component:dart sdk,status:awaiting user response,type:bug","Description of the bug:
+During prompting with function call, it randomly return 500 error (only about 8/10 requests are successful).
+[log] An internal error has occurred. Please retry or report in https://developers.generativeai.google/guide/troubleshooting
+Here my model declaration:
+Actual vs expected behavior:
+No response
+Any other information you'd like to share?
+No response
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-dart/issues/161","Pub not pulling correct build","2024-05-14T06:12:29Z","Closed issue","component:dart sdk,component:documentation,type:bug","Description of the bug:
+running $ flutter pub add google_generative_ai is currently pulling google_generative_ai: ^0.0.1-dev instead of version 0.4.0
+Actual vs expected behavior:
+No response
+Any other information you'd like to share?
+No response
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-dart/issues/142","Security Policy violation SECURITY.md","2024-05-28T04:06:18Z","Closed issue","allstar","This issue was automatically created by Allstar.
+Security Policy Violation
+ Security policy not enabled.
+ A SECURITY.md file can give users information about what constitutes a vulnerability and how to report one securely so that information about a bug is not publicly visible. Examples of secure reporting methods include using an issue tracker with private issue support, or encrypted email with a published key.
+To fix this, add a SECURITY.md file that explains how to handle vulnerabilities found in your repository. Go to https://github.com/google-gemini/generative-ai-dart/security/policy to enable.
+For more information, see https://docs.github.com/en/code-security/getting-started/adding-a-security-policy-to-your-repository.
+This issue will auto resolve when the policy is in compliance.
+Issue created by Allstar. See https://github.com/ossf/allstar/ for more information. For questions specific to the repository, please contact the owner or maintainer.
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-dart/issues/141","Security Policy violation Outside Collaborators","2024-05-19T04:06:04Z","Closed issue","allstar","This issue was automatically created by Allstar.
+Security Policy Violation
+ Found 3 outside collaborators with admin access.
+ This policy requires users with this access to be members of the organisation. That way you can easily audit who has access to your repo, and if an account is compromised it can quickly be denied access to organization resources. To fix this you should either remove the user from repository-based access, or add them to the organization.
+Remove the user from the repository-based access. From the main page of the repository, go to Settings -> Manage Access.
+ (For more information, see https://docs.github.com/en/account-and-profile/setting-up-and-managing-your-github-user-account/managing-access-to-your-personal-repositories/removing-a-collaborator-from-a-personal-repository)
+OR
+Invite the user to join your organisation. Click your profile photo and choose “Your Organization” → choose the org name → “People” → “Invite Member.” (For more information, see https://docs.github.com/en/organizations/managing-membership-in-your-organization/inviting-users-to-join-your-organization)
+If you don't see the Settings tab you probably don't have administrative access. Reach out to the administrators of the organisation to fix this issue.
+OR
+Exempt the user by adding an exemption to your organization-level Outside Collaborators configuration file.
+⚠️ There is an updated version of this policy result! Click here to see the latest update
+This issue will auto resolve when the policy is in compliance.
+Issue created by Allstar. See https://github.com/ossf/allstar/ for more information. For questions specific to the repository, please contact the owner or maintainer.
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-dart/issues/140","Security Policy violation Branch Protection","2024-08-01T04:06:31Z","Closed issue","allstar","This issue was automatically created by Allstar.
+Security Policy Violation
+ Dismiss stale reviews not configured for branch main
+This issue will auto resolve when the policy is in compliance.
+Issue created by Allstar. See https://github.com/ossf/allstar/ for more information. For questions specific to the repository, please contact the owner or maintainer.
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-dart/issues/131","Multi-modal chat with gemini-pro-vision","2024-05-22T15:47:07Z","Closed as not planned issue","component:dart sdk,status:triaged,type:feature request","I am trying to build a multimodal chat component for my app. However, you can't have a text only input in 'gemini-pro-vision' ChatSession.
+We should be able to have a chat that includes text-only input and multi-modal inputs.
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-dart/issues/130","Add Schema named constructors for various types","2024-05-09T19:19:39Z","Closed issue","component:dart sdk,status:triaged,type:feature request","The current pattern is Schema(SchemaType.object, properties:..., Schema(SchemaType.string, description: ...
+This API is more verbose than it needs to be (Schema repeated twice, Type is a noise word).
+ This API is also less discoverable than it could be, because some named constructor arguments don't apply to all schema types - the enumValues, format, items, properties, and requiredProperties fields only apply to a subset of schema types.
+I think it would be an improvement to add Schema.object(properties: ..., Schema.string(description: ..., Schema.enum(values: ..., etc
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-dart/issues/128","Is it possible to add mandatory JSON format response","2024-05-22T15:47:49Z","Closed issue","component:dart sdk,status:awaiting user response,type:feature request","i see in google docs an example for CURL
+curl https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro-latest:generateContent?key=$API_KEY
+ -H 'Content-Type: application/json' 
+ -X POST 
+ -d '{ ""contents"":[{
+ ""parts"":[{""text"": ""List 5 popular cookie recipes using this JSON schema: { ""type"": ""object"", ""properties"": { ""recipe_name"": { ""type"": ""string"" },}}""}] }],
+ ""generationConfig"": {
+ ""response_mime_type"": ""application/json"",
+ } }'
+so is it possible to add ""response_mime_type"": ""application/json"", to generationConfig ?
+ The text was updated successfully, but these errors were encountered: 
+👍1
+devoncarew reacted with thumbs up emoji
+All reactions
+👍1 reaction"
+"https://github.com/google-gemini/generative-ai-dart/issues/122","Client side API Key security","2024-04-15T07:52:04Z","Open issue","component:dart sdk,status:triaged,type:bug","Hello
+The sdk is great. I have a working prototype of my app within 3 days. Doing everything client side is quite quick.
+However, this exposes the API key to any malicious actor on the client side. Especially on the web. I can build with obfuscation, but it would still not be good security practice to embed the key in the app. I also do not want to redo everything on the server side. Especially since there aren't many dart server sdks. This would require me to do all the work from scratch again. Would it be possible to secure this client-side?
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-dart/issues/111","Find a long term pattern for reuse between this implementation and the vertex AI SDK","2024-04-03T21:07:06Z","Open issue","component:dart sdk,status:triaged,type:feature request","There is a lot of overlap between the services, so initially the vertex AI SDK will depend on this package for most data types and the base model implementation. We'll start out with lib/src/ imports from the vertex AI SDK and extra caution when making changes here. When we are getting ready to publish as a stable version we should move to a better long term approach, or add mechanical checks to the current approach. In my opinion we should choose between making the extension points part of the stable public API, or moving the base implementation to a shared dependency and using the same customization handles to implement the vertex and google AI SDKs, or moving both implementations into a single package.
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-dart/issues/102","Riverpod + Flutter Hooks Flutter Sample","2024-03-23T19:40:18Z","Open issue","component:documentation,status:triaged,type:help","Would there be any interest for including a Riverpod + Hooks Flutter application into samples? I would imagine it would be based on the existing Flutter sample, but would just implement Riverpod/hooks features for those comfortable working with those commonly used packages.
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-dart/issues/99","GenerateContentResponse.text may not return all the response info","2024-05-23T19:02:48Z","Closed issue","component:dart sdk,status:triaged,type:bug","It looks like GenerateContentResponse.text just returns the text from the first Candidate in the candidates list, and from that candidate, the first TextPart in the parts list. I don't know about the guarantees wrt what the server returns, but it would probably be good to concatenate the returned candidates and parts (or, not offer a simplified API?).
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-dart/issues/98","parseEmbedContentResponse doesn't handle errors correctly.","2024-03-21T18:49:41Z","Closed issue","component:dart sdk,status:triaged,type:bug","Any error from the embedContent is returned as FormatException (FormatException: Unhandled EmbedContentResponse format) unlike generateContent which turns correct exception type.
+It seems like because it doesn't utilise parseError
+ The text was updated successfully, but these errors were encountered: 
+👍1
+natebosch reacted with thumbs up emoji
+All reactions
+👍1 reaction"
+"https://github.com/google-gemini/generative-ai-dart/issues/96","batchEmbedContent is not available as mentioned in the documentation.","2024-04-02T18:56:05Z","Closed issue","component:dart sdk,status:triaged,type:bug","I am not able to access the batchEmbedContent method for the GenerativeModel class as mentioned in the documentation here. .
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-dart/issues/93","consider exposing the ListModels API call","2024-03-04T22:55:35Z","Open issue","component:dart sdk,status:triaged,type:feature request","Seen from an error message:
+models/xxx is not found for API version v1, or is not supported for GenerateContent.
+ Call ListModels to see the list of available models and their supported methods.
+ The text was updated successfully, but these errors were encountered: 
+👍5
+jorgelrj, davidmigloz, immadisairaj, kascote, and MrCsabaToth reacted with thumbs up emoji
+All reactions
+👍5 reactions"
+"https://github.com/google-gemini/generative-ai-dart/issues/91","Tuned Models","2024-04-03T21:00:28Z","Closed issue","component:dart sdk,status:triaged,type:feature request","Specifying a tuned model does not seem to work, can this be added?
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-dart/issues/90","Difference in results between Gemini via interface and package","2024-02-28T13:32:42Z","Open issue","component:dart sdk,status:triaged,type:bug","Hello everyone, I'm facing a problem in relation to using Gemini through the interface and the package, using default parameters to analyze an image and using the same prompt, I'm having a difference in the response. In the image detection package it is X and in Gemini through the interface it is Y. The interface always gets it right, the package gets it wrong.
+ Anyone else facing the same problem?
+ The text was updated successfully, but these errors were encountered: 
+👍1
+sarankumar-ns reacted with thumbs up emoji
+All reactions
+👍1 reaction"
+"https://github.com/google-gemini/generative-ai-dart/issues/88","specifying generationConfig: GenerationConfig(maxOutputTokens: ) returns an empty text","2024-05-22T00:47:50Z","Closed as not planned issue","component:dart sdk,status:triaged,type:bug","using the package without generationConfig: GenerationConfig(maxOutputTokens: ) works well, but with it, it always results in an empty text.
+class _GeminiScreenState extends State<GeminiScreen> {
+  final GenerativeModel model = GenerativeModel(
+    model: 'gemini-pro',
+    safetySettings: [
+      SafetySetting(HarmCategory.hateSpeech, HarmBlockThreshold.high),
+      SafetySetting(HarmCategory.dangerousContent, HarmBlockThreshold.high),
+      SafetySetting(HarmCategory.harassment, HarmBlockThreshold.high),
+      SafetySetting(HarmCategory.sexuallyExplicit, HarmBlockThreshold.high),
+    ],
+    generationConfig: GenerationConfig(maxOutputTokens: 200),
+    apiKey: Env.ia,
+  );
+
+  @override
+ void initState() {
+    super.initState();
+    chat = model.startChat(
+      safetySettings: [
+        SafetySetting(HarmCategory.hateSpeech, HarmBlockThreshold.high),
+        SafetySetting(HarmCategory.dangerousContent, HarmBlockThreshold.high),
+        SafetySetting(HarmCategory.harassment, HarmBlockThreshold.high),
+        SafetySetting(HarmCategory.sexuallyExplicit, HarmBlockThreshold.high),
+      ],
+      generationConfig: GenerationConfig(maxOutputTokens: 200),
+    );
+}
+try {
+      var response = await chat.sendMessage(
+        Content.text(textController.text.trim()),
+      );
+      final text = response.text;
+      print(response.text);
+
+      if (text == null) {
+        debugPrint('No response from API.');
+        return;
+      } else {
+        setState(() {
+          isLoading = false;
+        });
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+      setState(() {
+        isLoading = false;
+      });
+    } finally {
+      textController.clear();
+      setState(() {
+        isLoading = false;
+      });
+    }
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-dart/issues/87","Facilitate the use of the Gemma LLM","2024-05-22T21:04:10Z","Closed as not planned issue","component:dart sdk,status:triaged,type:feature request","Facilitate the use of the Gemma model. Since it has launched, I believe that Gemma should be integrated with this SDK.
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-dart/issues/83","Vertex AI support","2024-02-21T19:24:53Z","Closed issue","package:google_generative_ai","It would be great if this package supported using it with Vertex AI. Currently, it's impossible to use it in the EU without hacks to make it work with Vertex AI.
+I know there are some differences between the API, probably there are a few more:
+Different URL
+Different authorization header
+Slight difference in citationMetadata. One has a citations field the other has citationSources. Also, the citation model itself is a bit different.
+ The text was updated successfully, but these errors were encountered: 
+👍1
+mkobuolys reacted with thumbs up emoji
+All reactions
+👍1 reaction"
+"https://github.com/google-gemini/generative-ai-dart/issues/81","Is Function Calling possible?","2024-02-19T05:09:07Z","Open issue","package:google_generative_ai","I've looked into the samples a bit and the available params but I'm not seeing anything about function calling/tools. Is this already possible and I'm missing it or is it planned to be supported? It would be awesome to be able to call local Dart functions through Gemini similar to how it appears to be possible with Python or a REST API
+ The text was updated successfully, but these errors were encountered: 
+👍3
+estebanrepupilli, jorgelrj, and MrCsabaToth reacted with thumbs up emoji
+All reactions
+👍3 reactions"
+"https://github.com/google-gemini/generative-ai-dart/issues/80","FormatException: Unhandled Candidate format when calling GenerativeModel.generateContent()","2024-02-21T20:17:36Z","Closed issue","package:google_generative_ai","I don't know what the result from the server was, but here's the stack trace I saw:
+Unhandled exception:
+FormatException: Unhandled Candidate format
+#0      _parseCandidate (package:google_generative_ai/src/api.dart:526:10)
+#1      MappedListIterable.elementAt (dart:_internal/iterable.dart:425:31)
+#2      ListIterator.moveNext (dart:_internal/iterable.dart:354:26)
+#3      new _GrowableList._ofEfficientLengthIterable (dart:core-patch/growable_array.dart:189:27)
+#4      new _GrowableList.of (dart:core-patch/growable_array.dart:150:28)
+#5      new List.of (dart:core-patch/array_patch.dart:39:18)
+#6      ListIterable.toList (dart:_internal/iterable.dart:224:7)
+#7      parseGenerateContentResponse (package:google_generative_ai/src/api.dart:470:41)
+#8      GenerativeModel.generateContent (package:google_generative_ai/src/model.dart:127:14)
+<asynchronous suspension>
+
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-dart/issues/79","Not available in Canada","2024-02-21T19:30:54Z","Closed issue","package:google_generative_ai","Despite the post showing that Gemini is now available in Canada, our app users in Canada are getting an Instance of ""UnsupportedUserLocation"" error with the google_generative_ai API. Would be helpful to get a feedback on this.
+
+https://blog.google/intl/en-ca/products/explore-get-answers/gemini-ca/amp/
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-dart/issues/75","CitationSource parsing is too strict","2024-02-22T21:33:09Z","Closed issue","package:google_generative_ai","The current implementation of CitationSource parsing throws an exception when any of the arguments is null
+CitationSource _parseCitationSource(Object? jsonObject) {
+  return switch (jsonObject) {
+    {
+      'startIndex': final int startIndex,
+      'endIndex': final int endIndex,
+      'uri': final String uri,
+      'license': final String license,
+    } =>
+      CitationSource(startIndex, endIndex, Uri.parse(uri), license),
+    _ => throw FormatException('Unhandled CitationSource format', jsonObject),
+  };
+}
+
+Seems like all of those fields should be nullable. All fields in the actual CitationSource model are nullable and according to the API documentation, all of them are optional https://ai.google.dev/api/rest/v1beta/CitationMetadata#CitationSource.
+ The text was updated successfully, but these errors were encountered: 
+👍1
+clemortel reacted with thumbs up emoji
+All reactions
+👍1 reaction"
+"https://github.com/google-gemini/generative-ai-dart/issues/74","Make consistent chats easier to save and restore","2024-02-16T11:22:34Z","Open issue","package:google_generative_ai","This SDK could also make it so that chats could become consistent between different sessions.
+As of right now, people could wrap around chats and models to recreate the chats from history but it would be a nice addition if this were already built-in.
+With options for the user to save and restore it in a file or something similar.
+Any suggestions or considerations are welcome.
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-dart/issues/70","Add support for File and Folder upload","2024-02-15T17:01:36Z","Open issue","package:google_generative_ai","Since Google AI Studio has offered functionalities to upload files and folders to the model for context, I request to add support for the same.
+ The text was updated successfully, but these errors were encountered: 
+👍2
+wliumelb and MrCsabaToth reacted with thumbs up emoji
+All reactions
+👍2 reactions"
+"https://github.com/google-gemini/generative-ai-dart/issues/66","need a way to dispose of the http Client()","2024-02-16T16:56:28Z","Closed issue","package:google_generative_ai","When creating a GenerativeModel, you can optionally pass in an http Client. If you don't pass one in, an instance is created for you.
+However, when I'm finished with the GenerativeModel, I don't have any way of disposing of the created http client (client.close()). I think we'll need a dispose or close on GenerativeModel (which may proxy through to ApiClient).
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-dart/issues/64","generateContent doesn't use provided http client","2024-02-13T18:59:35Z","Closed issue","package:google_generative_ai","When creating GenerativeModel we can provide a custom http client using the httpClient argument. This http client is used when generateContentStream is called but is not used by generateContent.
+The issue lies in the implementation of HttpApiClient. The streamRequest method used by generateContentStream correctly uses _httpClient if provided.
+final response = _httpClient == null
+    ? await request.send()
+    : await _httpClient.send(request);
+
+However, makeRequest used by generateContent does not. It always uses the global post method from http package.
+final response = await http.post(
+  uri,
+  headers: {
+    'x-goog-api-key': _apiKey,
+    'x-goog-api-client': clientName,
+    'Content-Type': 'application/json',
+  },
+  body: _utf8Json.encode(body),
+);
+
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-dart/issues/60","Flutter sample's text input loses focus after submission","2024-02-12T21:55:09Z","Closed issue","package:google_generative_ai","Repro steps:
+Run the Flutter sample.
+Type text and press Enter
+Expected result: the text input stays focused after the response is shown
+ Actual result: the text input loses focus after the response is shown
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-dart/issues/44","Add support for request options with a timeout","2024-02-09T00:14:16Z","Open issue","package:google_generative_ai","See google-gemini/generative-ai-js#31, google-gemini/generative-ai-android#52
+The new design allows passing a requestOptions argument when creating the model. Currently they cannot be passed to generateContent and the other calls like safety settings and generation config, but we can add optional arguments later and it should not be breaking for anyone since the class is final.
+The initially supported option is a timeout. cc @brianquinlan - Do you think we should punt on this for now until package:http supports ""real"" timeouts which cancel requests, or should we implement faked support for now and update to also cancel the outstanding request when we implement timeouts there?
+More options may be added later.
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-dart/issues/35","Allow setting generationConfig and safetySettings per request.","2024-02-08T05:52:35Z","Closed issue","package:google_generative_ai","Currently we allow setting this when constructing the model. The SDKs in at least some of the other languages support overriding for a single request.
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-dart/issues/34","Unable to set candidateCount","2024-08-01T16:32:35Z","Closed issue","package:google_generative_ai","Hi! First of all, it very useful for Flutter & Dart developers to have this package to use with Gemini so thank you for your time creating the package.
+While I was testing this package with old project that used PaLM API using HTTP calls, I faced this issue when I want to have more than one output
+FormatException (FormatException: Unhandled GenerateContentResponse format: {error: {code: 400, message: Only one candidate can be specified, status: INVALID_ARGUMENT}})
+My model instance and config
+final model = GenerativeModel(
+      model: 'gemini-pro',
+      apiKey: apiKey!,
+      generationConfig: GenerationConfig(candidateCount: 3),
+    );
+And the code that I used to fetch the Gemini responses
+final prompt = await _promptRepository.getPromptForGemini(parameters);
+
+final response = await model.generateContent([Content.text(prompt)]);
+I'm not sure if this is how I have to use the package, I didn't see any example with more than one output.
+ The text was updated successfully, but these errors were encountered: 
+👍1
+huynguyennovem reacted with thumbs up emoji
+All reactions
+👍1 reaction"
+"https://github.com/google-gemini/generative-ai-dart/issues/22","Google AI Dart SDK","2024-02-16T20:06:01Z","Closed issue","No label","Tracking issue
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/generative-ai-dart/issues/5","repo defaults","2024-01-24T06:54:46Z","Closed issue","No label","@cynthiajoan - can you set the defaults on this repo to be 'squash and merge'? I believe that means unchecking the other two PR merge options:
+Thanks!
+cc @natebosch
+ The text was updated successfully, but these errors were encountered: 
+👍1
+natebosch reacted with thumbs up emoji
+All reactions
+👍1 reaction"

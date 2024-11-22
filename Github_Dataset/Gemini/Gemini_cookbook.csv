@@ -1,0 +1,1706 @@
+﻿"https://github.com/google-gemini/cookbook/issues/306","citation_sources or citation_metadata not in candidate","2024-10-18T13:51:03Z","Closed issue","component:other,status:awaiting response,type:help","Description of the bug:
+I'm trying get citation_sources from candidate, ref https://cloud.google.com/vertex-ai/docs/reference/rest/v1/GenerateContentResponse#Candidate but this is not in the object.
+Actual vs expected behavior:
+No response
+Any other information you'd like to share?
+No response
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/cookbook/issues/304","Logprobs does not work with Python","2024-10-07T18:02:36Z","Open issue","status:awaiting response","Description of the bug:
+Unable to get response_logprobs in response body - unrecognized parameter
+Actual vs expected behavior:
+According to this cookbook, the following should work -
+import google.generativeai as genai
+
+model = genai.GenerativeModel(model_name)
+test_prompt=""Why don't people have tails?""
+
+response = model.generate_content(
+    test_prompt,
+    generation_config=dict(response_logprobs=True, logprobs=5)
+)
+But I receive the following error -
+---------------------------------------------------------------------------
+AttributeError                            Traceback (most recent call last)
+Cell In[79], line 1
+----> 1 model = genai.GenerativeModel(model_name)
+      2 test_prompt=""Why don't people have tails?""
+      4 response = model.generate_content(
+      5     test_prompt,
+      6     generation_config=dict(response_logprobs=True, logprobs=5)
+      7 )
+
+AttributeError: module 'google.generativeai' has no attribute 'GenerativeModel'
+Which tells me that the API has changed.
+Additionally, my company's internal offering receives the following error if I replicate the generation_config line -
+vertexai.init(project=""dev-poc-xxxyyy"", location=""x-y"")
+model = GenerativeModel(
+    ""gemini-1.5-flash-001"",
+)
+responses = model.generate_content(
+    [prompt],
+    generation_config=dict(response_logprobs=True, logprobs=5),
+    safety_settings=safety_settings,
+    stream=False
+)
+I get the following error -
+ValueError: Unknown field for GenerationConfig: response_logprobs
+Although it works if I replace generation_config with other parameters such as -
+generation_config = {
+    ""candidate_count"": 1,
+    ""max_output_tokens"": 1024,
+    ""temperature"": 0.2,
+    ""top_p"": 0.8
+}
+Any other information you'd like to share?
+No response
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/cookbook/issues/294","Missing cookbook for Rest Code execution","2024-09-20T00:28:18Z","Open issue","type:bug","Description of the bug:
+No response
+Actual vs expected behavior:
+No response
+Any other information you'd like to share?
+No response
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/cookbook/issues/293","Add an example of importing a CSV to the tuning cookbook","2024-10-11T02:16:35Z","Closed issue","good first issue,status:triaged,type:feature request","Description of the feature request:
+Add an example of importing a CSV using pandas.read_csv to the tuning cookbook: https://github.com/google-gemini/cookbook/blob/main/quickstarts/Tuning.ipynb
+AI Studio accepts csv files as datasets for tuning jobs. The tuning cookbook currently demonstrates creating a tuned model using an list of dictionaries. This is a request for an additional sample demonstrating importing a training dataset from a local csv file using pandas.read_csv, to mirror the functionality of importing a csv file through AI Studio.
+What problem are you trying to solve with this feature?
+Help users understand how to tune a model using data from a CSV.
+Any other information you'd like to share?
+No response
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/cookbook/issues/274","TypeError: argument of type 'Part' is not iterable","2024-10-08T22:34:58Z","Closed as not planned issue","component:other,status:awaiting response,status:stale,type:help","Description of the bug:
+I am getting a error of ""Part"" when i try running the code.
+Actual vs expected behavior:
+import google.generativeai as genai
+ import os
+genai.configure(api_key=os.environ[""API_KEY""])
+ model = genai.GenerativeModel('gemini-1.0-pro-latest')
+ response = model.generate_content(""The opposite of hot is"")
+ print(response.text)
+Above is the code I am trying to run. But it's throwing me a error ""TypeError: argument of type 'Part' is not iterable""
+Any other information you'd like to share?
+No response
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/cookbook/issues/265","Add logo in html","2024-09-23T22:35:25Z","Closed as not planned issue","component:other,status:awaiting response,status:stale,type:help","Description of the bug:
+i want add logo to code HTML
+ <title>Custom Pre-loader</title> <style> /* Pre-loader styles */ #preloader { position: fixed; left: 0; top: 0; width: 100%; height: 100%; background-color: #fff; /* Background color of the pre-loader */ display: flex; justify-content: center; align-items: center; z-index: 9999; /* Make sure it covers the content */ } 
+    #preloader img {
+        width: 100px; /* Adjust the size of the logo */
+        height: auto;
+    }
+
+    /* Main content styles */
+    #main-content {
+        display: none; /* Hide main content initially */
+    }
+</style>
+
+<!-- Main Content -->
+<div id=""main-content"">
+    <h1>Welcome to My Website</h1>
+    <p>This is the main content of the page.</p>
+</div>
+
+<script>
+    // JavaScript to hide pre-loader and show main content
+    window.addEventListener('load', function() {
+        const preloader = document.getElementById('preloader');
+        const mainContent = document.getElementById('main-content');
+
+        // Hide preloader and show main content
+        preloader.style.display = 'none';
+        mainContent.style.display = 'block';
+    });
+</script>
+
+Actual vs expected behavior:
+No response
+Any other information you'd like to share?
+No response
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/cookbook/issues/261","Missing OpenAPI spec","2024-09-23T22:35:27Z","Closed as not planned issue","status:awaiting response,status:stale","Description of the feature request:
+We need an OpenAPI spec for the gemini API.
+ The SpringAI team or some contributors would use this to implement Google Gemini directly into SpringAI. However this is not possible without reverse engineering code of existing clients like the python clients. (Which I would love not having to do)
+See: spring-projects/spring-ai#1252
+What problem are you trying to solve with this feature?
+Google Gemini should be available for the server side Java/JVM world.
+Any other information you'd like to share?
+No response
+ The text was updated successfully, but these errors were encountered: 
+👍1
+uripeled2 reacted with thumbs up emoji
+All reactions
+👍1 reaction"
+"https://github.com/google-gemini/cookbook/issues/241","Cook book - responseSchema","2024-07-12T14:45:51Z","Open issue","component:examples,status:awaiting response,status:triaged,type:feature request","Description of the feature request:
+Can we get a cookbook for the usage of responseSchema
+https://ai.google.dev/api/rest/v1beta/GenerationConfig
+What problem are you trying to solve with this feature?
+No response
+Any other information you'd like to share?
+No response
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/cookbook/issues/235","How to fine tune the model with images?","2024-08-16T03:35:46Z","Closed issue","component:examples,status:triaged,type:feature request","Description of the feature request:
+How to fine tune the model with images? fine-tune
+What problem are you trying to solve with this feature?
+fine-tune the multimodal
+Any other information you'd like to share?
+No response
+ The text was updated successfully, but these errors were encountered: 
+👍2
+Filimoa and fvaleye reacted with thumbs up emoji
+All reactions
+👍2 reactions"
+"https://github.com/google-gemini/cookbook/issues/233","Difference in Output Between PDF and DOC File Upload Methods","2024-07-08T06:53:10Z","Open issue","component:other,status:awaiting response,status:stale,type:bug","Description of the bug:
+I'm trying two methods for file uploads:
+PDF File Upload:
+ DOC File Upload:
+ Despite both files containing the same content, I'm noticing differences in the output. Specifically, the output response from the DOC file upload method lacks a lot of information and steps, while the PDF method works great.
+Actual vs expected behavior:
+Here's what I'm doing for each method:
+1. PDF File Upload:
+Since there is no support for direct PDF file upload, I'm converting each PDF page to an image, extracting text from the PDF, and then doing the following:
+ `files.append(genai.upload_file(img))
+for page, (text, image) in enumerate(zip(texts, files)):
+ instruction = f""{instruction}\nPage {page+1}\n------------\n{text}\n{image}""
+chat_session = model.start_chat(
+ history=[
+ {""role"": ""user"", ""parts"": [instruction]},
+ ]
+ )
+ response = chat_session.send_message(prompt)
+ print(response.text)
+ `
+2. DOC File Upload:
+For the DOC file, I'm uploading it directly to Gemini:
+files.append(genai.upload_file(""test.docx"")) instruction = f""Usage document:\n{file}"" chat_session = model.start_chat( history=[ {""role"": ""user"", ""parts"": [instruction]}, ] ) response = chat_session.send_message(prompt) print(response.text) 
+Any other information you'd like to share?
+Can anyone help me understand why there is a difference in the output between these two methods? The content in both files is the same, but the response from the DOC file upload lacks information and steps compared to the PDF method. Any insights would be appreciated!
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/cookbook/issues/221","""response_schema"" results in KeyError","2024-06-27T11:58:03Z","Open issue","component:examples,status:awaiting response,status:stale,type:bug","Description of the bug:
+Hello, I'm trying to recreate the example at: https://github.com/google-gemini/cookbook/blob/main/examples/json_capabilities/Text_Summarization.ipynb. After specifying the classes and creating the generation_config, while invoking the genai.GenerativeModel model with generation_config results in a KeyError.
+In [22]: from google import generativeai as genai
+         from typing_extensions import TypedDict
+
+In [23]: genai.__version__
+Out[23]: '0.7.1'
+
+In [24]: class Character(TypedDict):
+            name: str
+            description: str
+            alignment: str
+        
+        class Location(TypedDict):
+            name: str
+            description: str
+        
+        class TextSummary(TypedDict):
+            synopsis: str
+            genres: list[str]
+            locations: list[Location]
+            characters: list[Character]
+
+In [25]: generation_config = {
+            ""response_mime_type"": ""application/json"",
+            ""response_schema"": TextSummary
+        }
+
+In [26]: model = Genai.GenerativeModel(
+            model_name=model_name,
+            generation_config=generation_config,
+        )
+
+Traceback (most recent call last):
+
+  Cell In[26], line 1
+    model = Genai.GenerativeModel(
+
+  File ~\AppData\Local\anaconda3\Lib\site-packages\google\generativeai\generative_models.py:86 in __init__
+    self._generation_config = generation_types.to_generation_config_dict(generation_config)
+
+  File ~\AppData\Local\anaconda3\Lib\site-packages\google\generativeai\types\generation_types.py:213 in to_generation_config_dict
+    _normalize_schema(generation_config)
+
+  File ~\AppData\Local\anaconda3\Lib\site-packages\google\generativeai\types\generation_types.py:184 in _normalize_schema
+    response_schema = content_types._schema_for_class(response_schema)
+
+  File ~\AppData\Local\anaconda3\Lib\site-packages\google\generativeai\types\content_types.py:298 in _schema_for_class
+    schema = _build_schema(""dummy"", {""dummy"": (cls, pydantic.Field())})
+
+  File ~\AppData\Local\anaconda3\Lib\site-packages\google\generativeai\types\content_types.py:383 in _build_schema
+    unpack_defs(parameters, defs)
+
+  File ~\AppData\Local\anaconda3\Lib\site-packages\google\generativeai\types\content_types.py:404 in unpack_defs
+    ref = defs[ref_key.split(""defs/"")[-1]]
+
+KeyError: '#/definitions/TextSummary'
+
+
+
+Actual vs expected behavior:
+No response
+Any other information you'd like to share?
+No response
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/cookbook/issues/220","Bug Report the model often starts creating repetitive sequences of tokens","2024-06-26T22:53:15Z","Open issue","component:other,status:awaiting response,status:stale,type:bug","Description of the bug:
+Summary:
+ When using the “gemini-1.5-flash” model for generating long texts, the model often starts creating repetitive sequences of tokens, leading to an infinite loop and exhausting the token limit. This issue is observed with both the Vertex and Gemini APIs.
+Example: ```
+ “The judgment can be appealed in a motion for reconsideration, claiming that the judge did not consider the evidence properly. The judgment can be appealed in a motion for reconsideration, claiming that the judge did not consider the evidence properly. The judgment can be appealed in a motion for reconsideration, claiming that the judge did not consider the evidence properly. The judgment can be appealed…”
+ Steps to Reproduce:
+Use the ""gemini-1.5-flash"" model via Vertex or Gemini API.
+ Generate a long text (e.g., legal or technical document).
+ Observe the generated output for repetition of phrases or sentences.
+ Expected Behavior:
+ The model should generate coherent and non-repetitive text.
+Actual Behavior:
+ The model begins to repeat sequences of tokens indefinitely, leading to the maximum token limit being reached.
+Impact:
+Wastes tokens and API usage limits.
+ Generates unusable text, necessitating additional requests and costs.
+ Reproduction Rate:
+ Occurs frequently with long text generation tasks.
+Workaround:
+ Currently, there is no known workaround to prevent this issue.
+Request for Resolution:
+Investigate the cause of the repetitive token generation.
+ Implement a fix to prevent the model from entering a repetitive loop.
+ Provide a mechanism for users to request refunds or credits for tokens wasted due to this bug.
+Actual vs expected behavior:
+Actual: “The judgment can be appealed in a motion for reconsideration, claiming that the judge did not consider the evidence properly. The judgment can be appealed in a motion for reconsideration, claiming that the judge did not consider the evidence properly. The judgment can be appealed in a motion for reconsideration, claiming that the judge did not consider the evidence properly. The judgment can be appealed…”
+Expected: “The judgment can be appealed in a motion for reconsideration, claiming that the judge did not consider the evidence properly. ”
+Any other information you'd like to share?
+No response
+ The text was updated successfully, but these errors were encountered: 
+👍3
+mioruggieroguida, xansrnitu, and rchin-ascential reacted with thumbs up emoji
+All reactions
+👍3 reactions"
+"https://github.com/google-gemini/cookbook/issues/212","REST Example for Video prompting","2024-08-26T23:50:10Z","Closed issue","component:quickstarts,status:triaged,type:feature request","Description of the feature request:
+Can we get a quickstart example for video prompting using the REST API, particularly by using the File API to upload a video file (sampled at any fps) and querying the models using the file as input? Something similar to what we have in the Video.ipynb notebook would be super helpful.
+What problem are you trying to solve with this feature?
+No response
+Any other information you'd like to share?
+No response
+ The text was updated successfully, but these errors were encountered: 
+👍1
+KotlinFactory reacted with thumbs up emoji
+All reactions
+👍1 reaction"
+"https://github.com/google-gemini/cookbook/issues/210","https://github.com/google-gemini/cookbook.git","2024-06-15T08:38:54Z","Closed as not planned issue","No label","Description of the feature request:
+এখানে একবার প্রেস করলে সেটি ইনপুট বক্সে পেস্ট হবে
+What problem are you trying to solve with this feature?
+প্রেস করে হোল্ড করলে পিন, পেস্ট এবং ডিলিট করার অপশন আসবে
+Any other information you'd like to share?
+এখানে একবার প্রেস করলে সেটি ইনপুট বক্সে পেস্ট হবে
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/cookbook/issues/209","ALIHOSSAIN YT","2024-06-15T08:39:18Z","Closed as not planned issue","No label","Description of the bug:
+Fun
+Actual vs expected behavior:
+No response
+Any other information you'd like to share?
+No response
+ The text was updated successfully, but these errors were encountered: 
+😄1
+ALIHOSSAIN11 reacted with laugh emoji
+All reactions
+😄1 reaction"
+"https://github.com/google-gemini/cookbook/issues/203","Sherlock_Jr.ipynb was removed","2024-08-16T03:35:59Z","Closed issue","component:examples,status:awaiting response,type:bug","Description of the bug:
+Hi team,
+ I recently checked that Sherlock_Jr.ipynb was removed in the examples.
+Actual vs expected behavior:
+Sherlock_Jr.ipynb does exists in the examples
+Any other information you'd like to share?
+No response
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/cookbook/issues/201","Run on Multiple Images","2024-06-08T08:50:54Z","Open issue","component:other,status:awaiting response,status:stale,type:feature request","Description of the feature request:
+I cant run on multiple images as i am trying to run it on many images and store there output but it is saying
+ {
+ ""image"": ""800040_2.pdf_4.jpg"",
+ ""description"": ""I am sorry, I cannot access or process any external files, including images. Therefore, I am unable to extract information from the provided image. \n\nTo assist you, I need the text content of the menu itself. If you can copy and paste the text here, I can help you process it and return the data in the JSON format you requested. \n""
+ }
+What problem are you trying to solve with this feature?
+But when i run on single images it works please let me know what i have done wrong
+Any other information you'd like to share?
+import os
+ import json
+ import google.generativeai as genai
+ import google.generativeai as genai
+ from google.colab import userdata
+ GOOGLE_API_KEY=userdata.get('secretName')
+ genai.configure(api_key=GOOGLE_API_KEY)
+ model = genai.GenerativeModel('gemini-1.5-flash')
+image_directory = '/content/unzipped_files/New folder/'
+for filename in os.listdir(image_directory):
+ if filename.lower().endswith(('.png', '.jpg', '.jpeg')):
+ img_path = os.path.join(image_directory, filename)
+    # Define your prompt
+    prompt = """"""This image contains the restaurant menu we want to extract the dish name, section , price, description. section will be available at top only if not give blank section. Return output in json format:
+                    {section: section , dish name: dish name, price:price, description:description}""""""
+
+    # Generate content using the model
+    response = model.generate_content([prompt, img_path])  # Pass prompt and image path
+
+    # Create a dictionary for this image
+    image_data = {
+        'image': filename,
+        'description': response.text  # Access the text from the response
+    }
+
+    # Save the dictionary as a JSON file
+    json_filename = os.path.splitext(filename)[0] + '.json'  # Remove extension and add .json
+    json_path = os.path.join(image_directory, json_filename)
+    with open(json_path, 'w') as f:
+        json.dump(image_data, f, indent=4)
+
+print(""JSON files created successfully!"")
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/cookbook/issues/198","Add table of contexts for examples https://github.com/google-gemini/cookbook/tree/main/examples","2024-06-10T14:59:04Z","Closed issue","component:examples,status:triaged,type:feature request","Description of the feature request:
+We should have a robust table of contents to make the content more accessible https://github.com/google-gemini/cookbook/tree/main/examples
+What problem are you trying to solve with this feature?
+No response
+Any other information you'd like to share?
+No response
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/cookbook/issues/184","A small spelling mistake","2024-08-16T04:12:18Z","Closed issue","component:quickstarts,status:awaiting response,status:stale,type:bug","Description of the bug:
+Paragraph above ""Manual function calling"" part, the word ""Iff"" shoud be ""If"".
+Actual vs expected behavior:
+No response
+Any other information you'd like to share?
+No response
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/cookbook/issues/176","AI agent","2024-05-28T02:32:38Z","Closed as not planned issue","No label","No description provided.
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/cookbook/issues/175","in Audio.ipyn count_tokens results in 403","2024-06-22T13:59:22Z","Closed issue","component:quickstarts,status:triaged,type:bug","Description of the bug:
+Running the Audio.ipyn file, I am getting 403 error when running the count_tokens step.
+You do not have permission to access the File m7gxa43f7pft or it may not exist.
+To replicate,
+ 1 - Open the notebook in Google Colab,
+ 2 - Setup the GOOGLE_API_KEY
+ 3 - run all commands
+Actual vs expected behavior:
+actual behavior: model.count_tokens([your_file]) returns error
+I expect all steps in the cookbook execute without errors.
+Any other information you'd like to share?
+No response
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/cookbook/issues/174","AttributeError: 'File' object has no attribute 'state'","2024-05-25T05:00:29Z","Closed issue","component:examples,component:quickstarts,type:bug","Description of the bug:
+I'm following this cookbook: 
+cookbook/quickstarts/Video.ipynb
+ Line 224 in 54fb451
+	""while video_file.state.name == \""PROCESSING\"":\n"", 
+Getting the above mentioned attributeError when accessing state of the uploaded file.
+Actual vs expected behavior:
+Here is my code:
+import google.generativeai as genai
+
+def upload_file(video_file):
+        try:
+            print(""Inside upload file"")
+            genai.configure(api_key=userdata.get(""gemini""))
+            uploaded_file = genai.upload_file(video_file)
+            while uploaded_file.state.name == ""PROCESSING"":
+                print('Waiting for video to be processed.')
+                time.sleep(10)
+                uploaded_file = genai.get_file(uploaded_file.name)
+
+            if uploaded_file.state.name == ""FAILED"":
+                raise ValueError(uploaded_file.state.name)
+            print(f'Video processing complete: ' + uploaded_file.uri)
+            return uploaded_file
+        except Exception as e:
+            print(f""Error occurred when uploading file {e}"")
+            return None
+
+Actual behaviour:
+ Error occurred when uploading file AttributeError: 'File' object has no attribute 'state'.
+Expected:
+ Video processing complete: uploaded_file.uri
+Any other information you'd like to share?
+I executed print(dir(uploaded_file))
+And received the following result:
+ ['class', 'delattr', 'dict', 'dir', 'doc', 'eq', 'format', 'ge', 'getattribute', 'gt', 'hash', 'init', 'init_subclass', 'le', 'lt', 'module', 'ne', 'new', 'reduce', 'reduce_ex', 'repr', 'setattr', 'sizeof', 'str', 'subclasshook', 'weakref', '_proto', 'create_time', 'delete', 'display_name', 'expiration_time', 'mime_type', 'name', 'sha256_hash', 'size_bytes', 'to_proto', 'update_time', 'uri']
+As you can see state is not in the attribute list.
+My genai.__version__ is 0.5.2
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/cookbook/issues/161","Token counting for Audio input","2024-08-27T23:55:23Z","Closed issue","component:quickstarts,status:triaged,type:help","Description of the feature request:
+It would be great to know a close estimate of how many tokens it costs per minute of audio. In this guide, it mentions ""Audio and video are each converted to tokens at a fixed rate of tokens per minute."" Using the audio example you used in the guide as a reference point, for ~44 minutes of audio, it would cost ~1,899 tokens/minute of audio (83552/44). Is my understanding correct? Also, would the number of tokens change based on the audio input type (eg. wav vs mp3)?
+What problem are you trying to solve with this feature?
+Estimating the count of tokens for audio input.
+Any other information you'd like to share?
+No response
+ The text was updated successfully, but these errors were encountered: 
+❤️1
+Alexisloyolamend3z reacted with heart emoji
+All reactions
+❤️1 reaction"
+"https://github.com/google-gemini/cookbook/issues/158","Gemini handle the pdf file?","2024-08-16T03:53:12Z","Closed issue","component:quickstarts,status:awaiting response,status:stale,type:help","Description of the feature request:
+https://ai.google.dev/gemini-api/docs/prompting_with_media?lang=python
+ based on the above link, it seems not to work on the pdf file?
+ is my understanding right?
+What problem are you trying to solve with this feature?
+No response
+Any other information you'd like to share?
+No response
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/cookbook/issues/156","Enhance Function_calling.ipynb cookbook","2024-05-20T22:47:30Z","Open issue","component:quickstarts,status:triaged,type:feature request","Description of the feature request:
+Add example of Parallel function calling in the last section of cookbook/quickstarts
+ /Function_calling.ipynb
+The last section of the cookbook demonstrates the parallel-calling feature when there are no dependencies between arguments to be supplied to function tools and results from previous function tools. That is a good starting point.
+Many applications have partial dependencies. In other words, there are situations where, say, three functions can be requested by the model in parallel (because there are no dependencies between them) and two more functions are available to the model which can not yet be called because their arguments depend on results from one of the previously mentioned three functions.
+It will be helpful to describe how this flow will be implemented even if it is currently not working.
+See also
+https://discuss.ai.google.dev/t/function-calling-in-gemini-1-5-pro-latest-are-multiple-functioncall-in-the-same-response-a-positive-development/632
+What problem are you trying to solve with this feature?
+Clarify the development direction for developing with function tools
+Any other information you'd like to share?
+Update issue
+#94
+ It has been implicitly answered (and it would have been helpful if it had been actually answered before the May 15th code drop).
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/cookbook/issues/155","Cookbook: ""Code examples"" links needs to be updated","2024-05-21T03:33:14Z","Closed issue","component:examples,component:quickstarts,type:bug","Description of the bug:
+I've just checked the cookbook links and found few links are dead in below area:
+Actual vs expected behavior:
+The link for first card ""Anomaly Detection"" having this wrong link instead of this correct link
+Same way all the card under the Code examples section having same issue.
+ All the links should be
+main/examples/<FileName>.ipynb
+instead of
+main/cookbook/<FileName>.ipynb
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/cookbook/issues/153","https://github.com/google-gemini/cookbook/blob/main/quickstarts/File_API.ipynb gives error when loading","2024-05-20T01:04:15Z","Closed issue","component:examples,component:quickstarts,type:bug","Description of the bug:
+https://github.com/google-gemini/cookbook/blob/main/quickstarts/File_API.ipynb currently does not load on GitHub
+Actual vs expected behavior:
+I expect it to load
+Any other information you'd like to share?
+No response
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/cookbook/issues/151","Hey","2024-05-19T19:09:53Z","Closed issue","No label","// In the Xcode Add Packages dialog, add this Swift package URL into the search bar:
+ // https://github.com/google/generative-ai-swift
+// Add the following code to your Swift source code
+ import GoogleGenerativeAI
+let config = GenerationConfig(
+ temperature: 1,
+ topP: 0.95,
+ topK: 64,
+ maxOutputTokens: 8192,
+ )
+// Don't check your API key into source control!
+ guard let apiKey = ProcessInfo.processInfo.environment[""API_KEY""] else {
+ fatalError(""Add API_KEY as an Environment Variable in your app's scheme."")
+ }
+let model = GenerativeModel(
+ name: ""gemini-1.5-flash-latest"",
+ apiKey: apiKey,
+ generationConfig: config,
+ safetySettings: [
+ SafetySetting(harmCategory: .harassment, threshold: .blockMediumAndAbove),
+ SafetySetting(harmCategory: .hateSpeech, threshold: .blockMediumAndAbove),
+ SafetySetting(harmCategory: .sexuallyExplicit, threshold: .blockMediumAndAbove),
+ SafetySetting(harmCategory: .dangerousContent, threshold: .blockMediumAndAbove)
+ ]
+ )
+Task {
+ do {
+ let response = try await model.generateContent(
+ ""input: "",
+ ""output: ""
+ )
+ print(response.text ?? ""No text available"")
+ } catch {
+ print(error)
+ }
+ }
+SiriSearchFeedback-2024-04-22-211451.txt
+Uploading SteamLink.zip…
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/cookbook/issues/147","Would you accept translation contribution for this cookbook?","2024-05-17T16:24:31Z","Open issue","component:other,status:awaiting response,status:triaged,type:feature request","Description of the feature request:
+I translated full Gemini API Cookbook into Traditional Chinese here: https://github.com/doggy8088/gemini-api-cookbook
+I'd like to know that is this repo accept for contribute translations?
+If yes, is there any translation guideline I can follow?
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/cookbook/issues/145","A Comprehensive User Onboarding Guide","2024-05-17T08:16:06Z","Open issue","component:quickstarts,status:awaiting response,status:triaged,type:feature request","Description of the feature request:
+A comprehensive user onboarding guide designed to help new users quickly understand and start using the Google Gemini API. This guide should cover all necessary steps from account setup to making the first API call, including detailed explanations, screenshots, and troubleshooting tips.
+What problem are you trying to solve with this feature?
+The current documentation provides excellent individual pieces of information but lacks a cohesive, step-by-step onboarding experience for new users. Beginners might find it challenging to piece together all necessary steps from scattered documents. A unified onboarding guide would streamline the initial setup process, reduce confusion, and enhance the user experience by providing a clear, structured path from start to finish. I am a new user and I actually had issues connecting the pieces
+Any other information you'd like to share?
+The onboarding guide should include:
+•	Account Setup: Instructions for creating a Google account if the user does not have one.
+•	API Key Creation: Step-by-step guide on how to create and manage API keys in the Google AI Studio.
+•	Environment Setup: Detailed instructions on setting up the development environment, including installing necessary software and dependencies.
+•	First API Call: A simple tutorial on making the first API call, with explanations of each step and expected outcomes.
+•	Common Errors and Troubleshooting: A section dedicated to common issues users might encounter during the setup and how to resolve them.
+•	Next Steps: Suggestions for further reading and advanced tutorials to continue learning.
+
+Providing this comprehensive onboarding guide will significantly improve the initial user experience, making it easier for new users like me to get started with the Google Gemini API and encouraging more widespread adoption of the platform.
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/cookbook/issues/143","""Upload your own files"" in cookbook/quickstarts /Video.ipynb Gives error 404","2024-05-21T09:18:01Z","Closed issue","component:quickstarts,status:triaged,type:bug","Description of the bug:
+In quickstarts/Video.ipynb file under ""Upload a video to the Files API"" section, link ""Upload your own files"" is redirecting to examples/Upload_files.ipynb which gives error ""404 - page not found"".
+
+
+Actual vs expected behavior:
+No response
+Any other information you'd like to share?
+No response
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/cookbook/issues/142","Downloading scikit-learn news dataset gives HTTPError: HTTP Error 403: Forbidden","2024-05-18T09:52:30Z","Closed issue","component:examples,component:quickstarts,type:bug","Description of the bug:
+newsgroups_train = fetch_20newsgroups(subset='train')
+newsgroups_test = fetch_20newsgroups(subset='test')
+
+# View list of class names for datasetnewsgroups_train.target_names
+gives following error:
+HTTPError                                 Traceback (most recent call last)
+[<ipython-input-3-f3476b42207e>](https://localhost:8080/#) in <cell line: 1>()
+----> 1 newsgroups_train = fetch_20newsgroups(subset='train')
+      2 newsgroups_test = fetch_20newsgroups(subset='test')
+      3 
+      4 # View list of class names for dataset
+      5 newsgroups_train.target_names
+
+9 frames
+[/usr/lib/python3.10/urllib/request.py](https://localhost:8080/#) in http_error_default(self, req, fp, code, msg, hdrs)
+    641 class HTTPDefaultErrorHandler(BaseHandler):
+    642     def http_error_default(self, req, fp, code, msg, hdrs):
+--> 643         raise HTTPError(req.full_url, code, msg, hdrs, fp)
+    644 
+    645 class HTTPRedirectHandler(BaseHandler):
+
+HTTPError: HTTP Error 403: Forbidden
+
+Actual vs expected behavior:
+No response
+Any other information you'd like to share?
+No response
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/cookbook/issues/141","Extremely limited requests per minute for the gemini-pro-1.5 models","2024-05-16T07:45:01Z","Open issue","component:other,status:awaiting response,status:stale,type:feature request","Description of the feature request:
+I'm facing an issue where quota for gemini-pro is set to 5 requests per minute. That's in contrast to the 300 requests per minute limit mentioned in the documentation. I have also tried to edit the quota but there is a hard cap of 5 imposed. how can I resolve this issue?
+In the contrary, OpenAI has a 10,000 RPM for their latest models.
+What problem are you trying to solve with this feature?
+I am working on a video application and need to process a series of video frames sequentially. A RPM = 5 is a serious roadblock to any further development.
+Any other information you'd like to share?
+No response
+ The text was updated successfully, but these errors were encountered: 
+👍2
+dbabbs and alexandredelarrard reacted with thumbs up emoji
+All reactions
+👍2 reactions"
+"https://github.com/google-gemini/cookbook/issues/140","Two bugs in your gemini api doc need to be fixed, please: ""Inconsistent Documentation and Errors with Text-Only Models and Streamed Responses""","2024-05-27T04:15:39Z","Closed issue","component:other,status:awaiting response,type:bug","The overall reference link: Google Gemini API Documentation
+Description of the Bug:
+Title: Inconsistent Documentation and Errors with Text-Only Models and Streamed Responses
+Description:
+ I encountered several issues while using the Google Gemini API, specifically related to text-only input and streamed responses.
+Text-Only Input Issue:
+ The documentation states that the Gemini API can handle text-only input. However, the example provided uses the 'gemini-pro-vision' model, which requires an image. This causes an error when executed.
+Streamed Responses Issue:
+ The documentation example for streamed responses is incorrect. When executing the provided code, an AttributeError is raised.
+Steps to Reproduce:
+For Text-Only Input Issue:
+Refer to the documentation here.
+Use the provided example code: 
+model = genai.GenerativeModel('gemini-pro-vision')
+prompt = ""Write a story about a magic backpack.""response = model.generate_content(prompt)
+Run the code in the terminal on macOS with Python 3.10.
+For Streamed Responses Issue:
+Refer to the documentation here.
+Use the provided example code: 
+prompt = ""Write a story about a magic backpack.""response = genai.stream_generate_content(
+  model=""models/gemini-pro"",
+  prompt=prompt
+)
+Run the code in the terminal on macOS with Python 3.10.
+Expected Behavior:
+The text-only example should use a non-vision model to avoid the error.
+The streamed response example should work without raising an AttributeError.
+Actual Behavior:
+Text-Only Input Issue:
+ When running the text-only example, I received the following error:
+google.api_core.exceptions.InvalidArgument: 400 Add an image to use models/gemini-pro-vision, or switch your model to a text model.
+[Process exited 1]
+
+Streamed Responses Issue:
+ When running the streamed response example, I received the following error:
+Traceback (most recent call last):
+  File ""xxxxxxxxxxsomething/here/test.py"", line 46, in <module>
+    response = genai.stream_generate_content(
+AttributeError: module 'google.generativeai' has no attribute 'stream_generate_content'
+[Process exited 1]
+
+Development Environment:
+OS: macOS
+Python Version: 3.10
+Terminal: Built-in macOS Terminal App
+Please address these documentation errors to ensure the examples work correctly for users.
+Thanks,
+ github user @eawlot3000
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/cookbook/issues/137","Broken Links on website","2024-05-22T19:34:47Z","Closed issue","component:other,status:awaiting response,type:bug","Description of the bug:
+If you go to the cookbook page on the website, many (if not all) lead to 404s in this repo.
+Actual vs expected behavior:
+No response
+Any other information you'd like to share?
+No response
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/cookbook/issues/135","Clarity on attaching billing account to make it work, as payment instrucment is visible in https://console.cloud.google.com/billing...","2024-08-31T01:57:33Z","Closed as not planned issue","component:other,status:awaiting response,status:stale,type:help","Description of the bug:
+I've tried making simple Gemini calls either from here or generated with https://aistudio.google.com/ generated API Key using it , and in both cases I got:
+400 User location is not supported for the API use without a billing account linked.
+
+(Funny thing, that https://gemini.google.com/ could not help.)
+So, I could not find way to link billing account.
+What I see is that I have attached payment instrument to payment methods under:
+https://console.cloud.google.com/billing
+Actual vs expected behavior:
+No response
+Any other information you'd like to share?
+No response
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/cookbook/issues/118","File URL option for the GenAI File API","2024-05-07T15:58:50Z","Closed issue","component:examples,component:quickstarts,type:feature request","Description of the feature request:
+At the moment a file path has to be utilised: mimeType: mime.lookup(filePath),. However it would be helpful if a file URL could also be used instead of a local file path: mimeType: mime.lookup(rawfileURL),
+What problem are you trying to solve with this feature?
+No response
+Any other information you'd like to share?
+(Sorry if this is the wrong place to request a feature like this...*
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/cookbook/issues/114","""Market a jet backpack"" times out when kernel=CPU","2024-05-07T04:19:10Z","Closed issue","component:examples,status:awaiting response,type:bug","Description of the bug:
+The jet backpack example loads by default with a runtime type = CPU. If you add an API credential and run the notebook on that runtime, the line response = model.generate_content([analyzePrompt, img]) consistently times out.
+Changing the runtime to T4 allows this line to complete successfully.
+ But then further down, copyResponse = model.generate_content([websiteCopyPrompt, img]) fails with a timeout.
+Changing the runtime to TPUv2 allows both to complete.
+It's not documented in the notebook that a specific class of runtime is required.
+Actual vs expected behavior:
+expected: notebook runs and matches included output
+ actual: timeout error
+Any other information you'd like to share?
+No response
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/cookbook/issues/112","add details on get_model method","2024-05-07T00:17:20Z","Closed issue","component:quickstarts,status:triaged,type:feature request","Description of the feature request:
+Generative AI is supporting get_model method, to get all models and its details around it.
+What problem are you trying to solve with this feature?
+Currently, quickstart guide has only few model method and get_model is missing.
+https://github.com/google-gemini/cookbook/blob/main/quickstarts/Models.ipynb
+Any other information you'd like to share?
+No response
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/cookbook/issues/107","make code-only version of notebooks available","2024-08-28T01:49:04Z","Closed issue","component:examples,status:triaged,type:feature request","Description of the feature request:
+The example notebooks are great, but if, like me, you are not big into notebooks, you may want to be able to just extract the code without all the explanatory Javascript. Another folder with ""code-only examples"" would do the trick.
+What problem are you trying to solve with this feature?
+ease of access to code samples
+Any other information you'd like to share?
+Mentioned this to @logankilpatrick who liked idea.
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/cookbook/issues/106","Code Style","2024-05-06T09:02:18Z","Closed issue","component:other,status:awaiting response,type:feature request","Description of the feature request:
+
+ Make these code colorful and more readable (word wrap for small screens)
+What problem are you trying to solve with this feature?
+Better understanding
+Any other information you'd like to share?
+No response
+ The text was updated successfully, but these errors were encountered: 
+❤️1
+akbarjorayev reacted with heart emoji
+All reactions
+❤️1 reaction"
+"https://github.com/google-gemini/cookbook/issues/105","Real Time Speech to text conversation","2024-05-07T18:28:08Z","Closed issue","component:quickstarts,status:triaged,type:feature request","Description of the feature request:
+Hi, I want to use Gemini 1.5 Pro's newest multi-model. I'm looking for a feature similar to what's in Vertex AI playground, where we can convert speech to text in real-time. Right now, In this Gemini API examples we see that inferencing does this in batches after uploading a file, but I need it to happen in real-time. Can you help me figure out how to do this? Thanks a lot!
+What problem are you trying to solve with this feature?
+No response
+Any other information you'd like to share?
+No response
+ The text was updated successfully, but these errors were encountered: 
+👍1
+nakaakist reacted with thumbs up emoji
+All reactions
+👍1 reaction"
+"https://github.com/google-gemini/cookbook/issues/102","Why Google AI Studio is not available in Poland?","2024-05-02T20:40:39Z","Closed issue","component:examples,component:quickstarts,type:feature request","Description of the feature request:
+What is the reason Google AI Studio is not available in Poland?
+What problem are you trying to solve with this feature?
+No response
+Any other information you'd like to share?
+No response
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/cookbook/issues/101","Security Policy violation SECURITY.md","2024-05-28T04:07:01Z","Closed issue","allstar","This issue was automatically created by Allstar.
+Security Policy Violation
+ Security policy not enabled.
+ A SECURITY.md file can give users information about what constitutes a vulnerability and how to report one securely so that information about a bug is not publicly visible. Examples of secure reporting methods include using an issue tracker with private issue support, or encrypted email with a published key.
+To fix this, add a SECURITY.md file that explains how to handle vulnerabilities found in your repository. Go to https://github.com/google-gemini/cookbook/security/policy to enable.
+For more information, see https://docs.github.com/en/code-security/getting-started/adding-a-security-policy-to-your-repository.
+This issue will auto resolve when the policy is in compliance.
+Issue created by Allstar. See https://github.com/ossf/allstar/ for more information. For questions specific to the repository, please contact the owner or maintainer.
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/cookbook/issues/100","Security Policy violation Branch Protection","2024-05-03T04:06:46Z","Closed issue","allstar","This issue was automatically created by Allstar.
+Security Policy Violation
+ Dismiss stale reviews not configured for branch main
+This issue will auto resolve when the policy is in compliance.
+Issue created by Allstar. See https://github.com/ossf/allstar/ for more information. For questions specific to the repository, please contact the owner or maintainer.
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/cookbook/issues/94","quickstarts/Function_calling.ipynb Can the ai only call functions once before returning the chat?","2024-04-25T00:00:44Z","Open issue","component:quickstarts,status:triaged,type:help","Can the ai only call functions once before returning the chat?
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/cookbook/issues/93","OpenAPI files for AI Models","2024-04-24T20:59:15Z","Open issue","component:examples,status:collecting interest,status:triaged,type:feature request","If you want to use a more advanced model with Agent Builder in GCP, then you need to generate an OpenAPI YAML or JSON file and upload it as a tool.
+This is definitely something that people can do individually, but it would be beneficial to everyone if there were ready-made files and examples in the cookbook that people could grab quickly. I assume that there are copies of this floating around the Google-universe since I saw it often during Google Next, someone just needs to grab them and make them publicly available.
+ The text was updated successfully, but these errors were encountered: 
+👍3
+atacan, zapdingbat777, and dotslashderek reacted with thumbs up emoji
+All reactions
+👍3 reactions"
+"https://github.com/google-gemini/cookbook/issues/92","Function calling cookbook does not adequately explain how function calling works","2024-08-27T23:46:58Z","Closed issue","component:quickstarts,status:triaged,type:bug","The documentation and the function calling cookbook examples confer the impression that the model will use one of the tool functions supplied by the client in the function_declarations array. In fact, the model predicts a tool function and is in no way constrained to use the tools listed.
+ Consider the following request (used in v1beta, gemini-pro)
+Model request.json
+ It generated response like this (Headers and response body)
+BadFunctionResponse2.txt
+BadFunctionResponse2.json
+The actual name of the functionCall the model will predict varies. This is another model response to that same identical model request
+BadFunctionResponse3.json
+The cookbook should, in my opinion, clarify that the function declaration section is not like a traditional software interface with strictly defined operations that specify a contract. The interface is open ended, with the model predicting useful tool functions it considers should be there.
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/cookbook/issues/90","Real time data like gemini.google.com/","2024-05-02T20:43:10Z","Closed issue","component:other,status:triaged,type:help","For some reason the model I use only has data until the date it was trained and is not searching the internet for current information such as gemini.google.com/ is doing it.
+ I tried:
+ genai.GenerativeModel('gemini-pro')
+ genai.GenerativeModel('gemini-1.0-pro-latest')
+ genai.GenerativeModel('gemini-1.5-pro-latest')
+is there a different model to be used? or some other setting or not possible yet?
+Many thanks
+Tom
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/cookbook/issues/77","Method: tunedModels.list returns 400 Bad Request when Query Parameter is passed","2024-04-18T11:23:48Z","Closed issue","No label","Hello, listing tuned models returns 400 Bad Request when I pass the optional query parameters with documentation at: https://ai.google.dev/api/rest/v1beta/tunedModels/list
+ All other tuning end points, including listing the tuned models without parameters work fine but not with parameters passed.
+Successful:
+$request = $gemini->listTunedModels();
+
+print_r($request);
+400 Bad Request:
+$request = $gemini->listTunedModels([
+    'page_size' => 20,
+    'filter' => 'owner:me'
+]);
+
+print_r($request);
+The Code:
+public function listTunedModels(?array $params = null): string
+    {
+        if (!$this->accountCredentialStatus) {
+            throw new \Exception('Service or OAuth 2.0 Credential required to list tuned models');
+        }
+
+        $url = Url::tunedModelsUrl();
+        if (!is_null($params)) {
+            $response = $this->client->get($url, [
+                'headers' => [
+                    'Content-Type' => 'application/json',
+                    'x-goog-user-project' => $this->projectid,
+                    'Authorization' => 'Bearer ' . $this->getAccessToken(),
+                ],
+                'json' => $params
+            ]);
+
+        } else {
+            $response = $this->client->get($url, [
+                'headers' => [
+                    'Content-Type' => 'application/json',
+                    'x-goog-user-project' => $this->projectid,
+                    'Authorization' => 'Bearer ' . $this->getAccessToken(),
+                ]
+            ]);
+        }
+
+        return $response->getBody()->getContents();
+    }
+Is there another way of passing the parameters? Because this is the only endpoint so far failing (passing the paramters)
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/cookbook/issues/73","Gemini API: Prompting with Video - genai.upload_file [Errno 60] Operation timed out","2024-04-23T06:58:48Z","Closed issue","component:examples,status:awaiting response,type:bug","The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/cookbook/issues/72","[Run in Google Colab] An exception occurred User location is not supported for the API use","2024-04-19T21:47:52Z","Closed issue","status:awaiting response","Hello, according to the example https://github.com/google-gemini/cookbook/blob/main/quickstarts/Video.ipynb，Run in Google Colab Execution, the following error occurred， 
+
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/cookbook/issues/70","Enabling JSON Format Responses for Image Inputs in Gemini 1.5","2024-04-22T18:41:29Z","Closed issue","component:examples,status:awaiting response,type:feature request","The new Gemini 1.5 model has the capability to enforce JSON responses, but there is limited documentation available on how to implement this, particularly for obtaining JSON responses from image inputs.
+Could you provide an example of how to achieve this?
+ The REST example here and the official doc provided did not give me clarity on the process.
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/cookbook/issues/67","Streaming Quickstart: Must be run locally, but first item in notebook is a button to run it in Colab","2024-04-17T17:56:36Z","Closed issue","No label","The https://github.com/google-gemini/cookbook/blob/cf2dc7a3a851c5f553c2bf9ff884770719ca368d/quickstarts/Streaming.ipynb notebook says at the top to Download it and run it locally, as streaming is not correctly handled in Colab yet.
+I recommend removing this button as it can confuse users - they'll spin up the notebook in Colab where it doesn't work.
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/cookbook/issues/66","File upload example for javascript returns No file found in request.","2024-10-09T22:34:48Z","Closed as not planned issue","component:quickstarts,status:awaiting response,status:stale,type:bug","I tried to run the file upload example for javascript
+The file exits as i added a check for it
+// Check if the file exists
+if (!fs.existsSync(filePath)) {
+    console.log(`File '${filePath}' does not exist` );
+}
+
+When i run the sample i get
+GaxiosError: No file found in request.
+    at Gaxios._request (C:\Development\Gemini\nodejs\gemini_samples_node\node_modules\gaxios\build\src\gaxios.js:144:23)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async JWT.requestAsync (C:\Development\Gemini\nodejs\gemini_samples_node\node_modules\google-auth-library\build\src\auth\oauth2client.js:405:18)
+    at async run (C:\Development\Gemini\nodejs\gemini_samples_node\test2.js:30:36) {
+  config: {
+    url: 'https://generativelanguage.googleapis.com/upload/v1beta/files?uploadType=multipart',
+    method: 'POST',
+    userAgentDirectives: [
+      {
+        product: 'google-api-nodejs-client',
+        version: '7.1.0',
+        comment: 'gzip'
+      }
+    ],
+    paramsSerializer: [Function (anonymous)],
+    data: PassThrough {
+      _readableState: ReadableState {
+        objectMode: false,
+        highWaterMark: 16384,
+        buffer: BufferList { head: null, tail: null, length: 0 },
+        length: 0,
+        pipes: [],
+        flowing: false,
+        ended: true,
+        endEmitted: true,
+        reading: false,
+        constructed: true,
+        sync: false,
+        needReadable: false,
+        emittedReadable: false,
+        readableListening: false,
+        resumeScheduled: false,
+        errorEmitted: false,
+        emitClose: true,
+        autoDestroy: true,
+        destroyed: true,
+        errored: null,
+        closed: true,
+        closeEmitted: true,
+        defaultEncoding: 'utf8',
+        awaitDrainWriters: null,
+        multiAwaitDrain: false,
+        readingMore: false,
+        dataEmitted: true,
+        decoder: null,
+        encoding: null,
+        [Symbol(kPaused)]: true
+      },
+      _events: [Object: null prototype] {
+        prefinish: [Function: prefinish],
+        error: [Function (anonymous)]
+      },
+      _eventsCount: 2,
+      _maxListeners: undefined,
+      _writableState: WritableState {
+        objectMode: false,
+        highWaterMark: 16384,
+        finalCalled: true,
+        needDrain: false,
+        ending: true,
+        ended: true,
+        finished: true,
+        destroyed: true,
+        decodeStrings: true,
+        defaultEncoding: 'utf8',
+        length: 0,
+        writing: false,
+        corked: 0,
+        sync: false,
+        bufferProcessing: false,
+        onwrite: [Function: bound onwrite],
+        writecb: null,
+        writelen: 0,
+        afterWriteTickInfo: null,
+        buffered: [],
+        bufferedIndex: 0,
+        allBuffers: true,
+        allNoop: true,
+        pendingcb: 0,
+        constructed: true,
+        prefinished: true,
+        errorEmitted: false,
+        emitClose: true,
+        autoDestroy: true,
+        errored: null,
+        closed: true,
+        closeEmitted: true,
+        [Symbol(kOnFinished)]: []
+      },
+      allowHalfOpen: true,
+      _flush: [Function: flush],
+      [Symbol(kCapture)]: false,
+      [Symbol(kCallback)]: null
+    },
+    headers: {
+      'x-goog-api-client': 'gdcl/7.1.0 gl-node/18.16.1',
+      'content-type': 'multipart/related; boundary=cf9e6ad4-9c0e-4e75-9a86-01de5c3e849f',
+      'Accept-Encoding': 'gzip',
+      'User-Agent': 'google-api-nodejs-client/7.1.0 (gzip)',
+      'X-Goog-Api-Key': '[REDACTED]'
+    },
+    params: { uploadType: 'multipart' },
+    validateStatus: [Function (anonymous)],
+    retry: true,
+    body: PassThrough {
+      _readableState: ReadableState {
+        objectMode: false,
+        highWaterMark: 16384,
+        buffer: BufferList { head: null, tail: null, length: 0 },
+        length: 0,
+        pipes: [],
+        flowing: false,
+        ended: true,
+        endEmitted: true,
+        reading: false,
+        constructed: true,
+        sync: false,
+        needReadable: false,
+        emittedReadable: false,
+        readableListening: false,
+        resumeScheduled: false,
+        errorEmitted: false,
+        emitClose: true,
+        autoDestroy: true,
+        destroyed: true,
+        errored: null,
+        closed: true,
+        closeEmitted: true,
+        defaultEncoding: 'utf8',
+        awaitDrainWriters: null,
+        multiAwaitDrain: false,
+        readingMore: false,
+        dataEmitted: true,
+        decoder: null,
+        encoding: null,
+        [Symbol(kPaused)]: true
+      },
+      _events: [Object: null prototype] {
+        prefinish: [Function: prefinish],
+        error: [Function (anonymous)]
+      },
+      _eventsCount: 2,
+      _maxListeners: undefined,
+      _writableState: WritableState {
+        objectMode: false,
+        highWaterMark: 16384,
+        finalCalled: true,
+        needDrain: false,
+        ending: true,
+        ended: true,
+        finished: true,
+        destroyed: true,
+        decodeStrings: true,
+        defaultEncoding: 'utf8',
+        length: 0,
+        writing: false,
+        corked: 0,
+        sync: false,
+        bufferProcessing: false,
+        onwrite: [Function: bound onwrite],
+        writecb: null,
+        writelen: 0,
+        afterWriteTickInfo: null,
+        buffered: [],
+        bufferedIndex: 0,
+        allBuffers: true,
+        allNoop: true,
+        pendingcb: 0,
+        constructed: true,
+        prefinished: true,
+        errorEmitted: false,
+        emitClose: true,
+        autoDestroy: true,
+        errored: null,
+        closed: true,
+        closeEmitted: true,
+        [Symbol(kOnFinished)]: []
+      },
+      allowHalfOpen: true,
+      _flush: [Function: flush],
+      [Symbol(kCapture)]: false,
+      [Symbol(kCallback)]: null
+    },
+    responseType: 'unknown',
+    errorRedactor: [Function: defaultErrorRedactor],
+    retryConfig: {
+      currentRetryAttempt: 0,
+      retry: 3,
+      httpMethodsToRetry: [ 'GET', 'HEAD', 'PUT', 'OPTIONS', 'DELETE' ],
+      noResponseRetries: 2,
+      statusCodesToRetry: [ [ 100, 199 ], [ 429, 429 ], [ 500, 599 ] ]
+    }
+  },
+  response: {
+    config: {
+      url: 'https://generativelanguage.googleapis.com/upload/v1beta/files?uploadType=multipart',
+      method: 'POST',
+      userAgentDirectives: [
+        {
+          product: 'google-api-nodejs-client',
+          version: '7.1.0',
+          comment: 'gzip'
+        }
+      ],
+      paramsSerializer: [Function (anonymous)],
+      data: PassThrough {
+        _readableState: ReadableState {
+          objectMode: false,
+          highWaterMark: 16384,
+          buffer: BufferList { head: null, tail: null, length: 0 },
+          length: 0,
+          pipes: [],
+          flowing: false,
+          ended: true,
+          endEmitted: true,
+          reading: false,
+          constructed: true,
+          sync: false,
+          needReadable: false,
+          emittedReadable: false,
+          readableListening: false,
+          resumeScheduled: false,
+          errorEmitted: false,
+          emitClose: true,
+          autoDestroy: true,
+          destroyed: true,
+          errored: null,
+          closed: true,
+          closeEmitted: true,
+          defaultEncoding: 'utf8',
+          awaitDrainWriters: null,
+          multiAwaitDrain: false,
+          readingMore: false,
+          dataEmitted: true,
+          decoder: null,
+          encoding: null,
+          [Symbol(kPaused)]: true
+        },
+        _events: [Object: null prototype] {
+          prefinish: [Function: prefinish],
+          error: [Function (anonymous)]
+        },
+        _eventsCount: 2,
+        _maxListeners: undefined,
+        _writableState: WritableState {
+          objectMode: false,
+          highWaterMark: 16384,
+          finalCalled: true,
+          needDrain: false,
+          ending: true,
+          ended: true,
+          finished: true,
+          destroyed: true,
+          decodeStrings: true,
+          defaultEncoding: 'utf8',
+          length: 0,
+          writing: false,
+          corked: 0,
+          sync: false,
+          bufferProcessing: false,
+          onwrite: [Function: bound onwrite],
+          writecb: null,
+          writelen: 0,
+          afterWriteTickInfo: null,
+          buffered: [],
+          bufferedIndex: 0,
+          allBuffers: true,
+          allNoop: true,
+          pendingcb: 0,
+          constructed: true,
+          prefinished: true,
+          errorEmitted: false,
+          emitClose: true,
+          autoDestroy: true,
+          errored: null,
+          closed: true,
+          closeEmitted: true,
+          [Symbol(kOnFinished)]: []
+        },
+        allowHalfOpen: true,
+        _flush: [Function: flush],
+        [Symbol(kCapture)]: false,
+        [Symbol(kCallback)]: null
+      },
+      headers: {
+        'x-goog-api-client': 'gdcl/7.1.0 gl-node/18.16.1',
+        'content-type': 'multipart/related; boundary=cf9e6ad4-9c0e-4e75-9a86-01de5c3e849f',
+        'Accept-Encoding': 'gzip',
+        'User-Agent': 'google-api-nodejs-client/7.1.0 (gzip)',
+        'X-Goog-Api-Key': '[REDACTED]'
+      },
+      params: { uploadType: 'multipart' },
+      validateStatus: [Function (anonymous)],
+      retry: true,
+      body: PassThrough {
+        _readableState: ReadableState {
+          objectMode: false,
+          highWaterMark: 16384,
+          buffer: BufferList { head: null, tail: null, length: 0 },
+          length: 0,
+          pipes: [],
+          flowing: false,
+          ended: true,
+          endEmitted: true,
+          reading: false,
+          constructed: true,
+          sync: false,
+          needReadable: false,
+          emittedReadable: false,
+          readableListening: false,
+          resumeScheduled: false,
+          errorEmitted: false,
+          emitClose: true,
+          autoDestroy: true,
+          destroyed: true,
+          errored: null,
+          closed: true,
+          closeEmitted: true,
+          defaultEncoding: 'utf8',
+          awaitDrainWriters: null,
+          multiAwaitDrain: false,
+          readingMore: false,
+          dataEmitted: true,
+          decoder: null,
+          encoding: null,
+          [Symbol(kPaused)]: true
+        },
+        _events: [Object: null prototype] {
+          prefinish: [Function: prefinish],
+          error: [Function (anonymous)]
+        },
+        _eventsCount: 2,
+        _maxListeners: undefined,
+        _writableState: WritableState {
+          objectMode: false,
+          highWaterMark: 16384,
+          finalCalled: true,
+          needDrain: false,
+          ending: true,
+          ended: true,
+          finished: true,
+          destroyed: true,
+          decodeStrings: true,
+          defaultEncoding: 'utf8',
+          length: 0,
+          writing: false,
+          corked: 0,
+          sync: false,
+          bufferProcessing: false,
+          onwrite: [Function: bound onwrite],
+          writecb: null,
+          writelen: 0,
+          afterWriteTickInfo: null,
+          buffered: [],
+          bufferedIndex: 0,
+          allBuffers: true,
+          allNoop: true,
+          pendingcb: 0,
+          constructed: true,
+          prefinished: true,
+          errorEmitted: false,
+          emitClose: true,
+          autoDestroy: true,
+          errored: null,
+          closed: true,
+          closeEmitted: true,
+          [Symbol(kOnFinished)]: []
+        },
+        allowHalfOpen: true,
+        _flush: [Function: flush],
+        [Symbol(kCapture)]: false,
+        [Symbol(kCallback)]: null
+      },
+      responseType: 'unknown',
+      errorRedactor: [Function: defaultErrorRedactor]
+    },
+    data: 'No file found in request.',
+    headers: {
+      'alt-svc': 'h3="":443""; ma=2592000,h3-29="":443""; ma=2592000',
+      connection: 'close',
+      'content-length': '25',
+      'content-type': 'text/plain; charset=utf-8',
+      date: 'Mon, 15 Apr 2024 12:38:14 GMT',
+      server: 'UploadServer',
+      'x-guploader-uploadid': 'ABPtcPqNkgTHmrQKds3j_Ta0oLJiLONuY30frVrqh61kdQLK-YokDMT1RFx5H3EY38h3ivp7bvo'
+    },
+    status: 400,
+    statusText: 'Bad Request',
+    request: {
+      responseURL: 'https://generativelanguage.googleapis.com/upload/v1beta/files?uploadType=multipart'
+    }
+  },
+  error: undefined,
+  status: 400,
+  [Symbol(gaxios-gaxios-error)]: '6.4.0'
+}
+
+Update
+I did find that this works loading just the file path.
+const media = {
+        mimeType: mime.lookup(filePath),
+        body: filePath,
+    };
+
+
+It seams its the loading the stream thats not working.
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/cookbook/issues/65","Pdf upload not working","2024-04-15T20:39:30Z","Closed issue","No label","Hello,
+ I am trying to upload a PDF and trying to get a summary of it.
+ Unsupported MIME type: application/pdf
+sample_file = genai.upload_file(path=""test.pdf"",
+                                display_name=""Test"")
+
+model = genai.GenerativeModel(model_name=""models/gemini-1.5-pro-latest"")
+
+response = model.generate_content([""Generate a summary of the document"", sample_file])
+
+print(response.text)
+
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/cookbook/issues/64","Failed to retrieve data. HTTP Status: 403","2024-08-31T01:57:35Z","Closed as not planned issue","status:awaiting response,status:stale","import requests
+ import json
+google_api_key = 'my api key'
+url = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=' + google_api_key
+data = {
+ ""contents"": [{
+ ""parts"": [{
+ ""text"": ""Write a story about a magic backpack.""
+ }]
+ }]
+ }
+headers = {
+ 'Content-Type': 'application/json',
+ ""User-Agent"" : ""Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36""
+ }
+response = requests.post(url, headers=headers, data=json.dumps(data))
+if response.status_code == 200:
+ print(""Response from server:"", response.json())
+ else:
+ print(""Failed to retrieve data. HTTP Status:"", response.status_code)
+What should i do to solve my problem with HTTP Status: 403?
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/cookbook/issues/63","Proposal for Adding Basiclingua, a Gemini-powered NLP Library, to Cookbook","2024-09-13T22:34:29Z","Closed as not planned issue","component:examples,status:awaiting response,status:stale,status:triaged,type:feature request","I'd like to propose adding a guide for Basiclingua, a Python library built on the Gemini API, to the Google Gemini Cookbook.
+Basiclingua aims to simplify handling complex text data with minimal human intervention. It leverages the power of Gemini to offer functionalities for various linguistic tasks such as:
+Extract Patterns
+NER Detection
+Spell Checking
+ 30 more features...
+Motivation:
+ Existing NLP libraries often fall short in addressing the growing complexity of text data or require extensive manual configuration. Basiclingua, powered by Gemini's advanced capabilities, offers a powerful solution for efficiently and accurately handling diverse text-related tasks.
+Project Status:
+ Version 1.0 Released: Basiclingua is currently available for use with core functionalities.
+Documentation in Progress:
+ We are actively working on comprehensive documentation to facilitate easy adoption and usage.
+Contribution:
+ I would be happy to contribute a guide to the Cookbook, outlining how to effectively use Basiclingua for various NLP tasks. This guide could include:
+Installation instructions
+API reference and usage examples
+Tutorials for common NLP workflows
+Benchmarks and comparisons with other libraries
+Best practices and tips
+Link to Project:Gemini AI based NLP
+I believe Basiclingua would be a valuable addition to the Cookbook, empowering users to leverage the power of Gemini for their NLP needs. I'm open to feedback and suggestions on how to best structure the guide and integrate it into the Cookbook.
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/cookbook/issues/62","File API does not delete files upon request","2024-08-16T04:34:28Z","Closed issue","component:quickstarts,status:awaiting response,status:stale,type:bug","genai.delete_file(frame.response.name), buffers forever. There is no response, no error, just buffering until I cancel the call.
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/cookbook/issues/61","Is there a fee in using the Gemini API?","2024-04-13T19:02:04Z","Closed issue","No label","Hello! I was wondering what cost is associated with using the Gemini API, as it's linked to my google account I would like to prevent any surprise charges.
+thanks!
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/cookbook/issues/60","FeatureRequest: Streaming audio input","2024-08-27T23:40:30Z","Closed issue","component:other,type:help","I have an audio clip where a person says a particular Matra once!
+ Like this - Om Namah Shivay - This is your input voice
+ Now, The person starts chanting the same mantra Over an over an without any stop
+Om Namah ShivayOm Namah ShivayOm Namah ShivayOm Namah ShivayOm Namah ShivayOm Namah ShivayOm Namah ShivayOm Namah ShivayOm Namah ShivayOm Namah ShivayOm Namah ShivayOm Namah ShivayOm Namah ShivayOm Namah ShivayOm Namah ShivayOm Namah ShivayOm Namah Shivay
+ Note that there is no fixed silence between each time it is being said.
+I need to show the count of the number of times he has spoken it correctly in runtime, as he speaks.
+How can i achieve this using python and gemini
+Note that the mantra can be very different as well as very long
+Currently I have developed a system that implements a websocket to read the chant continuously and the input audio is sent at the time of handshake. the stream is collected and and split of regular intervals (approximately equal to the length of input), dumped into a temporary wav file and sent to gemini along with the input audio. But there is a catch! The user can obviously modify his speed and it is not fixed that the audio will have a integer number of mantras chanted.
+For example the audio chunks might be like
+chunk 1: Om Namah Shivay Om Namah ShivayOm Namah
+ Chunk 2: Shivay Om Namah ShivayOm Namah Shivay
+Here I want gemini to count the total chants as 5 (2 +0.5+0.5+2)
+How can this be acheived using Gemini?
+Below is the link to my repo!
+https://github.com/Praj-17/Chant-Counter
+I would really apprecialte any resources that could help me solve this problem in runtime!
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/cookbook/issues/58","curl URLs should be quoted.","2024-04-15T05:07:42Z","Closed issue","component:quickstarts,type:bug","Problem:
+ I attempted to run a curl command and got a ""no matches found"" error
+Explanation:
+ This is because the shell that I ran this command from, zsh, explicitly raises an error when it cannot expand a wildcard.
+ In this case, it is attempting to expand the ? used in the query string ?key=$GOOGLE_API_KEY
+AFAIK this only affects zsh users because other shells like bash will pass the unexpanded wildcard pattern instead of raising an error like zsh.
+ Example:
+
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/cookbook/issues/57","Working with Byted with Audio","2024-04-12T19:58:25Z","Closed issue","No label","Hello does the Audio require and audio file only or does it work with bytesio. i am streaming the input using Bytes and sending them directly to generate content!
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/cookbook/issues/56","Returning a Fixed Json","2024-08-27T23:37:51Z","Closed issue","component:other,type:help","Hi I am working on audio understanding and would like the script return me the output in a fixed output format. Something like this
+{
+    ""name"": ""set_output_json_format"",
+    ""parameters"": {
+        ""type"": ""object"",
+        ""properties"": {
+            ""count"": {
+                ""type"": ""string"",
+                ""description"": ""Represents the number of times the user has chanted correctly""
+            },
+            ""mantra"": {
+                ""type"": ""string"",
+                ""description"": ""Represents the mantra chanted""
+            }
+        }
+    }
+}
+
+How can I do it in the Audio Script?
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/cookbook/issues/54","TimeoutError in File_API.ipynb","2024-04-12T13:55:38Z","Open issue","component:quickstarts,status:awaiting response,type:bug","Hi,
+ I got a TimeoutError while executing the File_API.ipynb locally on my Macbook Pro.
+ I can list the models with genai.list_model() request:
+
+But the error poped after running the following line:
+sample_file = genai.upload_file(path=""image.jpg"",
+                                display_name=""Sample drawing"")
+
+print(f""Uploaded file '{sample_file.display_name}' as: {sample_file.uri}"")
+
+Here is the Traceback
+---------------------------------------------------------------------------
+TimeoutError                              Traceback (most recent call last)
+Cell In[4], line 1
+----> 1 sample_file = genai.upload_file(path=""jetpack.jpg"",
+      2                                 display_name=""Sample drawing"")
+      4 print(f""Uploaded file '{sample_file.display_name}' as: {sample_file.uri}"")
+
+File ~/anaconda3/lib/python3.10/site-packages/google/generativeai/files.py:52, in upload_file(path, mime_type, name, display_name)
+     49 if display_name is None:
+     50     display_name = path.name
+---> 52 response = client.create_file(
+     53     path=path, mime_type=mime_type, name=name, display_name=display_name
+     54 )
+     55 return file_types.File(response)
+
+File ~/anaconda3/lib/python3.10/site-packages/google/generativeai/client.py:64, in FileServiceClient.create_file(self, path, mime_type, name, display_name)
+     55 def create_file(
+     56     self,
+     57     path: str | pathlib.Path | os.PathLike,
+   (...)
+     61     display_name: str | None = None,
+     62 ) -> glm.File:
+     63     if self._discovery_api is None:
+---> 64         self._setup_discovery_api()
+     66     file = {}
+     67     if name is not None:
+
+File ~/anaconda3/lib/python3.10/site-packages/google/generativeai/client.py:48, in FileServiceClient._setup_discovery_api(self)
+     41     raise ValueError(""Uploading to the File API requires an API key."")
+     43 request = googleapiclient.http.HttpRequest(
+     44     http=httplib2.Http(),
+     45     postproc=lambda resp, content: (resp, content),
+     46     uri=f""{GENAI_API_DISCOVERY_URL}?version=v1beta&key={api_key}"",
+     47 )
+---> 48 response, content = request.execute()
+     50 discovery_doc = content.decode(""utf-8"")
+     51 self._discovery_api = googleapiclient.discovery.build_from_document(
+     52     discovery_doc, developerKey=api_key
+     53 )
+
+File ~/anaconda3/lib/python3.10/site-packages/googleapiclient/_helpers.py:130, in positional.<locals>.positional_decorator.<locals>.positional_wrapper(*args, **kwargs)
+    128     elif positional_parameters_enforcement == POSITIONAL_WARNING:
+    129         logger.warning(message)
+--> 130 return wrapped(*args, **kwargs)
+
+File ~/anaconda3/lib/python3.10/site-packages/googleapiclient/http.py:923, in HttpRequest.execute(self, http, num_retries)
+    920     self.headers[""content-length""] = str(len(self.body))
+    922 # Handle retries for server-side errors.
+--> 923 resp, content = _retry_request(
+    924     http,
+    925     num_retries,
+    926     ""request"",
+    927     self._sleep,
+    928     self._rand,
+    929     str(self.uri),
+    930     method=str(self.method),
+    931     body=self.body,
+    932     headers=self.headers,
+    933 )
+    935 for callback in self.response_callbacks:
+    936     callback(resp)
+
+File ~/anaconda3/lib/python3.10/site-packages/googleapiclient/http.py:222, in _retry_request(http, num_retries, req_type, sleep, rand, uri, method, *args, **kwargs)
+    220 if exception:
+    221     if retry_num == num_retries:
+--> 222         raise exception
+    223     else:
+    224         continue
+
+File ~/anaconda3/lib/python3.10/site-packages/googleapiclient/http.py:191, in _retry_request(http, num_retries, req_type, sleep, rand, uri, method, *args, **kwargs)
+    189 try:
+    190     exception = None
+--> 191     resp, content = http.request(uri, method, *args, **kwargs)
+    192 # Retry on SSL errors and socket timeout errors.
+    193 except _ssl_SSLError as ssl_error:
+
+File ~/anaconda3/lib/python3.10/site-packages/httplib2/__init__.py:1724, in Http.request(self, uri, method, body, headers, redirections, connection_type)
+   1722             content = b""""
+   1723         else:
+-> 1724             (response, content) = self._request(
+   1725                 conn, authority, uri, request_uri, method, body, headers, redirections, cachekey,
+   1726             )
+   1727 except Exception as e:
+   1728     is_timeout = isinstance(e, socket.timeout)
+
+File ~/anaconda3/lib/python3.10/site-packages/httplib2/__init__.py:1444, in Http._request(self, conn, host, absolute_uri, request_uri, method, body, headers, redirections, cachekey)
+   1441 if auth:
+   1442     auth.request(method, request_uri, headers, body)
+-> 1444 (response, content) = self._conn_request(conn, request_uri, method, body, headers)
+   1446 if auth:
+   1447     if auth.response(response, body):
+
+File ~/anaconda3/lib/python3.10/site-packages/httplib2/__init__.py:1366, in Http._conn_request(self, conn, request_uri, method, body, headers)
+   1364 try:
+   1365     if conn.sock is None:
+-> 1366         conn.connect()
+   1367     conn.request(method, request_uri, body, headers)
+   1368 except socket.timeout:
+
+File ~/anaconda3/lib/python3.10/site-packages/httplib2/__init__.py:1156, in HTTPSConnectionWithTimeout.connect(self)
+   1154 if has_timeout(self.timeout):
+   1155     sock.settimeout(self.timeout)
+-> 1156 sock.connect((self.host, self.port))
+   1158 self.sock = self._context.wrap_socket(sock, server_hostname=self.host)
+   1160 # Python 3.3 compatibility: emulate the check_hostname behavior
+
+TimeoutError: [Errno 60] Operation timed out
+
+And I double checked the image is downloaded successfully above the upload_file request cell:
+
+This problem has been tormenting me for two days,I tried different ways to solve it but make no sense.
+ Look forward to get some suggestion here.
+ Sincere thanks！
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/cookbook/issues/53","jorgeeduardoc902@gmail.com","2024-04-12T22:11:04Z","Closed as not planned issue","No label","No description provided.
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/cookbook/issues/52","Will Gemini-1.5-Pro be accessible via the AI Studio API?","2024-04-12T22:12:35Z","Closed issue","No label","For some time now, I have been using 1.5, and I am quite satisfied with its capabilities. However, the absence of gemini-1.5-pro's API is a source of annoyance.
+Currently, I am accessing gemini-1.5-pro through the vertex ai API, which employs a complex authentication process that involves token renewal.
+Can anyone confirm if gemini-1.5-pro will be accessible via the AI studio API?
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/cookbook/issues/51","HTTP 400 Error in Audio Notebook","2024-04-12T16:06:07Z","Closed issue","No label","While running the notebook locally I get erro 400 Bad Request
+I have defined the API key just above the following line rest everything is unchanged!
+genai.configure(api_key=GOOGLE_API_KEY)
+
+The error occurs on the line
+your_file = genai.upload_file(path='sample.mp3')
+
+Here is the full Traceback
+
+HttpError                                 Traceback (most recent call last)
+Cell In[20], [line 1](vscode-notebook-cell:?execution_count=20&line=1)
+----> [1](vscode-notebook-cell:?execution_count=20&line=1) your_file = genai.upload_file(path='sample.mp3')
+
+File [c:\Users\TI-SJL-0008\anaconda3\lib\site-packages\google\generativeai\files.py:52](file:///C:/Users/TI-SJL-0008/anaconda3/lib/site-packages/google/generativeai/files.py:52), in upload_file(path, mime_type, name, display_name)
+     [49](file:///C:/Users/TI-SJL-0008/anaconda3/lib/site-packages/google/generativeai/files.py:49) if display_name is None:
+     [50](file:///C:/Users/TI-SJL-0008/anaconda3/lib/site-packages/google/generativeai/files.py:50)     display_name = path.name
+---> [52](file:///C:/Users/TI-SJL-0008/anaconda3/lib/site-packages/google/generativeai/files.py:52) response = client.create_file(
+     [53](file:///C:/Users/TI-SJL-0008/anaconda3/lib/site-packages/google/generativeai/files.py:53)     path=path, mime_type=mime_type, name=name, display_name=display_name
+     [54](file:///C:/Users/TI-SJL-0008/anaconda3/lib/site-packages/google/generativeai/files.py:54) )
+     [55](file:///C:/Users/TI-SJL-0008/anaconda3/lib/site-packages/google/generativeai/files.py:55) return file_types.File(response)
+
+File [c:\Users\TI-SJL-0008\anaconda3\lib\site-packages\google\generativeai\client.py:74](file:///C:/Users/TI-SJL-0008/anaconda3/lib/site-packages/google/generativeai/client.py:74), in FileServiceClient.create_file(self, path, mime_type, name, display_name)
+     [72](file:///C:/Users/TI-SJL-0008/anaconda3/lib/site-packages/google/generativeai/client.py:72) media = googleapiclient.http.MediaFileUpload(filename=path, mimetype=mime_type)
+     [73](file:///C:/Users/TI-SJL-0008/anaconda3/lib/site-packages/google/generativeai/client.py:73) request = self._discovery_api.media().upload(body={""file"": file}, media_body=media)
+---> [74](file:///C:/Users/TI-SJL-0008/anaconda3/lib/site-packages/google/generativeai/client.py:74) result = request.execute()
+     [76](file:///C:/Users/TI-SJL-0008/anaconda3/lib/site-packages/google/generativeai/client.py:76) return glm.File(
+     [77](file:///C:/Users/TI-SJL-0008/anaconda3/lib/site-packages/google/generativeai/client.py:77)     {
+     [78](file:///C:/Users/TI-SJL-0008/anaconda3/lib/site-packages/google/generativeai/client.py:78)         re.sub(""[A-Z]"", lambda ch: f""_{ch.group(0).lower()}"", key): value
+     [79](file:///C:/Users/TI-SJL-0008/anaconda3/lib/site-packages/google/generativeai/client.py:79)         for key, value in result[""file""].items()
+     [80](file:///C:/Users/TI-SJL-0008/anaconda3/lib/site-packages/google/generativeai/client.py:80)     }
+     [81](file:///C:/Users/TI-SJL-0008/anaconda3/lib/site-packages/google/generativeai/client.py:81) )
+
+File [c:\Users\TI-SJL-0008\anaconda3\lib\site-packages\googleapiclient\_helpers.py:130](file:///C:/Users/TI-SJL-0008/anaconda3/lib/site-packages/googleapiclient/_helpers.py:130), in positional.<locals>.positional_decorator.<locals>.positional_wrapper(*args, **kwargs)
+...
+    [937](file:///C:/Users/TI-SJL-0008/anaconda3/lib/site-packages/googleapiclient/http.py:937) if resp.status >= 300:
+--> [938](file:///C:/Users/TI-SJL-0008/anaconda3/lib/site-packages/googleapiclient/http.py:938)     raise HttpError(resp, content, uri=self.uri)
+    [939](file:///C:/Users/TI-SJL-0008/anaconda3/lib/site-packages/googleapiclient/http.py:939) return self.postproc(resp, content)
+
+HttpError: <HttpError 400 when requesting https://generativelanguage.googleapis.com/upload/v1beta/files?key=[redacted[&alt=json&uploadType=multipart returned ""Bad Request"". Details: ""No file found in request."">
+Output is truncated. View as a [scrollable element](command:cellOutput.enableScrolling?7ba1350a-c01e-4d01-b5c2-18aeddf6630e) or open in a [text editor](command:workbench.action.openLargeOutput?7ba1350a-c01e-4d01-b5c2-18aeddf6630e). Adjust cell output [settings](command:workbench.action.openSettings?%5B%22%40tag%3AnotebookOutputLayout%22%5D)...
+
+Any suggestions on how this can be fixed??
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/cookbook/issues/49","Feature: Adding Dev Container Configuration for GitHub Codespaces","2024-09-12T06:09:04Z","Closed issue","component:other,status:awaiting response,type:feature request","Just wanted to know if its okay to add a Dev Container configuration so that it is easier for users to easily create a Codespace and view, run the code in the codespace provided.
+It's only an addition of a devcontainer.json file and that's all that will be needed.
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/cookbook/issues/47","Streaming Function Calls","2024-04-10T12:50:41Z","Open issue","component:quickstarts,type:feature request","I think an example of function calls using streaming would be helpful, as I believe it's the most common case for the chatbot. I've made a test script, though I'm not sure if it's the correct way to do it, but many questions have arisen.
+
+functions = {
+    'find_movies': find_movies,
+    'find_theaters': find_theaters,
+    'get_showtimes': get_showtimes,
+}
+instruction = ""Hablarás igual que yoda en starwars.""
+model = genai.GenerativeModel(
+    ""models/gemini-1.5-pro-latest"" , 
+    system_instruction=instruction, 
+    generation_config=genai.GenerationConfig(temperature=0),
+    tools=functions.values()
+)
+
+
+
+def generate_response(messages):
+  functios_to_call = []
+  complete_response = ''
+
+  response = model.generate_content(messages,  stream=True )
+  for chunk in response:
+    part = chunk.candidates[0].content.parts[0]
+    if part.function_call:
+      functios_to_call.append(part.function_call)
+
+
+    if part.text:
+      print('presponse part:', chunk.text)
+      complete_response = complete_response +   chunk.text
+
+
+  if len(complete_response)>0:
+    messages.append({'role':'user', 'parts': [complete_response]},)
+
+  if len(functios_to_call) > 0:
+    for function_call in functios_to_call:
+      result = call_function(part.function_call, functions)
+      s = Struct()
+      s.update({'result': result})
+      # Update this after https://github.com/google/generative-ai-python/issues/243
+      function_response = glm.Part(function_response=glm.FunctionResponse(name='find_theaters', response=s))
+      messages.append({'role':'model', 'parts': response.candidates[0].content.parts})
+      messages.append({'role':'user',  'parts': [function_response]})
+    generate_response(messages)
+
+
+
+
+
+messages = []
+
+while True:
+  print(""_""*80)
+  user_input = input()
+  messages.append({'role':'user', 'parts': [user_input]},)
+  generate_response(messages)
+    
+
+The questions are as follows:
+Is the model capable of responding with text, calling functions within the same iteration? And can it call more than one function at a time? How should I structure the response message in those cases?
+When the model calls a function, does the streaming not work? That is, does the call come all at once, or if not, is there any way to receive the call in parts? That is, I want to know as quickly as possible that a function will be called since at that moment you can give the user a heads-up that the response will take longer than normal, or in systems that have speech, something like 'mmm' can be said. On the other hand, if it is only notified to the model already with the complete call data and parameters, it does not make much sense, as the waiting time has already been reduced.
+In each streaming chunk, I am keeping part = chunk.candidates[0].content.parts[0], my question is whether I need to iterate through all the parts, that is, could the model return a parameter and a text?
+Another doubt I have is about how the instruction is being managed, that is, in a system with many models or chats, it is forcing to have a model instantiated in memory per instruction. That is, the instruction can often be different for each user, it would be much better if the system_instruction could be passed as a parameter at the moment of performing generate_content, is there any way to do this?
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/cookbook/issues/45","Example demonstrating how to resume an upload","2024-04-10T01:36:53Z","Open issue","component:examples,type:feature request","File uploads are resumable, but we don't have any examples of how that works.
+When we know the precise chunks already, it's pretty easy, but the example should demonstrate how to recover from an error - e.g. what info to save and how to resume from whatever is there, specifying the right offset.
+ The text was updated successfully, but these errors were encountered: 
+👍2
+jochenkirstaetter and raineydavid reacted with thumbs up emoji
+All reactions
+👍2 reactions"
+"https://github.com/google-gemini/cookbook/issues/30","Question: Forms of contribution","2024-08-27T23:29:54Z","Closed issue","component:examples,type:feature request","I have a couple of questions.
+Does this repository currently accept examples only in the form of Colab notebooks? Are end-to-end project applications acceptable? For example: PharmaScan is an Android app that leverages Gemini Pro Vision model to identify medicines and provide their details such as usage, dosage, diagnosis, etc. on-the-go.
+Can Gemma projects be submitted as well? If no, do we have a separate repository for that?
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/cookbook/issues/29","How to pass PDFs to Gemini using the Python SDK?","2024-04-05T08:26:27Z","Closed issue","No label","Hi,
+The Gemini Pro Vision and Gemini Pro 1.5 models look very performant from trying them out in Google AI Studio. However, the docs regarding API/Python SDK usage are pretty convoluted, hard to navigate through, and there's no guide on how to pass PDFs to Gemini.
+What I could find is this:
+https://cloud.google.com/vertex-ai/generative-ai/docs/model-reference/gemini#gemini-pro-vision => showcases all HTTP parameters, but I assume there's also a Python SDK rather than having to use the requests library to pass all these parameters
+https://cloud.google.com/vertex-ai/generative-ai/docs/multimodal/send-multimodal-prompts => this page shows usage of the Python SDK, but only explains it for images and video. Is there a possibility to directly pass a PDF using the Python SDK?
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/cookbook/issues/25","Get help link should point to the Discourse community space","2024-05-02T20:44:01Z","Closed issue","component:other,type:feature request","TODO: Once it is good to go, we should point the getting help section to the community forum not a GitHub issue.
+ The text was updated successfully, but these errors were encountered: 
+🚀1
+AndrewVoirol reacted with rocket emoji
+All reactions
+🚀1 reaction"
+"https://github.com/google-gemini/cookbook/issues/18","Example on handling concurrency and ratelimiting","2024-08-27T23:28:45Z","Closed issue","component:examples,type:feature request","There should be an example that shows how to best handle concurrency and rate-limiting problems when using the Gemini API.
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/cookbook/issues/14","HttpError 501","2024-03-28T05:21:35Z","Closed issue","No label","Traceback (most recent call last):
+ File ""/home/ubuntu/gemini-api-cookbook/preview/file-api/sample.py"", line 26, in 
+ create_file_response = create_file_request.execute()
+ File ""/home/ubuntu/venv/lib/python3.10/site-packages/googleapiclient/_helpers.py"", line 130, in positional_wrapper
+ return wrapped(*args, **kwargs)
+ File ""/home/ubuntu/venv/lib/python3.10/site-packages/googleapiclient/http.py"", line 938, in execute
+ raise HttpError(resp, content, uri=self.uri)
+ googleapiclient.errors.HttpError: <HttpError 501 when requesting https://generativelanguage.googleapis.com/upload/v1beta/files?key=AIzaSyAggwwrhhtetth7tb1dJhfXfuHq_bqM8GQg%0A&alt=json&uploadType=multipart returned ""Endpoint not implemented."". Details: ""Endpoint not implemented."">
+ (venv) root@ip-172-3116:/home/ubuntu/gemini-api-cookbook/preview/file-api# python3 sample.py
+ Traceback (most recent call last):
+ File ""/home/ubuntu/gemini-api-cookbook/preview/file-api/sample.py"", line 26, in 
+ create_file_response = create_file_request.execute()
+ File ""/home/ubuntu/venv/lib/python3.10/site-packages/googleapiclient/_helpers.py"", line 130, in positional_wrapper
+ return wrapped(*args, **kwargs)
+ File ""/home/ubuntu/venv/lib/python3.10/site-packages/googleapiclient/http.py"", line 938, in execute
+ raise HttpError(resp, content, uri=self.uri)
+ googleapiclient.errors.HttpError: <HttpError 501 when requesting https://generativelanguage.googleapis.com/upload/v1beta/files?key=AIzhhwhwrhtyAzD7tb1dJhfXfuHq_bqM8GQg%0A&alt=json&uploadType=multipart returned ""Endpoint not implemented."". Details: ""Endpoint not implemented."">
+ issue: I have set up a virtual environment on my Ubuntu and followed the steps to run it. I obtained the API and confirmed that I have the permission to use it. However, when I run python3 sample.py, I encountered this issue.Due to security considerations, I obfuscated the API key.
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
+"https://github.com/google-gemini/cookbook/issues/6","Anomaly detection issue","2024-03-28T09:47:53Z","Closed issue","No label","Honestly the code/process in Anomaly detection was way over my head, but I was slowly going through it and ran into an error. I was in the second code cell after ""Choose a radius. Anything beyond this bound from the centroid of that category is considered an outlier.""
+range_ = np.arange(0.3, 0.75, 0.02).round(decimals=2).tolist()
+num_outliers = []
+for i in range_:
+  num_outliers.append(detect_outlier(df_train, emb_c, i))
+
+And got:
+I honestly don't know if this is expected, or I messed something up earlier. As far as I know I ran every previous cell and it worked ok.
+ The text was updated successfully, but these errors were encountered: 
+All reactions"
